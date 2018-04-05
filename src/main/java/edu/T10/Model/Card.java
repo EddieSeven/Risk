@@ -1,5 +1,9 @@
 package edu.T10.Model;
 
 public class Card {
-    private String type; // todo enum for different types (inf, cav, art, or wild)
+    private CardType type;
+}
+
+enum CardType {
+    INFANTRY, CAVALRY, ARTILLERY, WILDCARD
 }
