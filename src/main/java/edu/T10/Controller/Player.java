@@ -27,12 +27,11 @@ public class Player {
     }
 
     public void fortify(Territory from, Territory to, int unitValue){
-        from.updateArmyStrength(-unitValue);
-        from.updateArmyStrength(unitValue);
+        from.updateArmyStrength(-unitValue); // todo add condition to check that from territory has 1) enough unitValue to transfer and 2) that at least one unitValue is left
+        to.updateArmyStrength(unitValue);
     }
 
-    public void invade(Territory from, Territory to, int unitValue){ // todo changed name from attack to invade
-
+    public void invade(Territory from, Territory to, int unitValue){
     }
 
     public void assignColor(Color color){
