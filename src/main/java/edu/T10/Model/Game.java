@@ -12,5 +12,9 @@ public class Game {
         // todo constructor
     }
 
+    public void battleRound(int attackerDie, int defenderDie){
+
+    }
+
     // todo finish class model fleshing out
 }

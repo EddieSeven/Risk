@@ -40,5 +40,5 @@ public class Player {
 }
 
 enum Color {
-    RED, BLUE, GREEN, PURPLE // todo add more as needed
+    GRAY, YELLOW, RED, BLACK, GREEN, BLUE // six players, six colors, from a quick google search
 }
