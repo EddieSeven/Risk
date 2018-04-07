@@ -1,6 +1,5 @@
 package edu.T10.Model;
 
-
 import java.util.Random;
 
 public class Dice {
