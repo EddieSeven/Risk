@@ -6,6 +6,7 @@ public class Territory {
     private Player owner;
     private int army; // todo simple int for now until we figure out how we want to represent army
     private int id;
+    private int continentID;
     private int[] adjTerritories;
     private String name;
 
