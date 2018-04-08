@@ -20,4 +20,12 @@ public class Territory {
     public String getName(){
         return this.name;
     }
+
+    public Player getOwner(){
+        return this.owner;
+    }
+
+    public int getStrength(){
+        return this.army;
+    }
 }
