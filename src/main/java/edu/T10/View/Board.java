@@ -36,9 +36,10 @@ public class Board {
         Territory territory = null;
 
         for(int i = 0; i < nTerritories; i++){
-            if (territories[i].getId() == territoryID)
+            if (territories[i].getId() == territoryID){
                 territory = territories[i];
-            break;
+                break;
+            }
         }
 
         return territory;
@@ -48,9 +49,10 @@ public class Board {
         Territory territory = null;
 
         for(int i = 0; i < nTerritories; i++){
-            if (territories[i].getName().equals(name))
+            if (territories[i].getName().equals(name)){
                 territory = territories[i];
-            break;
+                break;
+            }
         }
 
         return territory;
