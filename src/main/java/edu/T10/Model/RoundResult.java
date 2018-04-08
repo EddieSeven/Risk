@@ -1,8 +1,8 @@
 package edu.T10.Model;
 
 public class RoundResult {
-    public int attackerLosses;
-    public int defenderLosses;
+    public int attackerLosses = 0;
+    public int defenderLosses = 0;
 
     public void incrementAttackerLosses(){
         attackerLosses += 1;
