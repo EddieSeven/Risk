@@ -1,7 +1,4 @@
-package edu.T10.View;
-
-import edu.T10.Controller.Player;
-import edu.T10.Model.Territory;
+package edu.T10.Model;
 
 public class Board {
     private Territory[] territories;

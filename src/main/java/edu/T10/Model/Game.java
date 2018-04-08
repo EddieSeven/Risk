@@ -1,8 +1,5 @@
 package edu.T10.Model;
 
-import edu.T10.Controller.Player;
-import edu.T10.View.Board;
-
 import java.util.Arrays;
 
 public class Game {
@@ -12,6 +9,12 @@ public class Game {
 
     public Game(){
         // todo constructor
+    }
+
+    public boolean updateTerritory(int territoryID, int unitValue){
+        board.getTerritory(territoryID).updateArmyStrength(unitValue);
+
+        return true; // todo change when needed
     }
 
     public RoundResult battleRound(int attackerDie, int defenderDie){
