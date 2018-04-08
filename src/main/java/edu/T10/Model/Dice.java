@@ -1,7 +1,10 @@
 package edu.T10.Model;
 
+import java.util.Random;
+
 public class Dice {
-    public int roll(){
-        return -1; // todo implement random number generation
+    public int roll() {
+        Random random = new Random();
+        return random.nextInt(6) + 1;
     }
 }
