@@ -7,8 +7,17 @@ public class Territory {
     private int army; // todo simple int for now until we figure out how we want to represent army
     private int id;
     private int[] adjTerritories;
+    private String name;
 
     public void assignOwner(Player player){
         this.owner = player;
+    }
+
+    public int getId(){
+        return this.id;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }
