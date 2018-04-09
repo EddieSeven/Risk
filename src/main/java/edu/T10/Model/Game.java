@@ -1,5 +1,7 @@
 package edu.T10.Model;
 
+import edu.T10.Model.Board.Board;
+
 import java.util.Arrays;
 
 public class Game {

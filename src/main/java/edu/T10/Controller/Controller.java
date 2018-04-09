@@ -1,18 +1,13 @@
 package edu.T10.Controller;
 
 import edu.T10.Model.Game;
-import edu.T10.Model.Territory;
+import edu.T10.Model.Board.Territory;
 
 public class Controller {
     Game game;
 
     public void doCommand(String command){
-        switch (command){
-            case "cards":
-                this.playCards();
-                break;
 
-        }
     }
 
     public void playCards(){
