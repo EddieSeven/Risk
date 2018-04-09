@@ -15,7 +15,6 @@ public class Board {
 
     public Board(){
         this.initTerritories(filename);
-        System.out.println(this.territories[19].toString());
     }
 
     private boolean initTerritories(String filename){
@@ -152,6 +151,7 @@ public class Board {
     }
 
     public static void main(String[] args) {
+        // Test Code
         Board board = new Board();
     }
 }
