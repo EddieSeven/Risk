@@ -7,6 +7,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class Server extends HttpServlet {
+
+	private Controller controller;
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         doGetOrPost(request, response);
@@ -23,7 +26,7 @@ public class Server extends HttpServlet {
         response.setContentType("text/x-json;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache");
 
-        response.getWriter().write("We can talk now \n\n");
+        response.getWriter().write("Risk WEB API \n\n");
         return;
     }
 }
