@@ -1,0 +1,65 @@
+South America, 0: 4 points
+Argentina, 0
+Brazil, 1
+Peru, 2
+Venezuela, 3
+
+Central America, 1: 1 point
+Central America, 4
+
+United States of America, 2: 4 points
+Western United States, 5
+Eastern United States, 6
+Alaska, 8
+
+Canada, 3: 4 points
+Alberta, 7
+Ontario, 10
+Eastern Canada, 11
+Northwest Territory, 9
+
+Scandinavia, 4: 3 points
+Greenland, 12
+Iceland, 13
+Scandinavia, 14
+
+Europe, 5: 6 points
+Western Europe, 17
+Great Britain, 15
+Northern Europe, 16
+Southern Europe, 18
+Russia, 19
+
+Africa, 6: 6 points
+North Africa, 20
+Egypt, 25
+East Africa, 24
+Congo, 21
+South Africa, 22
+Madagascar, 23
+
+Middle East, 7: 3 points
+Middle East, 26
+Afghanistan, 27
+
+India, 8: 1 point
+India, 36
+
+Siberia, 9: 7 points
+Ural, 28
+Siberia, 29
+Irkutsk, 32
+Yakutsk, 30
+Kamchatka, 31
+
+East Asia, 10: 5 points
+China, 35
+Mongolia, 33
+Japan, 34
+
+Oceania, 11: 3 points
+Siam, 37
+Indonesia, 38
+New Guinea, 39
+Western Australia, 40
+Eastern Australia, 41
