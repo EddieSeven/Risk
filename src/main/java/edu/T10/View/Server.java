@@ -4,8 +4,10 @@ import edu.T10.Controller.Controller;
 
 import java.io.*;
 import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
+@WebServlet(name = "Risk", urlPatterns = {"/"}, loadOnStartup = 1)
 public class Server extends HttpServlet {
 
 	private Controller controller;
