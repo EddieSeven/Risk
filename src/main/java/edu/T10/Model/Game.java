@@ -7,16 +7,61 @@ import java.util.Arrays;
 public class Game {
     private Board board;
     private Player[] players;
-    // todo not sure if we should have decks be handled by players or by game
+    private Deck deck; // the deck the players take from, later on
+    private boolean gameOver;
+    private boolean currentWin;
+    private int currentPlayer;
+    private int round;
 
-    public Game(){
-        // todo constructor
+    public Game(int numOfPlayer){
+        this.board = new Board();
+        this.players = new Player[numOfPlayer];
+        this.gameOver = false;
+        this.currentWin = false;
+        this.round = 0; // human readable
+    }
+
+    public void startGame() {
+        // TODO
+        // Player choose color
+        // Player claim territories
+    }
+
+    public void startTurn(){
+        this.getBonusArmy();
+    }
+
+    public void finishTurn() {
+        if (this.currentWin){
+            this.players[currentPlayer].addCard2Deck(this.deck.drawCards(1));
+        }
+        this.currentWin = false;
+        this.currentPlayer = (this.currentPlayer + 1) % players.length;
+    }
+
+    public void playCards(int numOfCards) {
+        if (this.players[currentPlayer].useCards(numOfCards))
+            this.players[currentPlayer].addNewArmies(numOfCards/3);
+        return;
+    }
+
+    private void getBonusArmy() {
+        // TODO
+        // Determine how many armies current player can get in the beginning of a new turn
     }
 
     public boolean updateTerritory(int territoryID, int unitValue){
         board.getTerritory(territoryID).updateArmyStrength(unitValue);
 
         return true; // todo change when needed
+    }
+
+    public void battleController(int territoryID, int targetID, int unitValue) {
+        int oppoUnits = board.getArmyStrength(targetID);
+        RoundResult roundResult = battleRound(unitValue, oppoUnits);
+        // TODO
+        // Determine winner and update two Territory
+        return;
     }
 
     public RoundResult battleRound(int attackerDie, int defenderDie){
@@ -63,4 +108,5 @@ public class Game {
             array[k] = temp;
         }
     }
+
 }
