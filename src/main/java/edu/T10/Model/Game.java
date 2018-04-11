@@ -45,6 +45,10 @@ public class Game {
         return;
     }
 
+    public void conductInvasion(int attackerStrength, int defenderStrength, int attackerDie, int defenderDie){
+
+    }
+
     private void getBonusArmy() {
         // TODO
         // Determine how many armies current player can get in the beginning of a new turn
@@ -58,16 +62,16 @@ public class Game {
 
     public void battleController(int territoryID, int targetID, int unitValue) {
         int oppoUnits = board.getArmyStrength(targetID);
-        RoundResult roundResult = battleRound(unitValue, oppoUnits);
+        InvasionResult invasionResult = battleRound(unitValue, oppoUnits);
         // TODO
         // Determine winner and update two Territory
         return;
     }
 
-    public RoundResult battleRound(int attackerDie, int defenderDie){
+    public InvasionResult battleRound(int attackerDie, int defenderDie){
         int attackerRolls[] = rollDie(attackerDie); // todo 1 <= attacker die <= 3
         int defenderRolls[] = rollDie(defenderDie); // todo 1 <= defender die <= 2
-        RoundResult result = new RoundResult();
+        InvasionResult result = new InvasionResult();
 
         if (attackerDie > defenderDie)
             compareDie(defenderDie, result, attackerRolls, defenderRolls);
@@ -77,7 +81,7 @@ public class Game {
         return result;
     }
 
-    private void compareDie(int lowestDieNumber, RoundResult result, int[] attackerRolls, int[] defenderRolls){
+    private void compareDie(int lowestDieNumber, InvasionResult result, int[] attackerRolls, int[] defenderRolls){
         for (int i = 0; i < lowestDieNumber; i++){
             if (attackerRolls[i] > defenderRolls[i])
                 result.incrementDefenderLosses();
