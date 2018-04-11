@@ -58,8 +58,8 @@ public class Game {
         return true; // todo change when needed
     }
 
-    public InvasionResult conductInvasion(int fromID, int toID, int attackerUnits, int attackerDice, int defenderDice) {
-        int defenderUnits = board.getArmyStrength(toID);
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
+        int defenderUnits = board.getArmyStrength(toTerritoryID);
         InvasionResult invasionResult = new InvasionResult();
 
         while (defenderUnits != 0 && attackerUnits != 0){
