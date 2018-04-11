@@ -45,13 +45,22 @@ public final class response_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("<html>\n");
       out.write("<head>\n");
-      out.write("    <title>Risk Test Page</title>\n");
+      out.write("    <link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css?family=Anton\">\n");
+      out.write("    <link rel=\"stylesheet\" type=\"text/css\" href=\"risk-styles.css\">\n");
+      out.write("    <meta charset=\"UTF-8\">\n");
+      out.write("    <title>Risk Demo</title>\n");
       out.write("</head>\n");
       out.write("<body>\n");
-      out.write("<h1>Risk</h1>\n");
-      out.write("<h2>Welcome to Risk, ");
+      out.write("    <div id=startpage\">\n");
+      out.write("        <h1>Risk</h1>\n");
+      out.write("        <h2>Welcome to Risk, ");
       out.write((java.lang.String) org.apache.jasper.runtime.PageContextImpl.evaluateExpression("${user}", java.lang.String.class, (PageContext)_jspx_page_context, null));
       out.write("!</h2>\n");
+      out.write("    </div>\n");
+      out.write("\n");
+      out.write("    <div id=\"board\">\n");
+      out.write("        <img src=\"../resources/world_map.png\">\n");
+      out.write("    </div>\n");
       out.write("</body>\n");
       out.write("</html>\n");
     } catch (Throwable t) {
