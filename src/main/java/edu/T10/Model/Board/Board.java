@@ -101,11 +101,16 @@ public class Board {
         }
     }
 
-    public Territory getAllTerritoriesForPlayer(Player player){
-        ArrayList playerTerritories = new ArrayList();
+    public Territory[] getAllTerritoriesForPlayer(Player player){
+        ArrayList<Territory> playerTerritories = new ArrayList<>();
+
+        for (int i = 0; i < nTerritories; i++){
+            if (territories[i].getOwner().equals(player)) // todo add equals override for player
+                playerTerritories.add(territories[i]);
+        }
 
 
-        return null;
+        return (Territory[]) playerTerritories.toArray();
     }
 
     public Territory getTerritory(int territoryID){
