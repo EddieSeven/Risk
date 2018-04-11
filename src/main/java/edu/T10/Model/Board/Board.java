@@ -5,6 +5,7 @@ import edu.T10.Model.Player;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Board {
@@ -98,6 +99,13 @@ public class Board {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public Territory getAllTerritoriesForPlayer(Player player){
+        ArrayList playerTerritories = new ArrayList();
+
+
+        return null;
     }
 
     public Territory getTerritory(int territoryID){
