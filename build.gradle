@@ -1,5 +1,6 @@
 plugins {
     id 'war'
+
     id 'org.akhikhl.gretty' version '1.4.2'
 }
 
@@ -9,6 +10,9 @@ version '1.0-SNAPSHOT'
 apply plugin: 'java'
 apply plugin: 'war'
 sourceCompatibility = 1.8
+    id 'java'
+}
+
 
 repositories {
     mavenLocal()
@@ -22,4 +26,9 @@ dependencies {
     testCompile 'org.mockito:mockito-core:2.7.19'
     // classpath 'org.akhikhl.gretty:gretty:+'
 }
+
+
+group 'T10'
+version '1.0-SNAPSHOT'
+sourceCompatibility = 1.8
 
