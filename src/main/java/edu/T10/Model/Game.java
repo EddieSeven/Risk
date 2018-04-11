@@ -4,6 +4,8 @@ import edu.T10.Model.Board.Board;
 
 import java.util.Arrays;
 
+import static edu.T10.Model.Victor.*;
+
 public class Game {
     private Board board;
     private Player[] players;
@@ -56,7 +58,7 @@ public class Game {
         return true; // todo change when needed
     }
 
-    public InvasionResult battleController(int fromID, int toID, int attackerUnits, int attackerDice, int defenderDice) {
+    public InvasionResult conductInvasion(int fromID, int toID, int attackerUnits, int attackerDice, int defenderDice) {
         int defenderUnits = board.getArmyStrength(toID);
         InvasionResult invasionResult = new InvasionResult();
 
@@ -67,8 +69,13 @@ public class Game {
             invasionResult.incrementAttackerLosses(results[0]);
             invasionResult.incrementDefenderLosses(results[1]);
 
-            defenderUnits -= invasionResult.getDefenderLosses();
-            attackerUnits -= invasionResult.getAttackerLosses();
+            attackerUnits -= results[0];
+            defenderUnits -= results[1];
+
+            if (defenderUnits <= 0)
+                invasionResult.setVictor(ATTACKER);
+            else if (attackerUnits <= 0)
+                invasionResult.setVictor(DEFENDER);
         }
 
 

@@ -57,7 +57,7 @@ public class Server extends HttpServlet {
                 this.game.startGame();
                 break;
             case "Attack":
-                this.game.battleController(
+                this.game.conductInvasion(
                         json.getInt("territoryID"),
                         json.getInt("targetID"),
                         json.getInt("unitValue"));
