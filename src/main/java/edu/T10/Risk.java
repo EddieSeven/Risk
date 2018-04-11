@@ -21,10 +21,10 @@ public class Risk extends HttpServlet {
         request.getRequestDispatcher("response.jsp").forward(request, response);
     }
 
-//    public static void main(String[] args) {
-//
-//        System.out.print("Hello world!");
-//
-//    }
+    public static void main(String[] args) {
+
+        System.out.print("Hello world!");
+
+   }
 
 }

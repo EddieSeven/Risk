@@ -5,6 +5,7 @@ import edu.T10.Model.Player;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 public class Board {
@@ -98,6 +99,18 @@ public class Board {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public Territory[] getAllTerritoriesForPlayer(Player player){
+        ArrayList<Territory> playerTerritories = new ArrayList<>();
+
+        for (int i = 0; i < nTerritories; i++){
+            if (territories[i].getOwner().equals(player)) // todo add equals override for player
+                playerTerritories.add(territories[i]);
+        }
+
+
+        return (Territory[]) playerTerritories.toArray();
     }
 
     public Territory getTerritory(int territoryID){

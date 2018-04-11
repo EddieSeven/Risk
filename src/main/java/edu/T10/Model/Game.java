@@ -4,6 +4,8 @@ import edu.T10.Model.Board.Board;
 
 import java.util.Arrays;
 
+import static edu.T10.Model.Victor.*;
+
 public class Game {
     private Board board;
     private Player[] players;
@@ -56,34 +58,54 @@ public class Game {
         return true; // todo change when needed
     }
 
-    public void battleController(int territoryID, int targetID, int unitValue) {
-        int oppoUnits = board.getArmyStrength(targetID);
-        RoundResult roundResult = battleRound(unitValue, oppoUnits);
-        // TODO
-        // Determine winner and update two Territory
-        return;
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
+        int defenderUnits = board.getArmyStrength(toTerritoryID);
+        InvasionResult invasionResult = new InvasionResult();
+
+        while (defenderUnits != 0 && attackerUnits != 0){
+            // attacker losses = results[0]
+            // defender losses = results[1]
+            int results[] = conductBattleRound(attackerDice, defenderDice, invasionResult);
+            invasionResult.incrementAttackerLosses(results[0]);
+            invasionResult.incrementDefenderLosses(results[1]);
+
+            attackerUnits -= results[0];
+            defenderUnits -= results[1];
+
+            if (defenderUnits <= 0)
+                invasionResult.setVictor(ATTACKER);
+            else if (attackerUnits <= 0)
+                invasionResult.setVictor(DEFENDER);
+        }
+
+
+        return invasionResult;
     }
 
-    public RoundResult battleRound(int attackerDie, int defenderDie){
-        int attackerRolls[] = rollDie(attackerDie); // todo 1 <= attacker die <= 3
-        int defenderRolls[] = rollDie(defenderDie); // todo 1 <= defender die <= 2
-        RoundResult result = new RoundResult();
+    private int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult){
+        int attackerRolls[] = rollDie(attackerDice); // todo 1 <= attacker die <= 3
+        int defenderRolls[] = rollDie(defenderDice); // todo 1 <= defender die <= 2
+        int results[];
 
-        if (attackerDie > defenderDie)
-            compareDie(defenderDie, result, attackerRolls, defenderRolls);
+        if (attackerDice > defenderDice)
+            results = compareDie(defenderDice, attackerRolls, defenderRolls);
         else
-            compareDie(attackerDie, result, attackerRolls, defenderRolls);
+            results = compareDie(attackerDice, attackerRolls, defenderRolls);
 
-        return result;
+        return results;
     }
 
-    private void compareDie(int lowestDieNumber, RoundResult result, int[] attackerRolls, int[] defenderRolls){
+    private int[] compareDie(int lowestDieNumber, int[] attackerRolls, int[] defenderRolls){
+        int results[] = new int[2];
+
         for (int i = 0; i < lowestDieNumber; i++){
             if (attackerRolls[i] > defenderRolls[i])
-                result.incrementDefenderLosses();
+                results[0] += 1;
             else // in the event of a tie the defend wins
-                result.incrementAttackerLosses();
+                results[1] += 1;
         }
+
+        return results;
     }
 
     private int[] rollDie(int numberOfDie){
