@@ -9,7 +9,7 @@
 //import javax.servlet.annotation.WebServlet;
 //import javax.servlet.http.*;
 //
-//@WebServlet(name = "Risk", urlPatterns = {"/"}, loadOnStartup = 1)
+//@WebServlet(name = "Server", urlPatterns = {"/"}, loadOnStartup = 1)
 //public class Server extends HttpServlet {
 //
 //    private Game game;
@@ -42,7 +42,7 @@
 //        response.setContentType("text/x-json;charset=UTF-8");
 //        response.setHeader("Cache-Control", "no-cache");
 //
-//        response.getWriter().write("Risk WEB API \n\n");
+//        response.getWriter().write("Server WEB API \n\n");
 //        return;
 //    }
 //
