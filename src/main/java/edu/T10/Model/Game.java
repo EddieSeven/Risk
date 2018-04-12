@@ -28,26 +28,29 @@ public class Game {
     }
 
     public void startTurn(){
-        this.getBonusArmy();
+        getBonusArmy();
     }
 
     public void finishTurn() {
-        if (this.currentWin){
-            this.players[currentPlayer].addCard2Deck(this.deck.drawCards(1));
+        if (currentWin){
+            players[currentPlayer].addCard2Deck(deck.drawCards(1));
         }
-        this.currentWin = false;
-        this.currentPlayer = (this.currentPlayer + 1) % players.length;
+        currentWin = false;
+        currentPlayer = (currentPlayer + 1) % players.length;
     }
 
     public void playCards(int numOfCards) {
-        if (this.players[currentPlayer].useCards(numOfCards))
-            this.players[currentPlayer].addNewArmies(numOfCards/3);
+        if (players[currentPlayer].useCards(numOfCards))
+            players[currentPlayer].addNewArmies(numOfCards/3);
         return;
     }
 
     private void getBonusArmy() {
-        // TODO
-        // Determine how many armies current player can get in the beginning of a new turn
+        int territoryBonus = board.getTerritoriesBonus(
+                                board.getTerritories(currentPlayer));
+        int continentBonus = board.getContinentsBonus(
+                                board.getContinents(currentPlayer));
+        players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
     }
 
     public boolean updateTerritory(int territoryID, int unitValue){
