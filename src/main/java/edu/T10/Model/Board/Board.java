@@ -139,6 +139,7 @@ public class Board {
         Territory territory = getTerritory(territoryID);
         territory.assignOwner(playerID);
     }
+
     public Territory getTerritory(int territoryID){
         return search(territoryID);
     }
