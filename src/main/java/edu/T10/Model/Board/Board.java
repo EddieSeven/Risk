@@ -1,11 +1,9 @@
 package edu.T10.Model.Board;
 
-import edu.T10.Model.Player;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Vector;
 
 public class Board {
@@ -15,7 +13,7 @@ public class Board {
     private final static String filename = "mapfile.txt";
 
     public Board(){
-        this.initTerritories(filename);
+        initTerritories(filename);
     }
 
     private boolean initTerritories(String filename){
@@ -48,7 +46,7 @@ public class Board {
     }
 
     private void readContinentsBuffer(BufferedReader br){
-        Vector<Continent> vec = new Vector<Continent>();
+        Vector<Continent> vec = new Vector<>();
         try {
             while (true) {
                 String line = br.readLine();
@@ -66,11 +64,11 @@ public class Board {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        this.continents = vec.toArray(new Continent[vec.size()]);
+        continents = vec.toArray(new Continent[vec.size()]);
     }
 
     private void readTerritoriesBuffer(BufferedReader br){
-        Vector<Territory> vec = new Vector<Territory>();
+        Vector<Territory> vec = new Vector<>();
         try {
             while (true) {
                 String line = br.readLine();
@@ -84,8 +82,8 @@ public class Board {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        this.territories = vec.toArray(new Territory[vec.size()]);
-        this.nTerritories = this.territories.length;
+        territories = vec.toArray(new Territory[vec.size()]);
+        nTerritories = territories.length;
     }
 
     private void readAdjacentsBuffer(BufferedReader br){
@@ -93,7 +91,7 @@ public class Board {
             while (true) {
                 String line = br.readLine();
                 if (line.equals(";;")) break;
-                Territory t = this.getTerritory(Integer.parseInt(line.split(" ")[0]));
+                Territory t = getTerritory(Integer.parseInt(line.split(" ")[0]));
                 t.readAdjacentsFromLine(line);
             }
         } catch (IOException ioe) {
@@ -101,16 +99,45 @@ public class Board {
         }
     }
 
-    public Territory[] getAllTerritoriesForPlayer(Player player){
-        ArrayList<Territory> playerTerritories = new ArrayList<>();
+    public int getTerritoriesBonus(Territory[] territories){
+        return (int) Math.floor((territories.length * 1.0) / 3.0);
+    }
 
+    public int getContinentsBonus(Continent[] continents){
+        int bonus = 0;
+        for (int i = 0; i < continents.length; i++)
+            bonus += continents[i].bonus;
+        return bonus;
+    }
+
+    public Territory[] getTerritories(int playerID){
+        Vector<Territory> vec = new Vector<>();
         for (int i = 0; i < nTerritories; i++){
-            if (territories[i].getOwner().equals(player)) // todo add equals override for player
-                playerTerritories.add(territories[i]);
+            if (territories[i].getOwner() == playerID)
+                vec.add(territories[i]);
         }
+        return vec.toArray(new Territory[vec.size()]);
+    }
 
+    public Continent[] getContinents(int playerID){
+        Vector<Continent> vec = new Vector<>();
+        for (int i = 0; i < continents.length; i++){
+            Continent continent = continents[i];
+            boolean occupied = true;
+            for (int j = 0; j < continent.members.length; j++){
+                Territory territory = search(continent.members[j]);
+                if (territory.getOwner() !=  playerID)
+                    occupied = false;
+            }
+            if (occupied)
+                vec.add(continent);
+        }
+        return vec.toArray(new Continent[vec.size()]);
+    }
 
-        return (Territory[]) playerTerritories.toArray();
+    public void updateOwner(int territoryID, int playerID){
+        Territory territory = getTerritory(territoryID);
+        territory.assignOwner(playerID);
     }
 
     public Territory getTerritory(int territoryID){
@@ -121,7 +148,7 @@ public class Board {
         return search(name); // todo we can delete one of these when we figure out which one will be more handy to use in practice.
     }
 
-    public Player getTerritoryOwner(int territoryID){
+    public int getTerritoryOwner(int territoryID){
         return searchOwner(territoryID);
     }
 
@@ -159,12 +186,12 @@ public class Board {
         return territory;
     }
 
-    private Player searchOwner(int territoryID){
+    private int searchOwner(int territoryID){
         return getTerritory(territoryID).getOwner();
     }
 
     public static void main(String[] args) {
         // Test Code
-        Board board = new Board();
+        new Board();
     }
 }

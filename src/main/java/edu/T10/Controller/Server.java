@@ -72,9 +72,12 @@ public class Server extends HttpServlet {
             case "PlayCards":
                 this.game.playCards(json.getInt("numOfCards"));
                 break;
-            default:
+            case "EndTurn":
                 this.game.finishTurn();
+                break;
+            default:
                 break;
         }
     }
+
 }

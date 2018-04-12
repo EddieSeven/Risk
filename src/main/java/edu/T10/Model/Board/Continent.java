@@ -6,6 +6,7 @@ public class Continent {
     String name;
     int id;
     int[] members;
+    int bonus;
 
 
     @Override
