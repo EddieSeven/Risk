@@ -100,10 +100,7 @@ public class Board {
     }
 
     public int getTerritoriesBonus(Territory[] territories){
-        int bonus = 0;
-        for (int i = 0; i < territories.length; i++)
-            bonus += territories[i].bonus;
-        return bonus;
+        return (int) Math.floor((territories.length * 1.0) / 3.0);
     }
 
     public int getContinentsBonus(Continent[] continents){

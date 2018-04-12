@@ -11,7 +11,6 @@ public class Territory {
     private int id;
     private int continentID;
     private int[] adjTerritories;
-    public int bonus;
 
     public Territory(){}
 
