@@ -51,6 +51,8 @@ public class Game {
         int defenderUnits = board.getArmyStrength(toTerritoryID);
         int attackingPlayerID = board.getTerritory(fromTerritoryID).getOwner();
         InvasionResult invasionResult = new InvasionResult();
+        int originalAttackerStrength = attackerUnits;
+        int originalDefenderStrength = defenderUnits;
 
         while (defenderUnits != 0 && attackerUnits != 0){
             // attacker losses = results[0]
@@ -63,15 +65,28 @@ public class Game {
             defenderUnits = updateUnits(defenderUnits, results);
 
             if (defenderUnits <= 0) {
+                checkLosses(invasionResult, originalAttackerStrength, true);
+                checkLosses(invasionResult, originalDefenderStrength, false);
                 attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
-
             }
             else if (attackerUnits <= 0){
+                checkLosses(invasionResult, originalAttackerStrength, true);
+                checkLosses(invasionResult, originalDefenderStrength, false);
                 defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
             }
         }
 
         return invasionResult;
+    }
+
+    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker){
+        if (isAttacker){
+            if (invasionResult.getAttackerLosses() > originalStrength)
+                invasionResult.setAttackerLosses(originalStrength);
+        } else {
+            if (invasionResult.getDefenderLosses() > originalStrength)
+                invasionResult.setDefenderLosses(originalStrength);
+        }
     }
 
     private int updateUnits(int units, int[] results) {

@@ -28,6 +28,14 @@ public class InvasionResult {
     public void setVictor(Victor victor){
         this.victor = victor;
     }
+
+    public void setAttackerLosses(int attackerLosses) {
+        this.attackerLosses = attackerLosses;
+    }
+
+    public void setDefenderLosses(int defenderLosses) {
+        this.defenderLosses = defenderLosses;
+    }
 }
 
 enum Victor {

@@ -44,6 +44,10 @@ public class Territory {
         this.armyStrength += unitValue; // todo add condition that armyStrength doesn't go below zero
     }
 
+    public void setArmyStrength(int unitValue){
+        this.armyStrength = unitValue;
+    }
+
     /*
         String line: Format:    id, name, continentID, ... ;
                          ex:    1 Alaska 1 47 76 ;

@@ -103,10 +103,12 @@ public class Board {
         return (int) Math.floor((territories.length * 1.0) / 3.0);
     }
 
-    public boolean updateTerritoryStrength(int territoryID, int unitValue){
+    public void updateTerritoryStrength(int territoryID, int unitValue){
         getTerritory(territoryID).updateArmyStrength(unitValue);
+    }
 
-        return true; // todo change when needed
+    public void setTerritoryStrength(int territoryID, int unitValue){
+        getTerritory(territoryID).setArmyStrength(unitValue);
     }
 
     public int getContinentsBonus(Continent[] continents){
