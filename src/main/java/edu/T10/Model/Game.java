@@ -55,9 +55,10 @@ public class Game {
         players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
     }
 
-    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice, int attackingPlayerID) {
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
         int defenderUnits = board.getArmyStrength(toTerritoryID);
         InvasionResult invasionResult = new InvasionResult();
+        int attackingPlayerID = board.getTerritory(fromTerritoryID).getOwner();
 
         while (defenderUnits != 0 && attackerUnits != 0){
             // attacker losses = results[0]
@@ -84,9 +85,6 @@ public class Game {
             }
 
         }
-
-
-
 
         return invasionResult;
     }
