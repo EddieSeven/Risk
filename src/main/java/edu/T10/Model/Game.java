@@ -55,13 +55,7 @@ public class Game {
         players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
     }
 
-    public boolean updateTerritory(int territoryID, int unitValue){
-        board.getTerritory(territoryID).updateArmyStrength(unitValue);
-
-        return true; // todo change when needed
-    }
-
-    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice, int attackingPlayerID) {
         int defenderUnits = board.getArmyStrength(toTerritoryID);
         InvasionResult invasionResult = new InvasionResult();
 
@@ -75,11 +69,23 @@ public class Game {
             attackerUnits -= results[0];
             defenderUnits -= results[1];
 
-            if (defenderUnits <= 0)
+            if (defenderUnits <= 0) {
+                int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
                 invasionResult.setVictor(ATTACKER);
-            else if (attackerUnits <= 0)
+                board.updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
+                board.updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
+                board.updateOwner(toTerritoryID, attackingPlayerID);
+
+            }
+            else if (attackerUnits <= 0){
                 invasionResult.setVictor(DEFENDER);
+                board.updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
+                board.updateTerritoryStrength(fromTerritoryID, invasionResult.getAttackerLosses());
+            }
+
         }
+
+
 
 
         return invasionResult;
