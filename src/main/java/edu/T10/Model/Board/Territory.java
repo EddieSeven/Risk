@@ -5,23 +5,17 @@ import edu.T10.Model.Player;
 import java.util.Arrays;
 
 public class Territory {
-    private int owner;
-    private String name;
+    private int owner = -1;
+    private String name = null;
     private int armyStrength = 0; // todo simple int for now until we figure out how we want to represent army
-    private int id;
+    private int id = -1;
     private int continentID = 0;
     private int[] adjTerritories = new int[0];
 
     public Territory(){}
 
-    public Territory(String name, int id, int[] adjTerritories){
-        this.name = name;
-        this.id = id;
-        this.adjTerritories = adjTerritories;
-    }
-
-    public void assignOwner(int player){
-        this.owner = player;
+    public void assignOwner(int playerID){
+        this.owner = playerID;
     }
 
     public int getId(){

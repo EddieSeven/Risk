@@ -13,6 +13,14 @@ public class Player {
         this.color = Color.DEFAULT;
     }
 
+    public int getFreeArmies() {
+        return freeArmies;
+    }
+
+    public void assignColor(int colorIdx){
+        this.color = Color.values()[colorIdx];
+    }
+
     public void assignColor(Color color){
         this.color = color;
     }
@@ -29,6 +37,11 @@ public class Player {
 
     public void addNewArmies(int numOfArmies){
         this.freeArmies += numOfArmies;
+    }
+
+    @Override
+    public String toString() {
+        return this.name + " " + this.color.toString() + " " + String.valueOf(freeArmies);
     }
 }
 
