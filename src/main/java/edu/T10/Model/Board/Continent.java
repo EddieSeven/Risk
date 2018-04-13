@@ -3,10 +3,10 @@ package edu.T10.Model.Board;
 import java.util.Arrays;
 
 public class Continent {
-    String name;
-    int id;
-    int[] members;
-    int bonus;
+    public String name;
+    public int id;
+    public int[] members;
+    public int bonus;
 
 
     @Override

@@ -4,8 +4,17 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 public class Deck {
+	
     private Card[] cards; //todo any array for now, though an arraylist will probably be better.
 
+    public Deck() {
+    	cards = new Card[0];
+    }
+	
+	public Deck(Card[] c) { 
+		cards = c;
+	}
+    
     public Card[] drawCards(int numOfCards){
         if (numOfCards > this.cards.length)
             return new Card[0];
