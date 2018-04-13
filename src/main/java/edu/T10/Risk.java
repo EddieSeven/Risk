@@ -1,5 +1,8 @@
 package edu.T10;
 
+import edu.T10.Model.Game;
+import edu.T10.Model.InvasionResult;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,6 +27,12 @@ public class Risk extends HttpServlet {
     public static void main(String[] args) {
 
         System.out.print("Hello world!");
+        Game game = new Game(4);
+        game.board.updateTerritoryStrength(3, 5);
+        game.board.updateTerritoryStrength(4, 4);
+        InvasionResult ir = game.conductInvasion(3, 4,4, 3, 2);
+        int az = 65;
+
 
    }
 

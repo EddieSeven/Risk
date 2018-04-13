@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static edu.T10.Model.Victor.*;
 
 public class Game {
-    private Board board;
+    public Board board; //todo change back to private!
     private Player[] players;
     private Deck deck; // the deck the players take from, later on
     private boolean gameOver;
@@ -20,7 +20,7 @@ public class Game {
         this.players = new Player[numOfPlayer];
         this.gameOver = false;
         this.currentWin = false;
-        this.round = 0; // human readable
+        this.round = 0;
     }
 
     public void startGame() {
@@ -47,14 +47,6 @@ public class Game {
         return;
     }
 
-    private void getBonusArmy() {
-        int territoryBonus = board.getTerritoriesBonus(
-                                board.getTerritories(currentPlayer));
-        int continentBonus = board.getContinentsBonus(
-                                board.getContinents(currentPlayer));
-        players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
-    }
-
     public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
         int defenderUnits = board.getArmyStrength(toTerritoryID);
         InvasionResult invasionResult = new InvasionResult();
@@ -71,27 +63,42 @@ public class Game {
             defenderUnits -= results[1];
 
             if (defenderUnits <= 0) {
-                int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
-                invasionResult.setVictor(ATTACKER);
-                board.updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
-                board.updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
-                board.updateOwner(toTerritoryID, attackingPlayerID);
+                attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
 
             }
             else if (attackerUnits <= 0){
-                invasionResult.setVictor(DEFENDER);
-                board.updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
-                board.updateTerritoryStrength(fromTerritoryID, invasionResult.getAttackerLosses());
+                defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
             }
-
         }
 
         return invasionResult;
     }
 
+    private void getBonusArmy() {
+        int territoryBonus = board.getTerritoriesBonus(
+                board.getTerritories(currentPlayer));
+        int continentBonus = board.getContinentsBonus(
+                board.getContinents(currentPlayer));
+        players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
+    }
+
+    private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
+        invasionResult.setVictor(DEFENDER);
+        board.updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
+        board.updateTerritoryStrength(fromTerritoryID, invasionResult.getAttackerLosses());
+    }
+
+    private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
+        int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
+        invasionResult.setVictor(ATTACKER);
+        board.updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
+        board.updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
+        board.updateOwner(toTerritoryID, attackingPlayerID);
+    }
+
     private int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult){
-        int attackerRolls[] = rollDie(attackerDice); // todo 1 <= attacker die <= 3
-        int defenderRolls[] = rollDie(defenderDice); // todo 1 <= defender die <= 2
+        int attackerRolls[] = rollDie(attackerDice);
+        int defenderRolls[] = rollDie(defenderDice);
         int results[];
 
         if (attackerDice > defenderDice)

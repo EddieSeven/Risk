@@ -65,9 +65,9 @@ public class Server extends HttpServlet {
                         json.getInt("defenderDice"));
                 break;
             case "Reinforce":
-                this.game.updateTerritory(
-                        json.getInt("territoryID"),
-                        json.getInt("unitValue"));
+                //this.game.updateTerritory(
+                        //json.getInt("territoryID"),
+                        //json.getInt("unitValue"));
                 break;
             case "PlayCards":
                 this.game.playCards(json.getInt("numOfCards"));
