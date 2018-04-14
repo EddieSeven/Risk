@@ -7,6 +7,7 @@ import edu.T10.Model.InvasionResult;
 import javax.json.*;
 import java.io.*;
 import java.util.ArrayList;
+import javax.json.stream.JsonParsingException;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
@@ -23,7 +24,22 @@ public class Server {
     @OnMessage
     public void onMessage(Session session, String message) throws IOException {
         System.out.println("[ServerSide] Received message : " + message);
-        // Handle new messages
+
+
+        try {
+            JsonReader jsonReader = Json.createReader(new StringReader(message));
+            try{
+                JsonObject jsonObj = jsonReader.readObject();
+                parseCommand(jsonObj, session);
+            } catch (JsonParsingException jpe) {
+                jpe.printStackTrace();
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+
     }
 
     @OnClose
@@ -38,7 +54,7 @@ public class Server {
         // Do error handling here
     }
 
-    private void parseCommand(JsonObject json) {
+    private void parseCommand(JsonObject json, Session session) {
         switch (json.getString("Action")) {
             case "Init":
                 JsonArray jsonArray = json.getJsonArray("names");
@@ -53,7 +69,10 @@ public class Server {
                 int playerID = game.getCurrentPlayerID();
                 String playerInfo = game.getCurrentPlayer().toString();
                 ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
+                ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
 
+                String message = playerInfo + concatenateString(playerTerritories) + concatenateString(allTerritories);
+                sendBack(session, buildJson(message));
                 break;
 
             case "Attack":
@@ -66,6 +85,7 @@ public class Server {
 
                 // todo send message to front end
                 String invasionInfo = invasionResult.toString();
+                sendBack(session, buildJson(invasionInfo));
 
                 break;
             case "Reinforce":
@@ -78,6 +98,8 @@ public class Server {
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();
+                JsonObject boolJson = buildJson(booleanToString(endGame));
+                sendBack(session, boolJson);
                 break;
             default:
                 break;
@@ -92,5 +114,38 @@ public class Server {
         }
 
         return listOfStrings;
+    }
+
+    // Send response message
+    private void sendBack(Session session, JsonObject json){
+        RemoteEndpoint.Basic remote = session.getBasicRemote();//Get Session remote end
+        try{
+            System.out.println(json.toString());
+            remote.sendText(json.toString());
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private JsonObject buildJson(String string){
+        JsonReader jsonReader = Json.createReader(new StringReader(string));
+        return jsonReader.readObject();
+    }
+
+    private String concatenateString(ArrayList array){
+        String returnValue = "";
+
+        for (Object anArray : array) {
+            returnValue = returnValue + anArray;
+        }
+
+        return returnValue;
+    }
+
+    private String booleanToString(boolean endGame){
+        if (endGame)
+            return "1";
+        else
+            return "0";
     }
 }
