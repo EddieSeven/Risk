@@ -11,7 +11,9 @@ public class TestTerritory {
 	
 	@Before
 	public void setUp() {
-		t = new Territory("TestName", 1, new int[] {1, 2, 3});
+		t = new Territory();
+		t.readTerritoryFromLine("1 TestName 0 11 12 ;");
+		t.readAdjacentsFromLine("1 1 2 3 ;");
 	}
 	
 	@Test
@@ -43,18 +45,8 @@ public class TestTerritory {
 	}
 	
 	@Test
-	public void testReadTerritory() {
-		
-	}
-	
-	@Test
 	public void testReadAdjacentsError() {
 		assertTrue(!t.readAdjacentsFromLine(""));
-	}
-	
-	@Test
-	public void testReadAdjacents() {
-		
 	}
 	
 	@Test
