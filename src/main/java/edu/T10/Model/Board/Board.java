@@ -3,7 +3,6 @@ package edu.T10.Model.Board;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Vector;
 
 public class Board {
@@ -13,16 +12,15 @@ public class Board {
     private final static String filename = "mapfile.txt";
 
     public Board(){
-        initTerritories(filename);
+        String filepath = getClass().getClassLoader().getResource(filename).getFile();
+        initTerritories(filepath);
     }
 
-    private boolean initTerritories(String filename){
+    private boolean initTerritories(String filepath){
         try {
-            String filepath = getClass().getClassLoader().getResource(filename).getFile();
             BufferedReader br = new BufferedReader(new FileReader(filepath));
             String line;
             while ((line = br.readLine()) != null) {
-                System.out.println("line" + line);
                 switch (line.trim()){
                     case "{continents}":
                         readContinentsBuffer(br);
@@ -97,6 +95,10 @@ public class Board {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+
+    public int getTerritorySize(){
+        return territories.length;
     }
 
     public int getTerritoriesBonus(Territory[] territories){

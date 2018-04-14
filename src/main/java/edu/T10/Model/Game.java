@@ -8,6 +8,7 @@ import static edu.T10.Model.Victor.*;
 
 public class Game {
     private Board board;
+    private int numOfPlayers;
     private Player[] players;
     private Deck deck; // the deck the players take from, later on
     private boolean gameOver;
@@ -15,36 +16,76 @@ public class Game {
     private int currentPlayer;
     private int round;
 
-    public Game(int numOfPlayer){
+    public Game(String[] playerNames){
         this.board = new Board();
-        this.players = new Player[numOfPlayer];
+        this.numOfPlayers = playerNames.length;
+        this.players = new Player[this.numOfPlayers];
+        for (int i = 0; i < this.numOfPlayers; i++){
+            players[i] = new Player(playerNames[i]);
+        }
         this.gameOver = false;
         this.currentWin = false;
         this.round = 0;
     }
 
     public void startGame() {
-        // TODO
-        // Player choose color
-        // Player claim territories
+        // Players are assignedcolor
+        // Player choose territory
+        new StartGameController(this.board, this.players);
+        startTurn();
     }
 
     public void startTurn(){
-        getBonusArmy();
+        getBonusArmy(this.currentPlayer);
     }
 
-    public void finishTurn() {
-        if (currentWin){
-            players[currentPlayer].addCard2Deck(deck.drawCards(1));
+    public boolean finishTurn() {
+        // check if game is over or not
+        // eliminate players
+        EndGameController egc = new EndGameController(this.board, this.players);
+        gameOver = egc.checkGame();
+        if(gameOver) return true;
+        else {
+            // Draw Card
+            if (currentWin) {
+                players[currentPlayer].addCard2Deck(deck.drawCards(1));
+            }
+            currentWin = false;
+
+            // Swap Player
+            currentPlayer = egc.swapPlayer(currentPlayer);
+            startTurn();
+            return false;
         }
-        currentWin = false;
-        currentPlayer = (currentPlayer + 1) % players.length;
     }
 
     public void playCards(int numOfCards) {
         if (players[currentPlayer].useCards(numOfCards))
             players[currentPlayer].addNewArmies(numOfCards/3);
         return;
+    }
+
+
+    public boolean conductReinforcement(int territoryID, int unitValue){
+        if (players[currentPlayer].getFreeArmies() < unitValue)
+            return false;
+        else{
+            players[currentPlayer].addNewArmies(-unitValue);
+            updateTerritory(territoryID, unitValue);
+            return true;
+        }
+    }
+
+    private void getBonusArmy(int playerID) {
+        int territoryBonus = board.getTerritoriesBonus(
+                                board.getTerritories(playerID));
+        int continentBonus = board.getContinentsBonus(
+                                board.getContinents(playerID));
+        players[playerID].addNewArmies(territoryBonus + continentBonus);
+    }
+
+    private void updateTerritory(int territoryID, int unitValue){
+        board.getTerritory(territoryID).updateArmyStrength(unitValue);
     }
 
     public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
@@ -166,6 +207,29 @@ public class Game {
             array[i] = array[k];
             array[k] = temp;
         }
+    }
+
+    public static void main(String[] args){
+        // Test code
+        Game game = new Game(new String[]{"a", "b", "c", "d"});
+        game.startGame();
+        /* ----- Test Board ----- */
+        for (int i = 0; i < game.numOfPlayers; i++) {
+            System.out.println(game.board.getTerritories(i).length);
+            System.out.println(Arrays.toString(game.board.getTerritories(i)));
+        }
+        /* ------ Test Player ----- */
+//        for (int i = 0; i < game.numOfPlayers; i++) {
+//            System.out.println(game.players[i]);
+//        }
+        game.conductReinforcement(game.board.getTerritories(0)[0].getId(), 3);
+        game.finishTurn();
+        /* ------ Test Player ----- */
+        for (int i = 0; i < game.numOfPlayers; i++) {
+            System.out.println(game.players[i]);
+        }
+        System.out.println(game.currentPlayer);
+
     }
 
 }
