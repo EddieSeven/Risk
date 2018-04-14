@@ -1,8 +1,5 @@
 package edu.T10;
 
-import edu.T10.Model.Game;
-import edu.T10.Model.InvasionResult;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,10 +21,10 @@ public class Risk extends HttpServlet {
         request.getRequestDispatcher("response.jsp").forward(request, response);
     }
 
-    public static void main(String[] args) {
-
-        System.out.print("Hello world!");
-
-   }
+//    public static void main(String[] args) {
+//
+//        System.out.print("Hello world!");
+//
+//    }
 
 }
