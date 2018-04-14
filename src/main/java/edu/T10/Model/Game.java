@@ -7,7 +7,7 @@ import java.util.Arrays;
 import static edu.T10.Model.Victor.*;
 
 public class Game {
-    public Board board; //todo change back to private!
+    private Board board;
     private Player[] players;
     private Deck deck; // the deck the players take from, later on
     private boolean gameOver;
