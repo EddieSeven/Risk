@@ -1,6 +1,6 @@
 package edu.T10.Model.Board;
 
-import edu.T10.Model.Player;
+import edu.T10.Model.*;
 
 import java.util.Arrays;
 
