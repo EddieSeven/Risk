@@ -4,6 +4,10 @@ public class InvasionResult {
     private int attackerLosses = 0;
     private int defenderLosses = 0;
     private Victor victor;
+    
+    public InvasionResult() {
+    	this.victor = Victor.DEFAULT;
+    }
 
     public void incrementAttackerLosses(int losses){
         attackerLosses += losses;
@@ -39,5 +43,5 @@ public class InvasionResult {
 }
 
 enum Victor {
-    ATTACKER, DEFENDER;
+    ATTACKER, DEFENDER, DEFAULT;
 }
