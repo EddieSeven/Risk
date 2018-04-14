@@ -11,7 +11,7 @@ public class TestTerritory {
 	
 	@Before
 	public void setUp() {
-		t = new Territory("TestName", 1, new int[] {1, 2, 3});
+		t = new Territory();
 	}
 	
 	@Test

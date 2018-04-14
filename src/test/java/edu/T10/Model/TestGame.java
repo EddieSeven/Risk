@@ -7,7 +7,7 @@ public class TestGame {
 	Game g;
 	@Before
 	public void setUp() {
-		g = new Game(4);
+		g = new Game(new String[]{"a", "b", "c", "d"});
 	}
 	
 	@Test

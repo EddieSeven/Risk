@@ -14,11 +14,13 @@
     <title>Risk Demo</title>
 </head>
 <body>
+    <!-- Left Panel -->
     <div id=startpage">
         <h1>Risk</h1>
         <h2>Welcome to Risk, ${user}!</h2>
     </div>${user}
 
+    <!-- Right Panel -->
     <div id="board">
         <img src="../resources/world_map.png">
     </div>
