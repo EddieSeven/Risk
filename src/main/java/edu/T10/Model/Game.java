@@ -25,7 +25,7 @@ public class Game {
         }
         this.gameOver = false;
         this.currentWin = false;
-        this.round = 0; // human readable
+        this.round = 0;
     }
 
     public void startGame() {
@@ -65,6 +65,7 @@ public class Game {
         return;
     }
 
+
     public boolean conductReinforcement(int territoryID, int unitValue){
         if (players[currentPlayer].getFreeArmies() < unitValue)
             return false;
@@ -89,7 +90,10 @@ public class Game {
 
     public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
         int defenderUnits = board.getArmyStrength(toTerritoryID);
+        int attackingPlayerID = board.getTerritory(fromTerritoryID).getOwner();
         InvasionResult invasionResult = new InvasionResult();
+        int originalAttackerStrength = attackerUnits;
+        int originalDefenderStrength = defenderUnits;
 
         while (defenderUnits != 0 && attackerUnits != 0){
             // attacker losses = results[0]
@@ -98,22 +102,67 @@ public class Game {
             invasionResult.incrementAttackerLosses(results[0]);
             invasionResult.incrementDefenderLosses(results[1]);
 
-            attackerUnits -= results[0];
-            defenderUnits -= results[1];
+            attackerUnits = updateUnits(attackerUnits, results);
+            defenderUnits = updateUnits(defenderUnits, results);
 
-            if (defenderUnits <= 0)
-                invasionResult.setVictor(ATTACKER);
-            else if (attackerUnits <= 0)
-                invasionResult.setVictor(DEFENDER);
+            if (defenderUnits <= 0) {
+                checkLosses(invasionResult, originalAttackerStrength, true);
+                checkLosses(invasionResult, originalDefenderStrength, false);
+                attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
+            }
+            else if (attackerUnits <= 0){
+                checkLosses(invasionResult, originalAttackerStrength, true);
+                checkLosses(invasionResult, originalDefenderStrength, false);
+                defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
+            }
         }
-
 
         return invasionResult;
     }
 
+    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker){
+        if (isAttacker){
+            if (invasionResult.getAttackerLosses() > originalStrength)
+                invasionResult.setAttackerLosses(originalStrength);
+        } else {
+            if (invasionResult.getDefenderLosses() > originalStrength)
+                invasionResult.setDefenderLosses(originalStrength);
+        }
+    }
+
+    private int updateUnits(int units, int[] results) {
+        units -= results[0];
+        if (units < 0)
+            units = 0;
+
+        return units;
+    }
+
+    private void getBonusArmy() {
+        int territoryBonus = board.getTerritoriesBonus(
+                board.getTerritories(currentPlayer));
+        int continentBonus = board.getContinentsBonus(
+                board.getContinents(currentPlayer));
+        players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
+    }
+
+    private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
+        invasionResult.setVictor(DEFENDER);
+        board.updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
+        board.updateTerritoryStrength(fromTerritoryID, invasionResult.getAttackerLosses());
+    }
+
+    private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
+        int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
+        invasionResult.setVictor(ATTACKER);
+        board.updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
+        board.updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
+        board.updateOwner(toTerritoryID, attackingPlayerID);
+    }
+
     private int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult){
-        int attackerRolls[] = rollDie(attackerDice); // todo 1 <= attacker die <= 3
-        int defenderRolls[] = rollDie(defenderDice); // todo 1 <= defender die <= 2
+        int attackerRolls[] = rollDie(attackerDice);
+        int defenderRolls[] = rollDie(defenderDice);
         int results[];
 
         if (attackerDice > defenderDice)
