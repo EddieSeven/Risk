@@ -32,6 +32,18 @@ public class InvasionResult {
     public void setVictor(Victor victor){
         this.victor = victor;
     }
+
+    private String victorString(Victor victor){
+        if (victor == Victor.ATTACKER)
+            return "attacker";
+        else
+            return "defender";
+    }
+
+    @Override
+    public String toString(){
+        return victorString(victor) + " wins. Defender lost " + defenderLosses + ", attacker lost " + attackerLosses + ".";
+    }
 }
 
 enum Victor {

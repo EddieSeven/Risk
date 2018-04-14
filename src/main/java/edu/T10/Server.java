@@ -2,6 +2,7 @@ package edu.T10;
 
 import edu.T10.Model.Board.Territory;
 import edu.T10.Model.Game;
+import edu.T10.Model.InvasionResult;
 
 import javax.json.*;
 import java.io.*;
@@ -56,12 +57,16 @@ public class Server {
                 break;
 
             case "Attack":
-                this.game.conductInvasion(
+                InvasionResult invasionResult = this.game.conductInvasion(
                         json.getInt("territoryID"),
                         json.getInt("targetID"),
                         json.getInt("unitValue"),
                         json.getInt("attackerDice"),
                         json.getInt("defenderDice"));
+
+                // todo send message to front end
+                String invasionInfo = invasionResult.toString();
+
                 break;
             case "Reinforce":
                 this.game.conductReinforcement(
