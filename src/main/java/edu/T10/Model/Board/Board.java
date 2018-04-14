@@ -22,7 +22,7 @@ public class Board {
             BufferedReader br = new BufferedReader(new FileReader(filepath));
             String line;
             while ((line = br.readLine()) != null) {
-                // System.out.println("line" + line);
+                System.out.println("line" + line);
                 switch (line.trim()){
                     case "{continents}":
                         readContinentsBuffer(br);
