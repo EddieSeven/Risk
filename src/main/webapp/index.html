@@ -1,24 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Anton">
     <link rel="stylesheet" type="text/css" href="risk-styles.css">
+    <script type="text/javascript" src="Server.js"></script>
     <meta charset="UTF-8">
     <title>Risk Demo</title>
 </head>
 <body>
-    <div class="startpage">
-        <h1>R I S K</h1>
-        <p>Enter your name:
-        <form method="post" action="register">
-            <input type="text" id="register-text-input" name="name" />
-            <input type="submit" id="register-button" value="Register" />
-        </form>
-        </p>
-    </div>
+    <div class="container">
 
-    <div class="board">
-        <img src="./images/world_map.png">
+        <!-- Right Panel -->
+        <div class="controlPanel">
+            <h1>R I S K</h1>
+            <div id="startPanel" class='row'>
+                <p>Number of Players:</p>
+                <button onclick="registerNumber()"> Submit </button><br/>
+                <input type="text" id="numOfPlayer" class='box'> </input>
+
+            </div>
+            <div id="nameBoxes"> </div>
+
+        </div>
+        <!-- Right Panel -->
+        <div class="board">
+            <img src="./images/world_map.png">
+        </div>
+
     </div>
 
 

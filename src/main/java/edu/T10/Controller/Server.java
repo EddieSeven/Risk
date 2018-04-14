@@ -1,10 +1,13 @@
-//package edu.T10.Controller;
+//package edu.T10;
 //
 //import edu.T10.Model.Game;
 //
 //import java.io.*;
 //import javax.json.Json;
+//import javax.json.JsonArray;
 //import javax.json.JsonObject;
+//import javax.json.JsonReader;
+//import javax.json.stream.JsonParsingException;
 //import javax.servlet.*;
 //import javax.servlet.annotation.WebServlet;
 //import javax.servlet.http.*;
@@ -16,12 +19,12 @@
 //
 //    @Override
 //    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        doGetOrPost(request, response);
+////        doGetOrPost(request, response);
 //    }
 //
 //    @Override
 //    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-//        doGetOrPost(request, response);
+////        doGetOrPost(request, response);
 //    }
 //
 //    private void doGetOrPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -33,7 +36,17 @@
 //            while ((s = request.getReader().readLine()) != null) {
 //                sb.append(s);
 //            }
-//            parseCommand(sb.toString());
+//            JsonReader jsonReader = Json.createReader(new StringReader(sb.toString()));
+//            try{
+//                JsonObject jsonObj = jsonReader.readObject();
+//                parseCommand(jsonObj);
+//            } catch (JsonParsingException jpe) {
+//                response.getWriter().write("Not a valid json query \n\n");
+//
+//                response.getWriter().write("Json Query Received \n");
+//                response.getWriter().write(sb.toString() + "\n\n");
+//            }
+//
 //        } catch (Exception ex) {
 //            ex.printStackTrace();
 //            response.getOutputStream().flush();
@@ -49,11 +62,15 @@
 //    /*
 //        Json String: request format
 //     */
-//    private void parseCommand(String command){
-//        JsonObject json = Json.createReader(new StringReader(command)).readObject();
+//    private void parseCommand(JsonObject json){
 //        switch (json.getString("Action")) {
 //            case "Init":
-//                this.game = new Game(json.getInt("numOfPlayer"));
+//                JsonArray jarr = json.getJsonArray("names");
+//                String[] names = new String[jarr.size()];
+//                for (int i = 0; i < jarr.size(); i++) {
+//                    names[i] = jarr.getJsonObject(i).toString();
+//                }
+//                this.game = new Game(names);
 //                this.game.startGame();
 //                break;
 //            case "Attack":
@@ -65,7 +82,7 @@
 //                        json.getInt("defenderDice"));
 //                break;
 //            case "Reinforce":
-//                this.game.updateTerritory(
+//                this.game.conductReinforcement(
 //                        json.getInt("territoryID"),
 //                        json.getInt("unitValue"));
 //                break;
@@ -73,7 +90,7 @@
 //                this.game.playCards(json.getInt("numOfCards"));
 //                break;
 //            case "EndTurn":
-//                this.game.finishTurn();
+//                boolean endGame = this.game.finishTurn();
 //                break;
 //            default:
 //                break;
