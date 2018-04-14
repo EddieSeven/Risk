@@ -69,10 +69,12 @@ function startGame(){
     var obj = new Object();
     addKeyValuePair(obj, 'Action', 'Init')
     var nodes = document.getElementsByName('names');
-    var stArray = new String[nodes.length];
+    var stArray = new Array(nodes.length);
     for (i = 0; i < nodes.length; i++){
         stArray[i] = nodes[i].value;
     }
+    addKeyValuePair(obj, 'names', stArray);
+    webSocket.send(JSON.stringify(obj));
     console.log(stArray);
 }
 
