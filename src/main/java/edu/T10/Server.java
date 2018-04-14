@@ -1,13 +1,11 @@
 package edu.T10;
 
+import edu.T10.Model.Board.Territory;
 import edu.T10.Model.Game;
 
 import javax.json.*;
 import java.io.*;
-import javax.json.stream.JsonParsingException;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
@@ -41,7 +39,6 @@ public class Server {
 
     private void parseCommand(JsonObject json) {
         switch (json.getString("Action")) {
-
             case "Init":
                 JsonArray jsonArray = json.getJsonArray("names");
                 String[] names = new String[jsonArray.size()];
@@ -51,9 +48,10 @@ public class Server {
                 this.game = new Game(names);
                 this.game.startGame();
 
-
-                // return tostring of player, and toString of ALL territories, and tostring of player's territories
-                // use session to send back
+                // todo send message to front end
+                int playerID = game.getCurrentPlayerID();
+                String playerInfo = game.getCurrentPlayer().toString();
+                ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
 
                 break;
 
@@ -79,5 +77,15 @@ public class Server {
             default:
                 break;
         }
+    }
+
+    private ArrayList<String> buildTerritoryList(Territory[] territories){
+        ArrayList<String> listOfStrings = new ArrayList<>();
+
+        for (Territory territory : territories) {
+            listOfStrings.add(territory.toString());
+        }
+
+        return listOfStrings;
     }
 }

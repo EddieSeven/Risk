@@ -43,6 +43,10 @@ public class Board {
         return true;
     }
 
+    public Territory[] getAllTerritories(){
+        return this.territories;
+    }
+
     private void readContinentsBuffer(BufferedReader br){
         Vector<Continent> vec = new Vector<>();
         try {
