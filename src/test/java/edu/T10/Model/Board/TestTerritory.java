@@ -12,6 +12,8 @@ public class TestTerritory {
 	@Before
 	public void setUp() {
 		t = new Territory();
+		t.readTerritoryFromLine("1 TestName 0 11 12 ;");
+		t.readAdjacentsFromLine("1 1 2 3 ;");
 	}
 	
 	@Test
@@ -36,25 +38,21 @@ public class TestTerritory {
 		t.updateArmyStrength(5);
 		assertEquals(t.getStrength(), 5);
 	}
+
+	@Test
+	public void testSetArmyStrength() {
+		t.setArmyStrength(10);
+		assertEquals(t.getStrength(), 10);
+	}
 	
 	@Test
 	public void testReadTerritoryError() {
 		assertTrue(!t.readTerritoryFromLine(""));
 	}
-	
-	@Test
-	public void testReadTerritory() {
-		
-	}
-	
+
 	@Test
 	public void testReadAdjacentsError() {
 		assertTrue(!t.readAdjacentsFromLine(""));
-	}
-	
-	@Test
-	public void testReadAdjacents() {
-		
 	}
 	
 	@Test
