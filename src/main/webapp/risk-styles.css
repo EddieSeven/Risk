@@ -7,17 +7,19 @@ body{
 }
 
 .container{
-    width:100%;
+    width: 1400px;
     height: auto;
     background-color: darkred;
     text-align: center;
     vertical-align: center;
     display: inline-block;
+    margin: 0px auto;
+    padding: 10px;
 }
 
 .controlPanel {
-    float:left;
-    width:20%;
+    float: left;
+    width: 300px;
     margin: 10px auto;
     padding: 10px;
 }
@@ -33,15 +35,16 @@ h1, h2, p{
 }
 
 .board {
-    float:left;
-    width:75%;
+    float: left;
+    width: 75%;
     margin: 10px;
     padding: 5px;
 }
 
 .board img{
-    width: 100%;
+    width: 1024px;
     height: auto;
+    margin: 5px;
 }
 
 .row{
@@ -68,4 +71,13 @@ h1, h2, p{
     width: 100%;
     text-align: center;
     vertical-align: middle;
+}
+
+.game-map area{
+    background-color: aliceblue;
+}
+
+canvas {
+    pointer-events: none;       /* make the canvas transparent to the mouse - needed since canvas is position infront of image */
+    position: absolute;
 }

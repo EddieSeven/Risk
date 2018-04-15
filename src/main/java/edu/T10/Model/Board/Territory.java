@@ -1,6 +1,6 @@
 package edu.T10.Model.Board;
 
-import edu.T10.Model.Player;
+import edu.T10.Model.*;
 
 import java.util.Arrays;
 
@@ -36,6 +36,10 @@ public class Territory {
   
     public void updateArmyStrength(int unitValue){
         this.armyStrength += unitValue; // todo add condition that armyStrength doesn't go below zero
+    }
+
+    public void setArmyStrength(int unitValue){
+        this.armyStrength = unitValue;
     }
 
     /*
