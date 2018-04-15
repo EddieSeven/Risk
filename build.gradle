@@ -14,7 +14,7 @@ repositories {
 dependencies {
     providedCompile 'javax.websocket:javax.websocket-api:1.1'
     testCompile group: 'junit', name: 'junit', version: '4.12'
-    compile group: 'javax.json', name: 'javax.json-api', version: '1.0'
+    compile group: 'javax.json', name: 'javax.json-api', version: '1.1.2'
     testCompile 'org.mockito:mockito-core:2.7.19'
     testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.17.0'
 }
