@@ -60,19 +60,12 @@ public class Server {
                 JsonArray jsonArray = json.getJsonArray("names");
                 String[] names = new String[jsonArray.size()];
                 for (int i = 0; i < jsonArray.size(); i++) {
-                    names[i] = jsonArray.getJsonObject(i).toString();
+                    names[i] = jsonArray.getString(i);
                 }
                 this.game = new Game(names);
                 this.game.startGame();
 
-                // todo send message to front end
-                int playerID = game.getCurrentPlayerID();
-                String playerInfo = game.getCurrentPlayer().toString();
-                ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
-                ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
-
-                String message = playerInfo + concatenateString(playerTerritories) + concatenateString(allTerritories);
-                sendBack(session, buildJson(message));
+                sendBack2Server(session);
                 break;
 
             case "Attack":
@@ -110,11 +103,27 @@ public class Server {
         ArrayList<String> listOfStrings = new ArrayList<>();
 
         for (Territory territory : territories) {
-            listOfStrings.add(territory.toString());
+            listOfStrings.add(territory.toString() + ";");
         }
 
         return listOfStrings;
     }
+
+    private void sendBack2Server(Session session){
+        // todo send message to front end
+        int playerID = game.getCurrentPlayerID();
+        String playerInfo = game.getCurrentPlayer().toString();
+        ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
+        ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
+        JsonObject jobj = Json.createObjectBuilder()
+                .add("player", playerInfo)
+                .add("territory", concatenateString(playerTerritories))
+                .add("board", concatenateString(allTerritories)).build();
+        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
+        sendBack(session, jobj);
+    }
+
+
 
     // Send response message
     private void sendBack(Session session, JsonObject json){
