@@ -10,7 +10,7 @@ public class Player {
         this.name = name;
         this.freeArmies = 0;
         this.deck = new Deck();
-        this.color = Color.DEFAULT;
+        this.color = Color.RED;
     }
 
     public int getFreeArmies() {
@@ -46,5 +46,5 @@ public class Player {
 }
 
 enum Color {
-    GRAY, YELLOW, RED, BLACK, GREEN, BLUE, DEFAULT // six players, six colors, from a quick google search
+    GRAY, YELLOW, RED, BLACK, GREEN, BLUE // six players, six colors, from a quick google search
 }
