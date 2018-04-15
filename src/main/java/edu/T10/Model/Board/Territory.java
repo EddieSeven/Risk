@@ -77,7 +77,6 @@ public class Territory {
 
     @Override
     public String toString() {
-        return id + " " + name + " " + continentID
-                + " " + armyStrength + " " + Arrays.toString(adjTerritories);
+        return id + " " + armyStrength;
     }
 }

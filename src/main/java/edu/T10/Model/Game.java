@@ -1,6 +1,7 @@
 package edu.T10.Model;
 
 import edu.T10.Model.Board.Board;
+import edu.T10.Model.Board.Territory;
 
 import java.util.Arrays;
 
@@ -35,6 +36,14 @@ public class Game {
         startTurn();
     }
 
+    public int getCurrentPlayerID(){
+        return currentPlayer;
+    }
+
+    public Player getCurrentPlayer(){
+        return players[currentPlayer];
+    }
+
     public void startTurn(){
         getBonusArmy(this.currentPlayer);
     }
@@ -65,6 +74,14 @@ public class Game {
         return;
     }
 
+
+    public Territory[] getPlayerTerritories(int id){
+        return board.getTerritories(id);
+    }
+
+    public Territory[] getAllTerritories(){
+        return board.getAllTerritories();
+    }
 
     public boolean conductReinforcement(int territoryID, int unitValue){
         if (players[currentPlayer].getFreeArmies() < unitValue)
