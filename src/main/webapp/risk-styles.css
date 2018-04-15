@@ -72,3 +72,12 @@ h1, h2, p{
     text-align: center;
     vertical-align: middle;
 }
+
+.game-map area{
+    background-color: aliceblue;
+}
+
+canvas {
+    pointer-events: none;       /* make the canvas transparent to the mouse - needed since canvas is position infront of image */
+    position: absolute;
+}
