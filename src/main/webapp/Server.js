@@ -6,6 +6,16 @@
 
 //Declare Websocket to talk to server
 var webSocket;
+
+
+var playerName;
+var playerColor;
+var freeArmies;
+var board = [];
+var playerTerritories = [];
+
+var idOnClick;
+
 //Build URI for client side, based off of their window (OS dependent)
 var loc = window.location, new_uri;
 if (loc.protocol === "https:") {
@@ -18,6 +28,7 @@ new_uri += "risk";//Server end point reference, corrosponds to java server endpo
 //Establish connection from client URI
 webSocket = new WebSocket(new_uri);
 //Defualt On Open function, empty for now but can add funtionality
+
 webSocket.onopen = function () {
     // Check onOpen Here
 };
@@ -27,6 +38,20 @@ webSocket.onopen = function () {
 webSocket.onmessage = function (event) {
     var message = event.data;//Grab message string
     var obj = JSON.parse(message);//Turn message string into JSON
+
+    console.log(message)
+
+    parseResponse(obj);
+    highlight();
+    var action = obj["action"];
+    switch (action) {
+        case "init":
+            reinforceStage(freeArmies, playerName);
+            break;
+        case "reinforce":
+            reinforceStage(freeArmies, playerName);
+            break;
+    }
 
 };
 
@@ -39,6 +64,42 @@ webSocket.onerror = function () {
     // Check onError Here
 };
 
+function parseResponse(response){
+    parsePlayer(response["player"]);
+    pareseTerritories(response["territory"]);
+    parseBoard(response["board"]);
+}
+
+function parsePlayer(str){
+    playerName = str.split(" ")[0];
+    playerColor = str.split(" ")[1];
+    freeArmies = parseInt(str.split(" ")[2]);
+}
+
+function pareseTerritories(str){
+    var territories = str.split(";");
+    playerTerritories = [];
+    for (var i = 0; i < territories.length-1; i++){
+        var segs = territories[i].split(" ");
+        console.log(segs);
+        playerTerritories.push({
+            key:   segs[0],
+            value: segs[1]
+        });
+    }
+}
+
+function parseBoard(str){
+    var territories = str.split(";");
+    board = [];
+    for (var i = 0; i < territories.length-1; i++){
+        var segs = territories[i].split(" ");
+        board.push({
+            key:   segs[0],
+            value: segs[1]
+        });
+    }
+}
 
 function registerNumber() {
     var number = document.getElementById("numOfPlayer").value;
@@ -47,25 +108,23 @@ function registerNumber() {
 }
 
 function openTab(numOfBoxes) {
-    var node = document.getElementById('nameBoxes');
-    while (node.hasChildNodes()) {
-        node.removeChild(node.lastChild);
-    }
+    cleanBoxes('controlBoxes');
 
     var div = document.createElement('div');
     div.className = 'row';
     div.innerHTML += '<p>input your names</p>';
-    div.innerHTML += "<button onclick='startGame()'> Submit </button><br/>";
+    div.innerHTML += "<button onclick='startGame()'> Start </button><br/>";
     for (i  = 0; i < numOfBoxes; i++){
         var newInputBox = "<input type='text' id='nameBox' name='names' class='box'/>";
         div.innerHTML += newInputBox;
     }
 
-    document.getElementById('startPanel').style.display = 'none';
-    document.getElementById('nameBoxes').appendChild(div);
+    document.getElementById('controlBoxes').appendChild(div);
 }
 
 function startGame(){
+    addListener();
+
     var obj = new Object();
     addKeyValuePair(obj, 'Action', 'Init')
     var nodes = document.getElementsByName('names');
@@ -75,12 +134,89 @@ function startGame(){
     }
     addKeyValuePair(obj, 'names', stArray);
     webSocket.send(JSON.stringify(obj));
-    console.log(stArray);
+
+    cleanBoxes('controlBoxes');
+}
+
+function reinforce(){
+    var obj = new Object();
+
+    var units = document.getElementById('armyUnit').value;
+    addKeyValuePair(obj, 'Action', 'Reinforce');
+    addKeyValuePair(obj, 'territoryID', idOnClick+1);
+    addKeyValuePair(obj, 'unitValue', parseInt(units));
+    webSocket.send(JSON.stringify(obj));
+}
+
+function addListener(){
+    var classes = document.getElementsByClassName('territory');
+    for (var i = 0; i < classes.length; i++) {
+        classes[i].addEventListener('click', bindClick(i));
+    }
+}
+
+function bindClick(i) {
+    return function(){
+        var classes = document.getElementsByClassName('territory');
+        cleanBoxes('listener');
+        var div = document.createElement('div');
+        div.className = 'row';
+        div.innerHTML += "<input type='text' id='armyUnit' name='armyUnits' class='box' placeholder='input your units'>";
+        idOnClick = i;
+        document.getElementById("listener").innerHTML += "<h3> Territory:  " + classes[i].title + " </h3>";
+        console.log(i + 1);
+        console.log(board);
+        document.getElementById("listener").innerHTML += "<h3> Army Force:  " + board[i].value + " </h3>";
+        document.getElementById('listener').appendChild(div);
+        console.log("you clicked region number " + classes[i].title);
+    };
+}
+
+function reinforceStage(){
+    cleanBoxes('controlBoxes');
+
+
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p>Reinforce Your Territory</p>";
+    div.innerHTML += "<div class='row'><h3>Available Armies:  " + freeArmies + "</h3></div>";
+    div.innerHTML += "<div class='row' id='listener'> <h3>Territory:  </h3></div>";
+    div.innerHTML += "<div class='row'><button onclick='reinforce()'> Reinforce </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='attackStage()'> Next </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function attackStage(){
+    cleanBoxes('controlBoxes');
+
+
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p> Attack Other Territories</p>";
+    div.innerHTML += "<div class='row' id='listener'> <h3>Territory:  </h3></div>";
+    div.innerHTML += "<div class='row'><button onclick='reinforce()'> Reinforce </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='attackStage()'> Next </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function highlight(){
+    if (playerTerritories.length < 1) return;
+    for (var i = 0; i < playerTerritories.length; i++){
+        drawPoly(document.getElementById(playerTerritories[i].key).getAttribute('coords'), playerColor);
+    }
 }
 
 function addKeyValuePair(obj, key, value) {
-    obj.Key = key;//Set Key of JSON
-    obj.Value = value;//Set Filename value
+    obj[key] = value;
+}
+
+function cleanBoxes(ids){
+    var node = document.getElementById(ids);
+    while (node.hasChildNodes()) {
+        node.removeChild(node.lastChild);
+    }
 }
 
 // stores the device context of the canvas we use to draw the outlines
@@ -92,13 +228,14 @@ function byId(e){return document.getElementById(e);}
 
 // takes a string that contains coords eg - "227,307,261,309, 339,354, 328,371, 240,331"
 // draws a line from each co-ord pair to the next - assumes starting point needs to be repeated as ending point.
-function drawPoly(coOrdStr)
+function drawPoly(coOrdStr, color)
 {
     var mCoords = coOrdStr.split(',');
     var i, n;
     n = mCoords.length;
 
     hdc.beginPath();
+    hdc.strokeStyle=color;
     hdc.moveTo(mCoords[0], mCoords[1]);
     for (i=2; i<n; i+=2)
     {
@@ -121,7 +258,7 @@ function drawRect(coOrdStr)
 
 function myHover(element)
 {
-    var hoveredElement = element;
+    var color = "RED";
     var coordStr = element.getAttribute('coords');
     var areaType = element.getAttribute('shape');
 
@@ -129,7 +266,7 @@ function myHover(element)
     {
         case 'polygon':
         case 'poly':
-            drawPoly(coordStr);
+            drawPoly(coordStr, color);
             break;
 
         case 'rect':
@@ -141,6 +278,7 @@ function myLeave()
 {
     var canvas = byId('myCanvas');
     hdc.clearRect(0, 0, canvas.width, canvas.height);
+    highlight();
 }
 
 function myInit()

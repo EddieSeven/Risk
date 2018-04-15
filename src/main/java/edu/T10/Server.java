@@ -60,19 +60,12 @@ public class Server {
                 JsonArray jsonArray = json.getJsonArray("names");
                 String[] names = new String[jsonArray.size()];
                 for (int i = 0; i < jsonArray.size(); i++) {
-                    names[i] = jsonArray.getJsonObject(i).toString();
+                    names[i] = jsonArray.getString(i);
                 }
                 this.game = new Game(names);
                 this.game.startGame();
 
-                // todo send message to front end
-                int playerID = game.getCurrentPlayerID();
-                String playerInfo = game.getCurrentPlayer().toString();
-                ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
-                ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
-
-                String message = playerInfo + concatenateString(playerTerritories) + concatenateString(allTerritories);
-                sendBack(session, buildJson(message));
+                sendBack2Server(session, "init");
                 break;
 
             case "Attack":
@@ -92,6 +85,7 @@ public class Server {
                 this.game.conductReinforcement(
                         json.getInt("territoryID"),
                         json.getInt("unitValue"));
+                sendBack2Server(session, "reinforce");
                 break;
             case "PlayCards":
                 this.game.playCards(json.getInt("numOfCards"));
@@ -106,11 +100,26 @@ public class Server {
         }
     }
 
+    private void sendBack2Server(Session session, String action){
+        // todo send message to front end
+        int playerID = game.getCurrentPlayerID();
+        String playerInfo = game.getCurrentPlayer().toString();
+        ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
+        ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
+        JsonObject jobj = Json.createObjectBuilder()
+                .add("action", action)
+                .add("player", playerInfo)
+                .add("territory", concatenateString(playerTerritories))
+                .add("board", concatenateString(allTerritories)).build();
+        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
+        sendBack(session, buildJson(jobj.toString()));
+    }
+
     private ArrayList<String> buildTerritoryList(Territory[] territories){
         ArrayList<String> listOfStrings = new ArrayList<>();
 
         for (Territory territory : territories) {
-            listOfStrings.add(territory.toString());
+            listOfStrings.add(territory.toString() + ";");
         }
 
         return listOfStrings;

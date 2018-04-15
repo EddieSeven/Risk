@@ -41,8 +41,9 @@ public class InvasionResult {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return victorString(victor) + " wins. Defender lost " + defenderLosses + ", attacker lost " + attackerLosses + ".";
+    }
 
     public void setAttackerLosses(int attackerLosses) {
         this.attackerLosses = attackerLosses;

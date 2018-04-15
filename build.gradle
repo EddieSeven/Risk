@@ -1,5 +1,4 @@
 plugins {
-    id 'org.akhikhl.gretty' version '1.4.2'
     id 'war'
     id 'java'
     id 'org.akhikhl.gretty' version '1.4.2'
