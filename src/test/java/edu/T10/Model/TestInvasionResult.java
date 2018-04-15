@@ -39,4 +39,15 @@ public class TestInvasionResult {
 		assertEquals(result.getDefenderLosses(), 1);
 	}
 	
+	@Test
+	public void testSetAttactorLoss() {
+		result.setAttackerLosses(5);
+		assertEquals(result.getAttackerLosses(), 5);
+	}
+
+	@Test
+	public void testSetDefenderLoss() {
+		result.setDefenderLosses(6);
+		assertEquals(result.getDefenderLosses(), 6);
+	}
 }

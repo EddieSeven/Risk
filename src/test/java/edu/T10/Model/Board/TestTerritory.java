@@ -38,12 +38,18 @@ public class TestTerritory {
 		t.updateArmyStrength(5);
 		assertEquals(t.getStrength(), 5);
 	}
+
+	@Test
+	public void testSetArmyStrength() {
+		t.setArmyStrength(10);
+		assertEquals(t.getStrength(), 10);
+	}
 	
 	@Test
 	public void testReadTerritoryError() {
 		assertTrue(!t.readTerritoryFromLine(""));
 	}
-	
+
 	@Test
 	public void testReadAdjacentsError() {
 		assertTrue(!t.readAdjacentsFromLine(""));
