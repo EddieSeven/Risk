@@ -37,7 +37,7 @@ public class EndGameController {
         int next = currentPlayer;
         while(true) {
             next = (next + 1) % numOfPlayers;
-            if (players[next] == null) continue;
+            if (players[next].equals(null)) continue;
             return next;
         }
     }

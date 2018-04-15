@@ -1,6 +1,7 @@
 package edu.T10.Model;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +25,19 @@ public class TestPlayer {
 		assertTrue(p.useCards(1));
 	}
 	
-	// TODO: Army test needed, but since I don't see anywhere modifies players' free armies, will do it later 
-	
+	@Test
+	public void testFreeArmies() {
+		assertEquals(p.getFreeArmies(), 0);
+		p.addNewArmies(5);
+		assertEquals(p.getFreeArmies(), 5);
+	}
+
+	@Test
+	public void testAssignColor() {
+		assertEquals(p.toString(), "Test RED 0");
+		p.assignColor(Color.BLACK);
+		assertEquals(p.toString(), "Test BLACK 0");
+		p.assignColor(1);
+		assertEquals(p.toString(), "Test YELLOW 0");
+	}
 }
