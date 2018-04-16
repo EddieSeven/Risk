@@ -65,7 +65,7 @@ public class Server {
                 this.game = new Game(names);
                 this.game.startGame();
 
-                sendBack2Server(session);
+                sendBack2Server(session, "init");
                 break;
 
             case "Attack":
@@ -77,7 +77,9 @@ public class Server {
                         json.getInt("defenderDice"));
 
                 // todo send message to front end
+                sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
+                System.out.print(invasionInfo);
                 sendBack(session, buildJson(invasionInfo));
 
                 break;
@@ -85,18 +87,42 @@ public class Server {
                 this.game.conductReinforcement(
                         json.getInt("territoryID"),
                         json.getInt("unitValue"));
+                sendBack2Server(session, "reinforce");
+                break;
+            case "Fortify":
+                this.game.conductFortification(
+                        json.getInt("fromTerritoryID"),
+                        json.getInt("toTerritoryID"),
+                        json.getInt("unitValue"));
+                sendBack2Server(session, "fortify");
                 break;
             case "PlayCards":
                 this.game.playCards(json.getInt("numOfCards"));
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();
-                JsonObject boolJson = buildJson(booleanToString(endGame));
-                sendBack(session, boolJson);
+                this.game.startTurn();
+                String action = endGame ? "endGame" :"continue" ;
+                sendBack2Server(session, action);
                 break;
             default:
                 break;
         }
+    }
+
+    private void sendBack2Server(Session session, String action){
+        // todo send message to front end
+        int playerID = game.getCurrentPlayerID();
+        String playerInfo = game.getCurrentPlayer().toString();
+        ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
+        ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
+        JsonObject jobj = Json.createObjectBuilder()
+                .add("action", action)
+                .add("player", playerInfo)
+                .add("territory", concatenateString(playerTerritories))
+                .add("board", concatenateString(allTerritories)).build();
+        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
+        sendBack(session, buildJson(jobj.toString()));
     }
 
     private ArrayList<String> buildTerritoryList(Territory[] territories){

@@ -13,6 +13,8 @@ WebContent/
 .project
 .classpath
 
+classes
 build
+web
 
 /bin/

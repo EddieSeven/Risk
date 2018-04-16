@@ -93,6 +93,11 @@ public class Game {
         }
     }
 
+    public void conductFortification(int fromTerritoryID, int toTerritoryID, int unitValue){
+        updateTerritory(toTerritoryID, unitValue);
+        updateTerritory(fromTerritoryID, -unitValue);
+    }
+
     private void getBonusArmy(int playerID) {
         int territoryBonus = board.getTerritoriesBonus(
                                 board.getTerritories(playerID));
@@ -111,6 +116,10 @@ public class Game {
         InvasionResult invasionResult = new InvasionResult();
         int originalAttackerStrength = attackerUnits;
         int originalDefenderStrength = defenderUnits;
+
+        if (defenderUnits == 0){
+            attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
+        }
 
         while (defenderUnits != 0 && attackerUnits != 0){
             // attacker losses = results[0]
@@ -166,11 +175,12 @@ public class Game {
     private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
         invasionResult.setVictor(DEFENDER);
         board.updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
-        board.updateTerritoryStrength(fromTerritoryID, invasionResult.getAttackerLosses());
+        board.updateTerritoryStrength(fromTerritoryID, -invasionResult.getAttackerLosses());
     }
 
     private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
         int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
+        System.out.println("remainingAttackerStrength" + remainingAttackerStrength);
         invasionResult.setVictor(ATTACKER);
         board.updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
         board.updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);

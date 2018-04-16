@@ -1,5 +1,9 @@
 package edu.T10.Model;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+
 public class InvasionResult {
     private int attackerLosses = 0;
     private int defenderLosses = 0;
@@ -41,8 +45,14 @@ public class InvasionResult {
     }
 
     @Override
-    public String toString(){
-        return victorString(victor) + " wins. Defender lost " + defenderLosses + ", attacker lost " + attackerLosses + ".";
+    public String toString() {
+        JsonObject jsonObject = Json.createObjectBuilder()
+                .add("action", "result")
+                .add("result", victorString(victor))
+                .add("attacker", attackerLosses)
+                .add("defender", defenderLosses).build();
+        return jsonObject.toString();
+    }
 
     public void setAttackerLosses(int attackerLosses) {
         this.attackerLosses = attackerLosses;
