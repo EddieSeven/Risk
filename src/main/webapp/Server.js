@@ -60,6 +60,7 @@ webSocket.onmessage = function (event) {
             endGame();
             break;
         case "continue":
+            myLeave();
             reinforceStage(freeArmies, playerName);
             break;
         case "fortify":
@@ -235,10 +236,12 @@ function reinforceStage(){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p>Reinforce Your Territory</p>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='reinforce()'> Reinforce </button>";
+    div.innerHTML += "<button onclick='firstAttackStage()'> Next -- Attack </button>";
+    div.innerHTML += "</div>";
     div.innerHTML += "<div class='row'><h5>Available Armies:  " + freeArmies + "</h5></div>";
     div.innerHTML += "<div class='row' id='listener'></div>";
-    div.innerHTML += "<div class='row'><button onclick='reinforce()'> Reinforce </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Next -- Attack </button></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -249,10 +252,13 @@ function firstAttackStage(choice){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p> Where you attack from? </p>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='secondAttackStage()'> Choose This Territory</button>";
+    div.innerHTML += "<button onclick='firstFortifyStage()'> Next -- Fortify </button>";
+    // div.innerHTML += "<button onclick='firstAttackStage()'> Reset </button>";
+    div.innerHTML += "</div>";
     div.innerHTML += "<div class='row' id='listener'></div>";
-    div.innerHTML += "<div class='row'><button onclick='secondAttackStage()'> Choose This Territory</button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Reset </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
+
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -264,12 +270,14 @@ function secondAttackStage(choice){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p> Where you attack to? </p>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='attack()'> Conduct Attack </button>";
+    div.innerHTML += "<button onclick='firstFortifyStage()'> Next -- Fortify </button>";
+    // div.innerHTML += "<button onclick='firstAttackStage()'> Reset </button>";
+    div.innerHTML += "</div>";
     div.innerHTML += "<div class='row'><h5> From Territory: </h5><h5>" + document.getElementById(idOnClick).title +
                         " with "+ board[parseInt(idOnClick)-1].value + " armies  </h5></div>";
     div.innerHTML += "<div class='row' id='listener'></div>";
-    div.innerHTML += "<div class='row'><button onclick='attack()'> Conduct Attack </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Reset </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -283,11 +291,13 @@ function showresultStage(obj){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p> Attack Results</p>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='firstAttackStage()'> Conduct Another Attack </button>";
+    div.innerHTML += "<button onclick='firstFortifyStage()'> Next -- Fortify </button>";
+    div.innerHTML += "</div>";
     div.innerHTML += "<div class='row'><h5>"  + resultStr + "</h5></div>";
     div.innerHTML += "<div class='row'><h5> You Lost "  + obj["attacker"] + " units </h5></div>";
     div.innerHTML += "<div class='row' id='listener'></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Conduct Another Attack </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -298,10 +308,12 @@ function firstFortifyStage(){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p> Where you fortify from? </p>";
-    div.innerHTML += "<div class='row' id='listener'> <h5>Territory:  </h5></div>";
-    div.innerHTML += "<div class='row'><button onclick='secondFortifyStage()'> Choose This Territory</button></div>";
-    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Reset </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='endTurn()'> Finish </button></div>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='secondFortifyStage()'> Choose This Territory</button>";
+    div.innerHTML += "<button onclick='endTurn()'> Finish </button>";
+    // div.innerHTML += "<button onclick='firstFortifyStage()'> Reset </button>";
+    div.innerHTML += "</div>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -313,11 +325,13 @@ function secondFortifyStage(){
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p> Where you fortify to? </p>";
+    div.innerHTML += "<div class='row>";
+    div.innerHTML += "<button onclick='fortify()'> Fortify and Finish </button>";
+    div.innerHTML += "<button onclick='endTurn()'> Finish </button>";
+    div.innerHTML += "</div>";
     div.innerHTML += "<div class='row'><h5> From Territory: </h5><h5>" + document.getElementById(idOnClick).title +
         " with "+ board[parseInt(idOnClick)-1].value + " armies  </h5></div>";
-    div.innerHTML += "<div class='row' id='listener'> <h5>Territory:  </h5></div>";
-    div.innerHTML += "<div class='row'><button onclick='fortify()'> Fortify and Finish </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='endTurn()'> Finish </button></div>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -378,7 +392,7 @@ function drawRect(coOrdStr)
 
 function myHover(element)
 {
-    var color = "RED";
+    var color = "PURPLE";
     var coordStr = element.getAttribute('coords');
     var areaType = element.getAttribute('shape');
 
