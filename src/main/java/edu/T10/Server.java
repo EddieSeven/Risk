@@ -77,7 +77,9 @@ public class Server {
                         json.getInt("defenderDice"));
 
                 // todo send message to front end
+                sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
+                System.out.print(invasionInfo);
                 sendBack(session, buildJson(invasionInfo));
 
                 break;
@@ -87,13 +89,21 @@ public class Server {
                         json.getInt("unitValue"));
                 sendBack2Server(session, "reinforce");
                 break;
+            case "Fortify":
+                this.game.conductFortification(
+                        json.getInt("fromTerritoryID"),
+                        json.getInt("toTerritoryID"),
+                        json.getInt("unitValue"));
+                sendBack2Server(session, "fortify");
+                break;
             case "PlayCards":
                 this.game.playCards(json.getInt("numOfCards"));
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();
-                JsonObject boolJson = buildJson(booleanToString(endGame));
-                sendBack(session, boolJson);
+                this.game.startTurn();
+                String action = endGame ? "endGame" :"continue" ;
+                sendBack2Server(session, action);
                 break;
             default:
                 break;

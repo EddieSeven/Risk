@@ -13,6 +13,8 @@ var playerColor;
 var freeArmies;
 var board = [];
 var playerTerritories = [];
+var fromID;
+var showbox = true;
 
 var idOnClick;
 
@@ -40,7 +42,10 @@ webSocket.onmessage = function (event) {
     var obj = JSON.parse(message);//Turn message string into JSON
 
     console.log(message)
-
+    if(obj["action"] == "result") {
+        showresultStage(obj);
+        return;
+    }
     parseResponse(obj);
     highlight();
     var action = obj["action"];
@@ -51,6 +56,16 @@ webSocket.onmessage = function (event) {
         case "reinforce":
             reinforceStage(freeArmies, playerName);
             break;
+        case "endGame":
+            endGame();
+            break;
+        case "continue":
+            reinforceStage(freeArmies, playerName);
+            break;
+        case "fortify":
+            endTurn();
+            break;
+
     }
 
 };
@@ -143,9 +158,48 @@ function reinforce(){
 
     var units = document.getElementById('armyUnit').value;
     addKeyValuePair(obj, 'Action', 'Reinforce');
-    addKeyValuePair(obj, 'territoryID', idOnClick+1);
+    addKeyValuePair(obj, 'territoryID', parseInt(idOnClick));
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     webSocket.send(JSON.stringify(obj));
+}
+
+function attack() {
+    var obj = new Object();
+
+    var units = document.getElementById('armyUnit').value;
+    addKeyValuePair(obj, 'Action', 'Attack');
+    addKeyValuePair(obj, 'territoryID', parseInt(fromID));
+    addKeyValuePair(obj, 'targetID', parseInt(idOnClick));
+    addKeyValuePair(obj, 'unitValue', parseInt(units));
+    addKeyValuePair(obj, 'attackerDice', Math.min(parseInt(units), 3));
+    addKeyValuePair(obj, 'defenderDice', Math.min(parseInt(board[idOnClick-1].value), 3));
+    webSocket.send(JSON.stringify(obj));
+}
+
+function fortify(){
+    var obj = new Object();
+
+    var units = document.getElementById('armyUnit').value;
+    addKeyValuePair(obj, 'Action', 'Fortify');
+    addKeyValuePair(obj, 'fromTerritoryID', parseInt(fromID));
+    addKeyValuePair(obj, 'toTerritoryID', parseInt(idOnClick));
+    addKeyValuePair(obj, 'unitValue', parseInt(units));
+    webSocket.send(JSON.stringify(obj));
+}
+
+function endTurn(){
+    var obj = new Object();
+
+    addKeyValuePair(obj, 'Action', 'EndTurn');
+    webSocket.send(JSON.stringify(obj));
+}
+
+function endGame(){
+    cleanBoxes('controlBoxes');
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p> Game Ends</p>";
+    document.getElementById('controlBoxes').appendChild(div);
 }
 
 function addListener(){
@@ -161,12 +215,13 @@ function bindClick(i) {
         cleanBoxes('listener');
         var div = document.createElement('div');
         div.className = 'row';
-        div.innerHTML += "<input type='text' id='armyUnit' name='armyUnits' class='box' placeholder='input your units'>";
-        idOnClick = i;
-        document.getElementById("listener").innerHTML += "<h3> Territory:  " + classes[i].title + " </h3>";
-        console.log(i + 1);
+        if (showbox == true)
+            div.innerHTML += "<input type='text' id='armyUnit' name='armyUnits' class='box' placeholder='input your units'>";
+        idOnClick = classes[i].getAttribute("id");
+        document.getElementById("listener").innerHTML += "<h5> Territory:  " + classes[i].title + " </h5>";
+        console.log(idOnClick);
         console.log(board);
-        document.getElementById("listener").innerHTML += "<h3> Army Force:  " + board[i].value + " </h3>";
+        document.getElementById("listener").innerHTML += "<h5> Army Force:  " + board[parseInt(idOnClick)-1].value + " </h5>";
         document.getElementById('listener').appendChild(div);
         console.log("you clicked region number " + classes[i].title);
     };
@@ -175,29 +230,94 @@ function bindClick(i) {
 function reinforceStage(){
     cleanBoxes('controlBoxes');
 
-
+    showbox = true;
     var div = document.createElement('div');
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
     div.innerHTML += "<p>Reinforce Your Territory</p>";
-    div.innerHTML += "<div class='row'><h3>Available Armies:  " + freeArmies + "</h3></div>";
-    div.innerHTML += "<div class='row' id='listener'> <h3>Territory:  </h3></div>";
+    div.innerHTML += "<div class='row'><h5>Available Armies:  " + freeArmies + "</h5></div>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
     div.innerHTML += "<div class='row'><button onclick='reinforce()'> Reinforce </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='attackStage()'> Next </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Next -- Attack </button></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
-function attackStage(){
+function firstAttackStage(choice){
     cleanBoxes('controlBoxes');
-
-
+    showbox = false;
     var div = document.createElement('div');
     div.className = 'row';
     div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
-    div.innerHTML += "<p> Attack Other Territories</p>";
-    div.innerHTML += "<div class='row' id='listener'> <h3>Territory:  </h3></div>";
-    div.innerHTML += "<div class='row'><button onclick='reinforce()'> Reinforce </button></div>";
-    div.innerHTML += "<div class='row'><button onclick='attackStage()'> Next </button></div>";
+    div.innerHTML += "<p> Where you attack from? </p>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
+    div.innerHTML += "<div class='row'><button onclick='secondAttackStage()'> Choose This Territory</button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Reset </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function secondAttackStage(choice){
+    cleanBoxes('controlBoxes');
+    showbox = true;
+    fromID = idOnClick;
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p> Where you attack to? </p>";
+    div.innerHTML += "<div class='row'><h5> From Territory: </h5><h5>" + document.getElementById(idOnClick).title +
+                        " with "+ board[parseInt(idOnClick)-1].value + " armies  </h5></div>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
+    div.innerHTML += "<div class='row'><button onclick='attack()'> Conduct Attack </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Reset </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function showresultStage(obj){
+    cleanBoxes('controlBoxes');
+    var resultStr;
+    if (obj["result"] == "attacker") resultStr = "You Won";
+    else resultStr = "You Lost";
+    showbox = false;
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p> Attack Results</p>";
+    div.innerHTML += "<div class='row'><h5>"  + resultStr + "</h5></div>";
+    div.innerHTML += "<div class='row'><h5> You Lost "  + obj["attacker"] + " units </h5></div>";
+    div.innerHTML += "<div class='row' id='listener'></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstAttackStage()'> Conduct Another Attack </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Next -- Fortify </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function firstFortifyStage(){
+    cleanBoxes('controlBoxes');
+    showbox = false;
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p> Where you fortify from? </p>";
+    div.innerHTML += "<div class='row' id='listener'> <h5>Territory:  </h5></div>";
+    div.innerHTML += "<div class='row'><button onclick='secondFortifyStage()'> Choose This Territory</button></div>";
+    div.innerHTML += "<div class='row'><button onclick='firstFortifyStage()'> Reset </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='endTurn()'> Finish </button></div>";
+    document.getElementById('controlBoxes').appendChild(div);
+}
+
+function secondFortifyStage(){
+    cleanBoxes('controlBoxes');
+    showbox = true;
+    fromID = idOnClick;
+    var div = document.createElement('div');
+    div.className = 'row';
+    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    div.innerHTML += "<p> Where you fortify to? </p>";
+    div.innerHTML += "<div class='row'><h5> From Territory: </h5><h5>" + document.getElementById(idOnClick).title +
+        " with "+ board[parseInt(idOnClick)-1].value + " armies  </h5></div>";
+    div.innerHTML += "<div class='row' id='listener'> <h5>Territory:  </h5></div>";
+    div.innerHTML += "<div class='row'><button onclick='fortify()'> Fortify and Finish </button></div>";
+    div.innerHTML += "<div class='row'><button onclick='endTurn()'> Finish </button></div>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
