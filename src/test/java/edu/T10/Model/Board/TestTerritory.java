@@ -57,7 +57,7 @@ public class TestTerritory {
 	
 	@Test
 	public void testToString() {
-		assertEquals(t.toString(), "1 TestName 0 0 [1, 2, 3]");
+		assertEquals(t.toString(), "1 0");
 	}
 	
 }
