@@ -7,7 +7,7 @@ import java.util.Arrays;
 public class Territory {
     private int owner = -1;
     private String name = null;
-    private int armyStrength = 0; // todo simple int for now until we figure out how we want to represent army
+    private int armyStrength = 0;
     private int id = -1;
     private int continentID = 0;
     private int[] adjTerritories = new int[0];

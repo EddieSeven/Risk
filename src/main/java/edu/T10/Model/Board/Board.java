@@ -106,18 +106,6 @@ public class Board {
         return search(territoryID);
     }
 
-    public Territory getTerritory(String name){
-        return search(name); // todo we can delete one of these when we figure out which one will be more handy to use in practice.
-    }
-
-    public int getTerritoryOwner(int territoryID){
-        return searchOwner(territoryID);
-    }
-
-    public String getTerritoryName(int territoryID){
-        return getTerritory(territoryID).getName();
-    }
-
     public int getArmyStrength(int territoryID){
         return getTerritory(territoryID).getStrength();
     }
@@ -135,49 +123,8 @@ public class Board {
         return territory;
     }
 
-    private Territory search(String name){
-        Territory territory = null;
-
-        for(int i = 0; i < nTerritories; i++){
-            if (territories[i].getName().equals(name)){
-                territory = territories[i];
-                break;
-            }
-        }
-
-        return territory;
-    }
-
-    private int searchOwner(int territoryID){
-        return getTerritory(territoryID).getOwner();
-    }
-
     public static void main(String[] args) {
         // Test Code
         new Board();
-    }
-
-    public Territory[] getTerritories() {
-        return territories;
-    }
-
-    public Continent[] getContinents() {
-        return continents;
-    }
-
-    public int getnTerritories() {
-        return nTerritories;
-    }
-
-    public void setTerritories(Territory[] territories) {
-        this.territories = territories;
-    }
-
-    public void setContinents(Continent[] continents) {
-        this.continents = continents;
-    }
-
-    public void setnTerritories(int nTerritories) {
-        this.nTerritories = nTerritories;
     }
 }

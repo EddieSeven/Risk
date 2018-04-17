@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 public class Deck {
 	
-    private Card[] cards; //todo any array for now, though an arraylist will probably be better.
+    private Card[] cards;
 
     public Deck() {
     	cards = new Card[0];

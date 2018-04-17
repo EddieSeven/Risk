@@ -76,7 +76,6 @@ public class Server {
                         json.getInt("attackerDice"),
                         json.getInt("defenderDice"));
 
-                // todo send message to front end
                 sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
                 System.out.print(invasionInfo);
@@ -111,7 +110,6 @@ public class Server {
     }
 
     private void sendBack2Server(Session session, String action){
-        // todo send message to front end
         int playerID = game.getCurrentPlayerID();
         String playerInfo = game.getCurrentPlayer().toString();
         ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
@@ -136,7 +134,6 @@ public class Server {
     }
 
     private void sendBack2Server(Session session){
-        // todo send message to front end
         int playerID = game.getCurrentPlayerID();
         String playerInfo = game.getCurrentPlayer().toString();
         ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
