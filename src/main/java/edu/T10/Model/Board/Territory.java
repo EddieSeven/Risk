@@ -33,48 +33,30 @@ public class Territory {
     public int getStrength(){
         return this.armyStrength;
     }
-  
-    public void updateArmyStrength(int unitValue){
-        this.armyStrength += unitValue; // todo add condition that armyStrength doesn't go below zero
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setContinentID(int continentID) {
+        this.continentID = continentID;
+    }
+
+    public void setAdjTerritories(int[] adjTerritories) {
+        this.adjTerritories = adjTerritories;
     }
 
     public void setArmyStrength(int unitValue){
         this.armyStrength = unitValue;
     }
 
-    /*
-        String line: Format:    id, name, continentID, ... ;
-                         ex:    1 Alaska 1 47 76 ;
-     */
-    public boolean readTerritoryFromLine(String line){
-        String[] segs = line.split(" ");
-        if (segs.length < 4)
-            return false;
-        else{
-            id = Integer.parseInt(segs[0]);
-            name = segs[1];
-            continentID = Integer.parseInt(segs[2]);
-            return true;
-        }
+    public void updateArmyStrength(int unitValue){
+        this.armyStrength += unitValue; // todo add condition that armyStrength doesn't go below zero
     }
-
-    /*
-        String line: Format:    id, adjId, adjId ... ;
-                         ex:    1 2 4 32 ;
-     */
-    public boolean readAdjacentsFromLine(String line){
-        String[] segs = line.split(" ");
-        if (segs.length < 2)
-            return false;
-        else{
-            this.adjTerritories = new int[segs.length - 2];
-            for (int i = 0; i < segs.length - 2; i++){
-                this.adjTerritories[i] = Integer.parseInt(segs[1+i]);
-            }
-            return true;
-        }
-    }
-
     @Override
     public String toString() {
         return id + " " + armyStrength;
