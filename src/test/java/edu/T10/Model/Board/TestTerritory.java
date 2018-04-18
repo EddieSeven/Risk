@@ -7,28 +7,28 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestTerritory {
-	Territory t;
+	private Territory t;
 	
 	@Before
 	public void setUp() {
 		t = new Territory();
-		t.readTerritoryFromLine("1 TestName 0 11 12 ;");
-		t.readAdjacentsFromLine("1 1 2 3 ;");
 	}
 	
 	@Test
-	public void testAssignGetOwner() {
+	public void testAssignOwner() {
 		t.assignOwner(2);
 		assertEquals(t.getOwner(), 2);
 	}
 	
 	@Test
 	public void testGetId() {
+		t.setId(1);
 		assertEquals(t.getId(), 1);
 	}
 	
 	@Test
 	public void testGetName() {
+		t.setName("TestName");
 		assertEquals(t.getName(), "TestName");
 	}
 	
@@ -44,19 +44,11 @@ public class TestTerritory {
 		t.setArmyStrength(10);
 		assertEquals(t.getStrength(), 10);
 	}
-	
-	@Test
-	public void testReadTerritoryError() {
-		assertTrue(!t.readTerritoryFromLine(""));
-	}
 
 	@Test
-	public void testReadAdjacentsError() {
-		assertTrue(!t.readAdjacentsFromLine(""));
-	}
-	
-	@Test
 	public void testToString() {
+		t.setId(1);
+		t.setArmyStrength(0);
 		assertEquals(t.toString(), "1 0");
 	}
 	
