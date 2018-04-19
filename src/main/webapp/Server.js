@@ -119,7 +119,8 @@ function parseBoard(str){
 
 function registerNumber() {
     var number = document.getElementById("numOfPlayer").value;
-    openTab(number);
+    test();
+    // openTab(number);
     console.log(number);
 }
 
@@ -136,6 +137,60 @@ function openTab(numOfBoxes) {
     }
 
     document.getElementById('controlBoxes').appendChild(div);
+}
+
+function addTDRow(table, left, right) {
+    var row = document.createElement("tr");
+    row.innerHTML += "<td>" + left + "</td>" +
+                        "<td>" + right + "</td>";
+    document.getElementById(table).appendChild(row);
+}
+
+function addTHRow(table, title) {
+    var row = document.createElement("tr");
+    row.innerHTML += "<th colspan='2'>" + title + "</th>";
+    document.getElementById(table).appendChild(row);
+}
+
+function createButton(text, f) {
+    var btn = document.createElement("button");
+    btn.value = text;
+    btn.onclick = f;
+    return (btn);
+}
+
+function test(){
+    showText();
+    cleanBoxes('controlBoxes');
+
+    showbox = true;
+
+    var tableName = "playerTable";
+    addTDRow(tableName, "Player", "CD");
+    addTDRow(tableName, "Color", "Yellow");
+    addTDRow(tableName, "Available Armies", "11");
+    addTDRow(tableName, "Cards", "11");
+    addTHRow(tableName, "Reinforce");
+
+    var tableName = "controlTable";
+    addTDRow(tableName, "Player", "CD");
+    addTDRow(tableName, "Color", "Yellow");
+    addTDRow(tableName, "Available Armies", "11");
+    // var a = createButton("REINFORCE", reinforce());
+    // addTDRow(tableName, a, createButton("NEXT STAGE", firstAttackStage()));
+    // div.innerHTML += "<td> Player: </td>" +
+    //     " <td> CC </td>";
+    // document.getElementById('controlTable').appendChild(div);
+    //
+    // div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
+    // div.innerHTML += "<p>Reinforce Your Territory</p>";
+    // div.innerHTML += "<div class='row>";
+    // div.innerHTML += "<button onclick='reinforce()'> Reinforce </button>";
+    // div.innerHTML += "<button onclick='firstAttackStage()'> Next -- Attack </button>";
+    // div.innerHTML += "</div>";
+    // div.innerHTML += "<div class='row'><h5>Available Armies:  " + freeArmies + "</h5></div>";
+    // div.innerHTML += "<div class='row' id='listener'></div>";
+    // document.getElementById('controlTable').appendChild(div);
 }
 
 function startGame(){
@@ -353,6 +408,25 @@ function cleanBoxes(ids){
     }
 }
 
+function getcentral(mCoords){
+    var centerX = 0;
+    var centerY = 0;
+    for (var i = 0; i < mCoords.length; i++) {
+        if(i % 2 === 0) { // index is even
+            centerX += parseInt(mCoords[i]);
+        } else {
+            centerY += parseInt(mCoords[i]);
+        }
+    }
+    return [2*centerX/mCoords.length, 2*centerY/mCoords.length];
+}
+
+function showText() {
+    for (var i = 1; i <= 42; i++){
+        drawText(document.getElementById(i).getAttribute('coords'), playerColor);
+    }
+}
+
 // stores the device context of the canvas we use to draw the outlines
 // initialized in myInit, used in myHover and myLeave
 var hdc;
@@ -370,13 +444,31 @@ function drawPoly(coOrdStr, color)
 
     hdc.beginPath();
     hdc.strokeStyle=color;
+
     hdc.moveTo(mCoords[0], mCoords[1]);
     for (i=2; i<n; i+=2)
     {
         hdc.lineTo(mCoords[i], mCoords[i+1]);
     }
     hdc.lineTo(mCoords[0], mCoords[1]);
+    //
+    // hdc.globalAlpha = 0.5;
+    // hdc.fillStyle = color;
+    // hdc.fill();
     hdc.stroke();
+}
+
+function drawText(coOrdStr, text){
+    var mCoords = coOrdStr.split(',');
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext("2d");
+    ctx.fillStyle = 'white';
+    ctx.font = '24px georgia';
+    var x;
+    var y;
+    [x, y] = getcentral(mCoords);
+    console.log(x, y);
+    ctx.fillText(1 ,x, y);
 }
 
 function drawRect(coOrdStr)
@@ -413,6 +505,7 @@ function myLeave()
     var canvas = byId('myCanvas');
     hdc.clearRect(0, 0, canvas.width, canvas.height);
     highlight();
+    showText();
 }
 
 function myInit()
