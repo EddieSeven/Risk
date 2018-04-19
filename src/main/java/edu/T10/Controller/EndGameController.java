@@ -1,6 +1,7 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import edu.T10.Model.Board.Board;
+import edu.T10.Model.Player;
 
 public class EndGameController {
 

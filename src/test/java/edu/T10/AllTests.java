@@ -1,4 +1,5 @@
 package edu.T10;
+import edu.T10.Controller.TestGame;
 import edu.T10.Model.*;
 import edu.T10.Model.Board.*;
 import org.junit.runner.RunWith;

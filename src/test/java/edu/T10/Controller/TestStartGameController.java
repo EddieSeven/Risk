@@ -1,4 +1,4 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

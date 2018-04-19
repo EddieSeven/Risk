@@ -1,7 +1,7 @@
 package edu.T10;
 
 import edu.T10.Model.Board.Territory;
-import edu.T10.Model.Game;
+import edu.T10.Controller.Game;
 import edu.T10.Model.InvasionResult;
 
 import javax.json.*;

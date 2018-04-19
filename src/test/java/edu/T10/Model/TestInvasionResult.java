@@ -21,7 +21,7 @@ public class TestInvasionResult {
 	
 	@Test
 	public void testGetVictor() {
-		result.setVictor(Victor.ATTACKER);
+		result.setAttackerVictor();
 		assertEquals(result.getVictor(), Victor.ATTACKER);
 	}
 	
