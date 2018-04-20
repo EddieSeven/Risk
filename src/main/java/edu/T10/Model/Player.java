@@ -1,4 +1,5 @@
 package edu.T10.Model;
+import java.util.Vector;
 
 public class Player {
     private String name;
@@ -25,12 +26,12 @@ public class Player {
         this.color = color;
     }
 
-    public void addCard2Deck(Card[] pile){
+    public void addCard2Deck(Vector<Card> pile){
         this.deck.addCards(pile);
     }
 
     public boolean useCards(int numOfCards){
-        if (this.deck.drawCards(numOfCards).length != numOfCards)
+        if (this.deck.drawCards(numOfCards).size() != numOfCards)
             return false;
         return true;
     }
