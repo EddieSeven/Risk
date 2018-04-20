@@ -1,24 +1,24 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import edu.T10.Model.Board.Board;
+import edu.T10.Model.Player;
 
 public class EndGameController {
-
     private final int endingTerritories = 42;
     private final int endingPlayers = 1;
-    private Board board;
+    private Game game;
     private Player[] players;
 
-    public EndGameController(Board board, Player[] players) {
-        this.board = board;
-        this.players = players;
 
+    public EndGameController(Game game, Player[] players) {
+        this.game = game;
+        this.players = players;
         eliminatePlayers();
     }
 
     private void eliminatePlayers(){
         for (int i = 0; i < players.length; i++) {
-            if (board.getTerritories(i).length == 0)
+            if (game.getPlayerTerritories(i).length == 0)
                 players[i] = null;
         }
     }

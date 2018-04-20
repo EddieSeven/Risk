@@ -1,6 +1,7 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import edu.T10.Model.Board.Board;
+import edu.T10.Model.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,7 @@ public class StartGameController {
         int len = (board.getTerritorySize() / numOfPlayers) * numOfPlayers;
         int[] assignments = intArrayShuffled(len);
         for (int i = 0; i < len; i++) {
+
             board.updateOwner(assignments[i] + 1, i % numOfPlayers);
             // TODO: Default set to 3
             board.getTerritory(assignments[i] + 1).updateArmyStrength(3);
