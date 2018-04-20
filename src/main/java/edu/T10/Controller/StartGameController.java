@@ -27,6 +27,7 @@ public class StartGameController {
         int len = (board.getTerritorySize() / numOfPlayers) * numOfPlayers;
         int[] assignments = intArrayShuffled(len);
         for (int i = 0; i < len; i++) {
+
             board.updateOwner(assignments[i] + 1, i % numOfPlayers);
             // TODO: Default set to 3
             board.getTerritory(assignments[i] + 1).updateArmyStrength(3);

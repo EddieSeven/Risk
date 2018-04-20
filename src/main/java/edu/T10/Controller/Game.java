@@ -50,7 +50,7 @@ public class Game {
     public boolean finishTurn() {
         // check if game is over or not
         // eliminate players
-        EndGameController egc = new EndGameController(this.board, this.players);
+        EndGameController egc = new EndGameController(this, this.players);
         gameOver = egc.checkGame();
         if(gameOver) return true;
         else {
