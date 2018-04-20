@@ -119,6 +119,7 @@ function parseBoard(str){
 
 function registerNumber() {
     var number = document.getElementById("numOfPlayer").value;
+    addListener();
     test();
     // openTab(number);
     console.log(number);
@@ -139,6 +140,26 @@ function openTab(numOfBoxes) {
     document.getElementById('controlBoxes').appendChild(div);
 }
 
+function addTDRowWithButton(table, left, right) {
+    var row = document.createElement("tr");
+    row.innerHTML += "<td>" + left + "</td>"
+    var col2 = document.createElement("td");
+    col2.appendChild(right);
+    row.appendChild(col2);
+    document.getElementById(table).appendChild(row);
+}
+
+function addTDRowWithButtons(table, left, right) {
+    var row = document.createElement("tr");
+    var col1 = document.createElement("td");
+    col1.appendChild(left);
+    var col2 = document.createElement("td");
+    col2.appendChild(right);
+    row.appendChild(col1);
+    row.appendChild(col2);
+    document.getElementById(table).appendChild(row);
+}
+
 function addTDRow(table, left, right) {
     var row = document.createElement("tr");
     row.innerHTML += "<td>" + left + "</td>" +
@@ -154,9 +175,25 @@ function addTHRow(table, title) {
 
 function createButton(text, f) {
     var btn = document.createElement("button");
-    btn.value = text;
     btn.onclick = f;
+    btn.innerHTML = text;
     return (btn);
+}
+
+function createListener(){
+    var div = document.createElement("div");
+    div.id = "listener";
+    return (div);
+}
+
+function createInputBox(){
+    var input = document.createElement("input");
+    input.type = "text";
+    input.id = "armyUnit";
+    input.placeholder = "input your units";
+    input.style.width = "100%";
+    input.disabled="disabled";
+    return (input);
 }
 
 function test(){
@@ -170,14 +207,15 @@ function test(){
     addTDRow(tableName, "Color", "Yellow");
     addTDRow(tableName, "Available Armies", "11");
     addTDRow(tableName, "Cards", "11");
-    addTHRow(tableName, "Reinforce");
 
     var tableName = "controlTable";
-    addTDRow(tableName, "Player", "CD");
-    addTDRow(tableName, "Color", "Yellow");
-    addTDRow(tableName, "Available Armies", "11");
-    // var a = createButton("REINFORCE", reinforce());
-    // addTDRow(tableName, a, createButton("NEXT STAGE", firstAttackStage()));
+    addTHRow(tableName, "Reinforce");
+    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", firstAttackStage));
+
+    // addTDRow(tableName, "From", "<div class='row' id='listener'></div>");
+    addTDRowWithButton(tableName, "Location", createListener());
+    addTDRowWithButton(tableName, "Units", createInputBox());
+
     // div.innerHTML += "<td> Player: </td>" +
     //     " <td> CC </td>";
     // document.getElementById('controlTable').appendChild(div);
@@ -194,8 +232,6 @@ function test(){
 }
 
 function startGame(){
-    addListener();
-
     var obj = new Object();
     addKeyValuePair(obj, 'Action', 'Init')
     var nodes = document.getElementsByName('names');
@@ -267,17 +303,11 @@ function addListener(){
 
 function bindClick(i) {
     return function(){
-        var classes = document.getElementsByClassName('territory');
         cleanBoxes('listener');
+        var classes = document.getElementsByClassName('territory');
         var div = document.createElement('div');
-        div.className = 'row';
-        if (showbox == true)
-            div.innerHTML += "<input type='text' id='armyUnit' name='armyUnits' class='box' placeholder='input your units'>";
         idOnClick = classes[i].getAttribute("id");
-        document.getElementById("listener").innerHTML += "<h5> Territory:  " + classes[i].title + " </h5>";
-        console.log(idOnClick);
-        console.log(board);
-        document.getElementById("listener").innerHTML += "<h5> Army Force:  " + board[parseInt(idOnClick)-1].value + " </h5>";
+        document.getElementById("listener").innerHTML += classes[i].title;
         document.getElementById('listener').appendChild(div);
         console.log("you clicked region number " + classes[i].title);
     };
@@ -452,9 +482,9 @@ function drawPoly(coOrdStr, color)
     }
     hdc.lineTo(mCoords[0], mCoords[1]);
     //
-    // hdc.globalAlpha = 0.5;
-    // hdc.fillStyle = color;
-    // hdc.fill();
+    hdc.globalAlpha = 0.5;
+    hdc.fillStyle = color;
+    hdc.fill();
     hdc.stroke();
 }
 
@@ -462,12 +492,11 @@ function drawText(coOrdStr, text){
     var mCoords = coOrdStr.split(',');
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext("2d");
-    ctx.fillStyle = 'white';
-    ctx.font = '24px georgia';
+    ctx.fillStyle = 'black';
+    ctx.font = '24px Arial Black';
     var x;
     var y;
     [x, y] = getcentral(mCoords);
-    console.log(x, y);
     ctx.fillText(1 ,x, y);
 }
 
