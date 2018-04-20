@@ -20,6 +20,7 @@ body{
 .controlPanel {
     float: left;
     width: 300px;
+    height: 100%;
     margin: 10px auto;
     padding: 10px;
 }
@@ -27,6 +28,10 @@ body{
 h1, h2, p{
     color:white;
     font-family: 'Anton', Verdana, sans-serif;
+}
+
+h1{
+    border-bottom: 4px solid white;
 }
 
 h5 {
@@ -97,13 +102,45 @@ canvas {
 }
 
 table {
+    margin-top: 20px;
+}
+
+.border {
+    border: 1px solid white;
+    border-radius: 1em;
+    width: 100%;
+}
+
+.borderless {
     border-collapse: collapse;
+    border: none;
     width: 100%;
 }
 
 th, td {
+    color: white;
+    width: 50%;
     padding: 8px;
+
+}
+
+.border td {
     text-align: left;
+    height: 20px;
+}
+
+.borderless td {
+    text-align: center;
+}
+
+.borderless th {
+    height: 35px;
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
 
