@@ -6,20 +6,21 @@ import edu.T10.Model.Player;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 public class StartGameController {
-    public StartGameController(Board board, Player[] players){
+    public StartGameController(Board board, Vector<Player> players){
         // Player choose color, randomly assigned for this time
         this.colorAssignment(players);
         // Player choose territory, randomly assigned for this time
-        this.territoryAssignment(board, players.length);
+        this.territoryAssignment(board, players.size());
     }
 
-    private void colorAssignment(Player[] players){
-        int len = players.length;
+    private void colorAssignment(Vector<Player> players){
+        int len = players.size();
         int[] assignments = intArrayShuffled(len);
         for (int i = 0; i < len; i++){
-            players[i].assignColor(assignments[i]);
+            players.get(i).assignColor(assignments[i]);
         }
     }
 

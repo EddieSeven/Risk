@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import edu.T10.Controller.*;
 import edu.T10.Model.Board.Territory;
 
+import java.util.Vector;
+
 import edu.T10.Model.Player;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +32,10 @@ public class TestEndGameController {
 	public void setUp() {
 		when(game.getPlayerTerritories(0)).thenReturn(new Territory[] {territory});
 		when(game.getPlayerTerritories(1)).thenReturn(new Territory[] {territory});
-		egController = new EndGameController(game, new Player[] {new Player("player1"), new Player("player2")});
+		Vector<Player> players = new Vector<Player>();
+		players.add(new Player("player1"));
+		players.add(new Player("player2"));
+		egController = new EndGameController(game, players);
 	}
 
 	@Test
