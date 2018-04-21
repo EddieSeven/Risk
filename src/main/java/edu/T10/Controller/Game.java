@@ -21,13 +21,15 @@ public class Game {
     private int currentPlayer;
     private int round;
 
-    public Game(String[] playerNames){
+    public Game(Player[] players){
         this.board = new Board();
-        this.numOfPlayers = playerNames.length;
+        this.numOfPlayers = players.length;
         this.players = new Vector<Player>();
+
         for (int i = 0; i < this.numOfPlayers; i++){
-            players.set(i, new Player(playerNames[i]));
+            this.players.add(players[i]);
         }
+
         this.gameOver = false;
         this.currentWin = false;
         this.round = 0;
