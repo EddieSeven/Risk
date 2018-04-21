@@ -47,7 +47,7 @@ public class BattleController {
         return invasionResult;
     }
 
-    void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker) {
+    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker) {
         if (isAttacker) {
             if (invasionResult.getAttackerLosses() > originalStrength)
                 invasionResult.setAttackerLosses(originalStrength);
@@ -57,13 +57,13 @@ public class BattleController {
         }
     }
 
-    void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
+    private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
         invasionResult.setDefenderVictor();
         game.getBoard().updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
         game.getBoard().updateTerritoryStrength(fromTerritoryID, -invasionResult.getAttackerLosses());
     }
 
-    void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
+    private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
         int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
         System.out.println("remainingAttackerStrength" + remainingAttackerStrength);
         invasionResult.setAttackerVictor();
@@ -72,7 +72,7 @@ public class BattleController {
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
     }
 
-    int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult) {
+    private int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult) {
         int attackerRolls[] = rollDie(attackerDice);
         int defenderRolls[] = rollDie(defenderDice);
         int results[];
@@ -85,7 +85,7 @@ public class BattleController {
         return results;
     }
 
-    int[] compareDie(int lowestDieNumber, int[] attackerRolls, int[] defenderRolls) {
+    private int[] compareDie(int lowestDieNumber, int[] attackerRolls, int[] defenderRolls) {
         int results[] = new int[2];
 
         for (int i = 0; i < lowestDieNumber; i++) {
@@ -98,7 +98,7 @@ public class BattleController {
         return results;
     }
 
-    int[] rollDie(int numberOfDie) {
+    private int[] rollDie(int numberOfDie) {
         int result[] = new int[numberOfDie];
         Dice dice = new Dice();
 
@@ -112,7 +112,7 @@ public class BattleController {
         return result;
     }
 
-    void reverse(int[] array) {
+    private void reverse(int[] array) {
         int k = array.length - 1;
         for (int i = 0; i < k; i++, k--) {
             int temp = array[i];

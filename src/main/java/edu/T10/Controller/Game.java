@@ -114,45 +114,6 @@ public class Game {
         return battleController.conductInvasion(fromTerritoryID, toTerritoryID, attackerUnits, attackerDice, defenderDice);
     }
 
-    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker){
-        battleController.checkLosses(invasionResult, originalStrength, isAttacker);
-    }
-
-    private void getBonusArmy() {
-        int territoryBonus = board.getTerritoriesBonus(
-                board.getTerritories(currentPlayer));
-        int continentBonus = board.getContinentsBonus(
-                board.getContinents(currentPlayer));
-        players[currentPlayer].addNewArmies(territoryBonus + continentBonus);
-    }
-
-    private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
-        battleController.defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
-    }
-
-    private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
-        battleController.attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
-    }
-
-    private int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult){
-
-        return battleController.conductBattleRound(attackerDice, defenderDice, runningResult);
-    }
-
-    private int[] compareDie(int lowestDieNumber, int[] attackerRolls, int[] defenderRolls){
-
-        return battleController.compareDie(lowestDieNumber, attackerRolls, defenderRolls);
-    }
-
-    private int[] rollDie(int numberOfDie){
-
-        return battleController.rollDie(numberOfDie);
-    }
-
-    private void reverse(int[] array){
-        battleController.reverse(array);
-    }
-
     public Board getBoard() {
         return board;
     }
