@@ -1,6 +1,10 @@
 package edu.T10.Controller;
 
+import edu.T10.Model.Board.Territory;
 import edu.T10.Model.Dice;
+import edu.T10.Model.Exceptions.MoveException;
+import edu.T10.Model.Exceptions.NumberOfDiceException;
+import edu.T10.Model.Exceptions.NumberOfUnitsException;
 import edu.T10.Model.InvasionResult;
 
 import java.util.Vector;
@@ -13,12 +17,14 @@ public class BattleController {
         this.game = game;
     }
 
-    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) throws MoveException, NumberOfUnitsException, NumberOfDiceException {
         int defenderUnits = game.getBoard().getArmyStrength(toTerritoryID);
         int attackingPlayerID = game.getBoard().getTerritory(fromTerritoryID).getOwner();
         InvasionResult invasionResult = new InvasionResult();
         int originalAttackerStrength = attackerUnits;
         int originalDefenderStrength = defenderUnits;
+
+        checkConditions(fromTerritoryID, toTerritoryID, attackerUnits, defenderUnits, attackerDice, defenderDice);
 
         if (defenderUnits == 0) {
             attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
@@ -48,7 +54,30 @@ public class BattleController {
         return invasionResult;
     }
 
-    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker) {
+    private void checkConditions(int fromID, int toID, int attackerUnits, int defenderUnits, int attackerDice, int defenderDice) throws MoveException, NumberOfUnitsException, NumberOfDiceException{
+        Territory from = game.getTerritory(fromID);
+        Territory to = game.getTerritory(toID);
+
+        if (from.isNotAdjacent(toID))
+            throw new MoveException("Invalid move: Cannot move from " + from.getName() + " to " + to.getName() + ".");
+
+        int fromUnitValue = from.getStrength();
+
+        if (fromUnitValue <= attackerUnits)
+            throw new NumberOfUnitsException("Invalid move: " + from.getName() + " has only " + fromUnitValue + " and " +
+                    "you want to move " + attackerUnits + ". Make sure you leave at least one unit in the territory you " +
+                    "are attacking from and that you don't enter in more units than you have.");
+
+
+        if (attackerUnits < attackerDice)
+            throw new NumberOfDiceException("Invalid move: You have played " + attackerDice + "dice/die, and can play at most " + attackerUnits + ".");
+
+        if (defenderUnits < defenderDice)
+            throw new NumberOfDiceException("Invalid move: You have played " + defenderDice + "dice/die, and can play at most " + defenderUnits + ".");
+
+    }
+
+    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker){
         if (isAttacker) {
             if (invasionResult.getAttackerLosses() > originalStrength)
                 invasionResult.setAttackerLosses(originalStrength);
