@@ -38,6 +38,16 @@ public class Territory {
         this.name = name;
     }
 
+    public boolean isNotAdjacent(int adjTerritoryID){
+
+        for (int adjTerritory : adjTerritories) {
+            if (adjTerritory == adjTerritoryID)
+                return true;
+        }
+
+        return false;
+    }
+
     public void setId(int id) {
         this.id = id;
     }

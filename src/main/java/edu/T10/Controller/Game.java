@@ -3,7 +3,10 @@ package edu.T10.Controller;
 import edu.T10.Model.*;
 import edu.T10.Model.Board.Board;
 import edu.T10.Model.Board.Territory;
-
+import edu.T10.Model.Exceptions.MoveException;
+import edu.T10.Model.Exceptions.NumberOfDiceException;
+import edu.T10.Model.Exceptions.NumberOfUnitsException;
+import edu.T10.Model.Exceptions.PlayerException;
 
 public class Game {
     private final BattleController battleController = new BattleController(this);
@@ -74,25 +77,45 @@ public class Game {
     }
 
 
-    public Territory[] getPlayerTerritories(int id){
-        return board.getTerritories(id);
+    public Territory[] getPlayerTerritories(int playerID){
+        return board.getTerritories(playerID);
     }
 
     public Territory[] getAllTerritories(){
         return board.getAllTerritories();
     }
 
-    public boolean conductReinforcement(int territoryID, int unitValue){
+    public Territory getTerritory(int territoryID){
+        return board.getTerritory(territoryID);
+    }
+
+    public void conductReinforcement(int territoryID, int unitValue) throws NumberOfUnitsException, PlayerException {
         if (players[currentPlayer].getFreeArmies() < unitValue)
-            return false;
-        else{
+             throw new NumberOfUnitsException("Invalid move: You have " + players[currentPlayer].getFreeArmies() +
+                     " available, and you are trying to add "+ unitValue + ".");
+        else if(currentPlayer != getTerritory(territoryID).getOwner())
+            throw new PlayerException("Invalid move: You can't place units in territory you do not own.");
+        else {
             players[currentPlayer].addNewArmies(-unitValue);
             updateTerritory(territoryID, unitValue);
-            return true;
         }
     }
 
-    public void conductFortification(int fromTerritoryID, int toTerritoryID, int unitValue){
+    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) throws MoveException, NumberOfUnitsException, NumberOfDiceException {
+        return battleController.conductInvasion(fromTerritoryID, toTerritoryID, attackerUnits, attackerDice, defenderDice);
+    }
+
+    public void conductFortification(int fromTerritoryID, int toTerritoryID, int unitValue) throws MoveException, NumberOfUnitsException {
+        Territory from = getTerritory(fromTerritoryID);
+        Territory to = getTerritory(toTerritoryID);
+
+        if (from.isNotAdjacent(toTerritoryID))
+            throw new MoveException("Invalid move: Cannot move from " + from.getName() + " to " + to.getName() + ".");
+        else if (from.getStrength() < unitValue)
+            throw new NumberOfUnitsException("Invalid move: " + from.getName() + " has only " + from.getStrength() + " and " +
+                    "you want to move " + unitValue + ". Make sure you leave at least one unit in the territory you " +
+                    "are attacking from and that you don't enter in more units than you have.");
+
         updateTerritory(toTerritoryID, unitValue);
         updateTerritory(fromTerritoryID, -unitValue);
     }
@@ -109,14 +132,6 @@ public class Game {
         board.getTerritory(territoryID).updateArmyStrength(unitValue);
     }
 
-    public InvasionResult conductInvasion(int fromTerritoryID, int toTerritoryID, int attackerUnits, int attackerDice, int defenderDice) {
-
-        return battleController.conductInvasion(fromTerritoryID, toTerritoryID, attackerUnits, attackerDice, defenderDice);
-    }
-
-    private void checkLosses(InvasionResult invasionResult, int originalStrength, boolean isAttacker){
-        battleController.checkLosses(invasionResult, originalStrength, isAttacker);
-    }
 
     private void getBonusArmy() {
         int territoryBonus = board.getTerritoriesBonus(
