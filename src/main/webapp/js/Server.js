@@ -44,7 +44,7 @@ webSocket.onmessage = function (event) {
     var action = obj["action"];
     switch (action) {
         case "init":
-            reinforceStage(freeArmies, playerName);
+            openTab(6);
             break;
         case "reinforce":
             reinforceStage(freeArmies, playerName);

@@ -66,11 +66,11 @@ function findNeighbor(id){
  * -------------------------------
  */
 function registerNumber() {
-    var number = document.getElementById("numOfPlayer").value;
-    addListener();
-    test();
-    // openTab(number);
-    console.log(number);
+    // var number = document.getElementById("numOfPlayer").value;
+    // addListener();
+    // test();
+    openTab(6);
+    // console.log(number);
 }
 
 function openTab(numOfBoxes) {
@@ -78,13 +78,15 @@ function openTab(numOfBoxes) {
 
     var div = document.createElement('div');
     div.className = 'row';
-    div.innerHTML += '<p>input your names</p>';
-    div.innerHTML += "<button onclick='startGame()'> Start </button><br/>";
-    for (i  = 0; i < numOfBoxes; i++){
-        var newInputBox = "<input type='text' id='nameBox' name='names' class='box'/>";
+    div.innerHTML += '<p>Select Color by Inputting Player Names</p>';
+    for (i  = 0; i < 6; i++){
+        var newInputBox = "<input type='text' id='nameBox" + i + "' name='names' class='box'/>";
         div.innerHTML += newInputBox;
     }
 
+
+
+    div.innerHTML += "<br/><button onclick='startGame()'> Start </button><br/>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -100,14 +102,18 @@ function test(){
     addTDRow(tableName, "Available Armies", "11");
     addTDRow(tableName, "Cards", "11");
 
+
     var tableName = "controlTable";
-    addTHRow(tableName, "Reinforce");
-    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
+    //addTHRow(tableName, "Reinforce");
+    //addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 
     // addTDRow(tableName, "From", "<div class='row' id='listener'></div>");
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "To Location", createListener("listener2"));
     addTDRowWithButton(tableName, "Units", createInputBox());
+
+    var tableName = "controlButtons";
+    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 }
 
 /* -------------------------------
