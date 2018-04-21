@@ -50,6 +50,10 @@ public class Game {
         getBonusArmy(this.currentPlayer);
     }
 
+    public int getNumberOfTerritories(){
+        return this.board.getTerritorySize();
+    }
+
     public boolean finishTurn() {
         // check if game is over or not
         // eliminate players

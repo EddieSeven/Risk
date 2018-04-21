@@ -48,6 +48,16 @@ public class Territory {
         return false;
     }
 
+    public String getAdjTerritoriesString() {
+        String adjList = "";
+
+        for (int adjTerritory : adjTerritories) {
+            adjList = adjList + " " + adjTerritory;
+        }
+
+        return adjList;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
