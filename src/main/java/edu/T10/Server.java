@@ -145,7 +145,7 @@ public class Server {
     }
 
     private void sendBackError(Session session, String errorMessage){
-        JsonObject jsonObject = Json.createObjectBuilder().add("error", errorMessage).build();
+        JsonObject jsonObject = Json.createObjectBuilder().add("action", "error").add("error", errorMessage).build();
 
         sendBack(session, jsonObject);
     }
