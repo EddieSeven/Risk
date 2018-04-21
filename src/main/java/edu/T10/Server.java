@@ -2,6 +2,10 @@ package edu.T10;
 
 import edu.T10.Model.Board.Territory;
 import edu.T10.Controller.Game;
+import edu.T10.Model.Exceptions.MoveException;
+import edu.T10.Model.Exceptions.NumberOfDiceException;
+import edu.T10.Model.Exceptions.NumberOfUnitsException;
+import edu.T10.Model.Exceptions.PlayerException;
 import edu.T10.Model.InvasionResult;
 
 import javax.json.*;
@@ -69,12 +73,18 @@ public class Server {
                 break;
 
             case "Attack":
-                InvasionResult invasionResult = this.game.conductInvasion(
-                        json.getInt("territoryID"),
-                        json.getInt("targetID"),
-                        json.getInt("unitValue"),
-                        json.getInt("attackerDice"),
-                        json.getInt("defenderDice"));
+                InvasionResult invasionResult = null;
+                try {
+                    invasionResult = this.game.conductInvasion(
+                            json.getInt("territoryID"),
+                            json.getInt("targetID"),
+                            json.getInt("unitValue"),
+                            json.getInt("attackerDice"),
+                            json.getInt("defenderDice"));
+                } catch (MoveException | NumberOfUnitsException | NumberOfDiceException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
 
                 sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
@@ -83,16 +93,27 @@ public class Server {
 
                 break;
             case "Reinforce":
-                this.game.conductReinforcement(
-                        json.getInt("territoryID"),
-                        json.getInt("unitValue"));
+                try {
+                    this.game.conductReinforcement(
+                            json.getInt("territoryID"),
+                            json.getInt("unitValue"));
+                } catch (NumberOfUnitsException | PlayerException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
+
                 sendBack2Server(session, "reinforce");
                 break;
             case "Fortify":
-                this.game.conductFortification(
-                        json.getInt("fromTerritoryID"),
-                        json.getInt("toTerritoryID"),
-                        json.getInt("unitValue"));
+                try {
+                    this.game.conductFortification(
+                            json.getInt("fromTerritoryID"),
+                            json.getInt("toTerritoryID"),
+                            json.getInt("unitValue"));
+                } catch (MoveException | NumberOfUnitsException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
                 sendBack2Server(session, "fortify");
                 break;
             case "PlayCards":
@@ -121,6 +142,12 @@ public class Server {
                 .add("board", concatenateString(allTerritories)).build();
         System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
         sendBack(session, buildJson(jobj.toString()));
+    }
+
+    private void sendBackError(Session session, String errorMessage){
+        JsonObject jsonObject = Json.createObjectBuilder().add("error", errorMessage).build();
+
+        sendBack(session, jsonObject);
     }
 
     private ArrayList<String> buildTerritoryList(Territory[] territories){
