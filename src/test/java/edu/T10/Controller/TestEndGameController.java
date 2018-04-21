@@ -1,13 +1,14 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import edu.T10.Controller.EndGameController;
 import edu.T10.Model.Board.*;
 
+import edu.T10.Model.Player;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
