@@ -33,8 +33,12 @@ public class InvasionResult {
         return this.victor;
     }
 
-    public void setVictor(Victor victor){
-        this.victor = victor;
+    public void setDefenderVictor(){
+        this.victor = Victor.DEFENDER;
+    }
+
+    public void setAttackerVictor(){
+        this.victor = Victor.ATTACKER;
     }
 
     private String victorString(Victor victor){
