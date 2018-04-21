@@ -122,13 +122,29 @@ function test(){
  */
 function startGame(){
     var obj = new Object();
+    var counter = 0;
     addKeyValuePair(obj, 'Action', 'Init')
     var nodes = document.getElementsByName('names');
     var stArray = new Array(nodes.length);
+    var playerColors = new Array();
+    var colorArray = new Array("GREEN", "YELLOW", "RED", "BLUE", "PINK", "GREY");
+    var nameArray = new Array();
+
+
     for (i = 0; i < nodes.length; i++){
+        if (nodes[i].value !== ""){
+            nameArray.push(nodes[i].value);
+            playerColors.push(colorArray[i]);
+        }
         stArray[i] = nodes[i].value;
+
     }
-    addKeyValuePair(obj, 'names', stArray);
+
+    console.log("Name Array: " + nameArray);
+    console.log("Player Color Array: " + playerColors);
+
+    addKeyValuePairWithColor(obj, 'names', nameArray, playerColors);
+    console.log(obj);
     webSocket.send(JSON.stringify(obj));
 }
 

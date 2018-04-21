@@ -30,6 +30,15 @@ function addKeyValuePair(obj, key, value) {
     obj[key] = value;
 }
 
+function addKeyValuePairWithColor(obj, key, value, color) {
+    var temp = "";
+    for (var i = 0; i < value.length;i++){
+        temp += value[i] + " " + color[i] + ",";
+    }
+    temp = temp.substr(0,temp.length-1);
+    obj[key] = temp;
+}
+
 function cleanBoxes(ids){
     var node = document.getElementById(ids);
     while (node.hasChildNodes()) {
