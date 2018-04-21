@@ -2,7 +2,7 @@ package edu.T10.Model.Board;
 
 import edu.T10.Model.*;
 
-import java.util.Arrays;
+import java.util.Vector;
 
 public class Territory {
     private int owner = -1;
@@ -10,7 +10,7 @@ public class Territory {
     private int armyStrength = 0;
     private int id = -1;
     private int continentID = 0;
-    private int[] adjTerritories = new int[0];
+    private Vector<Integer> adjTerritories = new Vector<Integer>();
 
     public Territory(){}
 
@@ -66,8 +66,8 @@ public class Territory {
         this.continentID = continentID;
     }
 
-    public void setAdjTerritories(int[] adjTerritories) {
-        this.adjTerritories = adjTerritories;
+    public void setAdjTerritories(Vector<Integer> adjTerritories) {
+        this.adjTerritories = new Vector<Integer> (adjTerritories);
     }
 
     public void setArmyStrength(int unitValue){
