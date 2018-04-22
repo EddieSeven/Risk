@@ -7,7 +7,8 @@ import edu.T10.Model.Exceptions.NumberOfDiceException;
 import edu.T10.Model.Exceptions.NumberOfUnitsException;
 import edu.T10.Model.InvasionResult;
 
-import java.util.Arrays;
+import java.util.Vector;
+import java.util.Collections;
 
 public class BattleController {
     private final Game game;
@@ -32,9 +33,9 @@ public class BattleController {
         while (defenderUnits != 0 && attackerUnits != 0) {
             // attacker losses = results[0]
             // defender losses = results[1]
-            int results[] = conductBattleRound(attackerDice, defenderDice, invasionResult);
-            invasionResult.incrementAttackerLosses(results[0]);
-            invasionResult.incrementDefenderLosses(results[1]);
+            Vector<Integer> results = conductBattleRound(attackerDice, defenderDice, invasionResult);
+            invasionResult.incrementAttackerLosses(results.get(0));
+            invasionResult.incrementDefenderLosses(results.get(1));
 
             attackerUnits = updateUnits(attackerUnits, results);
             defenderUnits = updateUnits(defenderUnits, results);
@@ -52,7 +53,6 @@ public class BattleController {
 
         return invasionResult;
     }
-
 
     private void checkConditions(int fromID, int toID, int attackerUnits, int defenderUnits, int attackerDice, int defenderDice) throws MoveException, NumberOfUnitsException, NumberOfDiceException{
         Territory from = game.getTerritory(fromID);
@@ -87,13 +87,13 @@ public class BattleController {
         }
     }
 
-    void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
+    private void defenderWins(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult) {
         invasionResult.setDefenderVictor();
         game.getBoard().updateTerritoryStrength(toTerritoryID, -invasionResult.getDefenderLosses());
         game.getBoard().updateTerritoryStrength(fromTerritoryID, -invasionResult.getAttackerLosses());
     }
 
-    void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
+    private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
         int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
         System.out.println("remainingAttackerStrength" + remainingAttackerStrength);
         invasionResult.setAttackerVictor();
@@ -102,10 +102,10 @@ public class BattleController {
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
     }
 
-    int[] conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult) {
-        int attackerRolls[] = rollDie(attackerDice);
-        int defenderRolls[] = rollDie(defenderDice);
-        int results[];
+    private Vector<Integer> conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult) {
+        Vector<Integer> attackerRolls = rollDie(attackerDice);
+        Vector<Integer> defenderRolls = rollDie(defenderDice);
+        Vector<Integer> results;
 
         if (attackerDice > defenderDice)
             results = compareDie(defenderDice, attackerRolls, defenderRolls);
@@ -115,44 +115,46 @@ public class BattleController {
         return results;
     }
 
-    int[] compareDie(int lowestDieNumber, int[] attackerRolls, int[] defenderRolls) {
-        int results[] = new int[2];
+    private Vector<Integer> compareDie(int lowestDieNumber, Vector<Integer> attackerRolls, Vector<Integer> defenderRolls) {
+        Vector<Integer> results = new Vector<Integer>();
+		results.add(0);
+		results.add(0);
 
         for (int i = 0; i < lowestDieNumber; i++) {
-            if (attackerRolls[i] > defenderRolls[i])
-                results[0] += 1;
+            if (attackerRolls.get(i) > defenderRolls.get(i))
+                results.set(0, results.get(0)+1);
             else // in the event of a tie the defend wins
-                results[1] += 1;
+                results.set(1, results.get(1)+1);
         }
 
         return results;
     }
 
-    int[] rollDie(int numberOfDie) {
-        int result[] = new int[numberOfDie];
+    private Vector<Integer> rollDie(int numberOfDie) {
+        Vector<Integer> result = new Vector<Integer>();
         Dice dice = new Dice();
 
         for (int i = 0; i < numberOfDie; i++) {
-            result[i] = dice.roll();
+            result.add(dice.roll());
         }
 
-        Arrays.sort(result);
+        Collections.sort(result);
         reverse(result);
 
         return result;
     }
 
-    void reverse(int[] array) {
-        int k = array.length - 1;
+    private void reverse(Vector<Integer> vector) {
+        int k = vector.size() - 1;
         for (int i = 0; i < k; i++, k--) {
-            int temp = array[i];
-            array[i] = array[k];
-            array[k] = temp;
+            int temp = vector.get(i);
+			vector.set(i, vector.get(k));
+            vector.set(k, temp);
         }
     }
 
-    private int updateUnits(int units, int[] results) {
-        units -= results[0];
+    private int updateUnits(int units, Vector<Integer> results) {
+        units -= results.get(0);
         if (units < 0)
             units = 0;
 
