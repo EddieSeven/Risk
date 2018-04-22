@@ -144,6 +144,9 @@ function startGame(){
     addKeyValuePairWithColor(obj, 'names', nameArray, playerColors);
     console.log(obj);
     webSocket.send(JSON.stringify(obj));
+
+    addListener();
+    cleanBoxes('controlBoxes');
 }
 
 /* -------------------------------
