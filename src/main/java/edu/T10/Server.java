@@ -62,9 +62,10 @@ public class Server {
     private void parseCommand(JsonObject json, Session session) {
         switch (json.getString("Action")) {
             case "Init":
-                JsonArray jsonArray = json.getJsonArray("names");
+                String jsonString = json.getString("names");
+
            
-                Player[] players = constructPlayers(jsonArray);
+                Player[] players = constructPlayers(jsonString);
 
                 this.game = new Game(players);
 
@@ -133,18 +134,15 @@ public class Server {
         }
     }
 
-    private Player[] constructPlayers(JsonArray jsonArray) {
-        Player[] players = new Player[jsonArray.size()];
+    private Player[] constructPlayers(String jsonString) {
+        String elements[] = jsonString.split(",");
+        Player[] players = new Player[elements.length];
 
-        for (int i = 0; i < jsonArray.size(); i++) {
-            String line = jsonArray.getString(i);
-            String[] elements = line.split("");
-            String name = elements[0];
-            int colorID = Integer.parseInt(elements[1]);
-
-            Player player = new Player(name, colorID);
-            players[i] = player;
+        for (int i = 0; i < elements.length; i++){
+            String line[] = elements[i].split(" ");
+            players[i] = new Player(line[0], colorID(line[1]));
         }
+
         return players;
     }
 
@@ -254,5 +252,24 @@ public class Server {
             return "1";
         else
             return "0";
+    }
+
+    private int colorID(String color){
+        switch (color){
+            case "GREEN":
+                return 0;
+            case "YELLOW":
+                return 1;
+            case "RED":
+                return 2;
+            case "BLUE":
+                return 3;
+            case "PINK":
+                return 4;
+            case "GREY":
+                return 5;
+            default:
+                return -1;
+        }
     }
 }
