@@ -63,9 +63,11 @@ public class Server {
         switch (json.getString("Action")) {
             case "Init":
                 JsonArray jsonArray = json.getJsonArray("names");
+           
                 Player[] players = constructPlayers(jsonArray);
 
                 this.game = new Game(players);
+
                 this.game.startGame();
 
                 sendInitialSeverData(session);
@@ -174,7 +176,7 @@ public class Server {
         String adjList[] = new String[game.getNumberOfTerritories()];
 
         for (int i = 0; i < territories.length; i++){
-            adjList[i] = territories[i].getId() + " " + territories[i].getAdjTerritoriesString() + ";";
+            adjList[i] = territories[i].getId() + territories[i].getAdjTerritoriesString() + ";";
         }
 
         return adjList;

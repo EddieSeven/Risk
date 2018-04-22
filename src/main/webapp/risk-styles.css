@@ -20,6 +20,7 @@ body{
 .controlPanel {
     float: left;
     width: 300px;
+    height: 100%;
     margin: 10px auto;
     padding: 10px;
 }
@@ -27,6 +28,10 @@ body{
 h1, h2, p{
     color:white;
     font-family: 'Anton', Verdana, sans-serif;
+}
+
+h1{
+    border-bottom: 4px solid white;
 }
 
 h5 {
@@ -65,7 +70,8 @@ h5 {
 
 .buttonsBox{
     text-align: center;
-    float:bottom;
+    position: absolute;
+    bottom: 0px;
 }
 
 .box {
@@ -97,13 +103,50 @@ canvas {
 }
 
 table {
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.border {
+    border: 1px solid white;
+    border-radius: 1em;
+    width: 100%;
+}
+
+.borderless {
     border-collapse: collapse;
+    border: none;
     width: 100%;
 }
 
 th, td {
+    color: white;
+    width: 50%;
     padding: 8px;
+
+}
+
+.border td {
+    float: bottom;
     text-align: left;
+    height: 20px;
+}
+
+.borderless td {
+    text-align: center;
+}
+
+.borderless th {
+    -webkit-text-stroke: 1px black;
+    font-family: 'LATO', Verdana, sans-serif;
+    font-size: 24px;
+    height: 35px;
+    text-align: center;
+}
+
+th {
+    text-align: center;
+    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
 }
 
