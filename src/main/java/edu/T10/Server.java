@@ -66,6 +66,7 @@ public class Server {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     names[i] = jsonArray.getString(i);
                 }
+
                 this.game = new Game(names);
                 this.game.startGame();
 
@@ -160,7 +161,7 @@ public class Server {
         String adjList[] = new String[game.getNumberOfTerritories()];
 
         for (int i = 0; i < territories.length; i++){
-            adjList[i] = territories[i].getId() + " " + territories[i].getAdjTerritoriesString() + ";";
+            adjList[i] = territories[i].getId() + territories[i].getAdjTerritoriesString() + ";";
         }
 
         return adjList;

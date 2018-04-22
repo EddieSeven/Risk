@@ -8,6 +8,7 @@ var freeArmies;
 var availablecards;
 
 var board = [];
+var adjacent = [];
 var playerTerritories = [];
 
 var idOnClick;
@@ -16,6 +17,16 @@ var idOnClick;
  * Parsing and Querying
  * -------------------------------
  */
+function readAdjacent(response){
+    var adjs = response["adjLists"].split(";");
+    adjacent.push("dummy");
+    for (var i = 0; i < adjs.length; i++) {
+        adjacent.push(adjs[i].split(" ").map(Number));
+    }
+    console.log("adjacent");
+    console.log(adjacent);
+}
+
 function parseResponse(response){
     parsePlayer(response["player"]);
     parseTerritories(response["territory"]);
@@ -33,12 +44,10 @@ function parseTerritories(str){
     playerTerritories = [];
     for (var i = 0; i < territories.length-1; i++){
         var segs = territories[i].split(" ");
-        console.log(segs);
-        playerTerritories.push({
-            key:   segs[0],
-            value: segs[1]
-        });
+        playerTerritories.push(parseInt(segs[0]));
     }
+    console.log("playerTerritories");
+    console.log(playerTerritories);
 }
 
 function parseBoard(str){
@@ -48,17 +57,12 @@ function parseBoard(str){
     for (var i = 0; i < territories.length-1; i++){
         var segs = territories[i].split(" ");
         board.push({
-            key:   segs[0],
-            value: segs[1]
+            key:   parseInt(segs[0]),
+            value: parseInt(segs[1])
         });
     }
-}
-
-function findNeighbor(id){
-    var obj = new Object();
-    addKeyValuePair(obj, 'Action', 'Neighbor')
-    addKeyValuePair(obj, 'territoryID', id);
-    webSocket.send(JSON.stringify(obj));
+    console.log("board");
+    console.log(board);
 }
 
 /* -------------------------------
@@ -68,9 +72,11 @@ function findNeighbor(id){
 function registerNumber() {
     var number = document.getElementById("numOfPlayer").value;
     addListener();
-    test();
+    startGame();
+    // test();
     // openTab(number);
     console.log(number);
+    cleanBoxes('controlBoxes');
 }
 
 function openTab(numOfBoxes) {
@@ -101,12 +107,12 @@ function test(){
     addTDRow(tableName, "Cards", "11");
 
     var tableName = "controlTable";
-    addTHRow(tableName, "Reinforce");
+    addTHRow(tableName, "Player 1 : Fortify", "yellow");
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 
     // addTDRow(tableName, "From", "<div class='row' id='listener'></div>");
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
-    addTDRowWithButton(tableName, "To Location", createListener("listener2"));
+    // addTDRowWithButton(tableName, "To Location", createListener("listener2"));
     addTDRowWithButton(tableName, "Units", createInputBox());
 }
 
@@ -116,13 +122,13 @@ function test(){
  */
 function startGame(){
     var obj = new Object();
-    addKeyValuePair(obj, 'Action', 'Init')
+    addKeyValuePair(obj, 'Action', 'Init');
     var nodes = document.getElementsByName('names');
     var stArray = new Array(nodes.length);
     for (i = 0; i < nodes.length; i++){
         stArray[i] = nodes[i].value;
     }
-    addKeyValuePair(obj, 'names', stArray);
+    addKeyValuePair(obj, 'names', ["3","4","5"]);
     webSocket.send(JSON.stringify(obj));
 }
 
@@ -143,22 +149,16 @@ function reinforce(){
 function reinforceStage(){
 
     showText();
-    cleanBoxes('controlBoxes');
+    cleanBoxes('controlTable');
 
-    var tableName = "playerTable";
-    addTDRow(tableName, "Player", "CD");
-    addTDRow(tableName, "Color", "Yellow");
-    addTDRow(tableName, "Available Armies", "11");
-    addTDRow(tableName, "Cards", "11");
+    stage = "reinforcement";
 
     var tableName = "controlTable";
-    addTHRow(tableName, "Reinforce");
+    addTHRow(tableName, playerName + " : Reinforce", playerColor);
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", invasionStage));
 
-    addTDRowWithButton(tableName, "Location", createListener("listener1"));
+    addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "Units", createInputBox());
-
-    cleanBoxes('controlBoxes');
 }
 
 /* -------------------------------
@@ -170,8 +170,8 @@ function invade() {
 
     var units = document.getElementById('armyUnit').value;
     addKeyValuePair(obj, 'Action', 'Attack');
-    addKeyValuePair(obj, 'territoryID', parseInt(fromID));
-    addKeyValuePair(obj, 'targetID', parseInt(idOnClick));
+    addKeyValuePair(obj, 'territoryID', parseInt(from));
+    addKeyValuePair(obj, 'targetID', parseInt(to));
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     addKeyValuePair(obj, 'attackerDice', Math.min(parseInt(units), 3));
     addKeyValuePair(obj, 'defenderDice', Math.min(parseInt(board[idOnClick].value), 3));
@@ -181,8 +181,10 @@ function invade() {
 function invasionStage() {
     cleanBoxes('controlTable');
 
+    stage = "invasion";
+
     var tableName = "controlTable";
-    addTHRow(tableName, "Invasion");
+    addTHRow(tableName, playerName + " : Invade", playerColor);
     addTDRowWithButtons(tableName, createButton("ATTACK", invade), createButton("NEXT STAGE", fortifyStage));
 
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
@@ -199,8 +201,8 @@ function fortify(){
 
     var units = document.getElementById('armyUnit').value;
     addKeyValuePair(obj, 'Action', 'Fortify');
-    addKeyValuePair(obj, 'fromTerritoryID', parseInt(fromID));
-    addKeyValuePair(obj, 'toTerritoryID', parseInt(idOnClick));
+    addKeyValuePair(obj, 'fromTerritoryID', parseInt(from));
+    addKeyValuePair(obj, 'toTerritoryID', parseInt(to));
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     webSocket.send(JSON.stringify(obj));
 }
@@ -208,8 +210,10 @@ function fortify(){
 function fortifyStage(){
     cleanBoxes('controlTable');
 
+    stage = "fortification";
+
     var tableName = "controlTable";
-    addTHRow(tableName, "Fortification");
+    addTHRow(tableName, playerName + " : Fortify", playerColor);
     addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
 
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
@@ -254,4 +258,8 @@ function showresultStage(obj){
     div.innerHTML += "<div class='row'><h5> You Lost "  + obj["attacker"] + " units </h5></div>";
     div.innerHTML += "<div class='row' id='listener'></div>";
     document.getElementById('controlBoxes').appendChild(div);
+}
+
+function addKeyValuePair(obj, key, value) {
+    obj[key] = value;
 }

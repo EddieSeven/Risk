@@ -33,31 +33,36 @@ webSocket.onopen = function () {
 webSocket.onmessage = function (event) {
     var message = event.data;//Grab message string
     var obj = JSON.parse(message);//Turn message string into JSON
-
     console.log(message)
-    if(obj["action"] == "result") {
-        showresultStage(obj);
-        return;
-    }
-    parseResponse(obj);
-    highlight();
-    var action = obj["action"];
-    switch (action) {
+
+    switch (obj["action"]) {
+        case "open":
+            readAdjacent(obj);
+            break;
         case "init":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
             reinforceStage(freeArmies, playerName);
             break;
         case "reinforce":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
             reinforceStage(freeArmies, playerName);
             break;
-        case "endGame":
-            endGame();
-            break;
         case "continue":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
             myLeave();
             reinforceStage(freeArmies, playerName);
             break;
         case "fortify":
             endTurn();
+            break;
+        case "endGame":
+            endGame();
+            break;
+        case "result":
+            showresultStage(obj);
             break;
 
     }
