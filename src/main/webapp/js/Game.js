@@ -1,6 +1,3 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
 var playerName;
 var playerColor;

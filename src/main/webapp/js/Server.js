@@ -1,6 +1,3 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
 /*
  * To change this license header, choose License Headers in Project Properties.

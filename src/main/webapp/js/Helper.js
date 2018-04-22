@@ -1,6 +1,3 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
 var from = 0;
 var to = 0;

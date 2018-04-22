@@ -1,6 +1,3 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
 function highlight(territories, color){
     if (territories.length < 1) return;
