@@ -7,6 +7,7 @@ import edu.T10.Model.Exceptions.NumberOfDiceException;
 import edu.T10.Model.Exceptions.NumberOfUnitsException;
 import edu.T10.Model.Exceptions.PlayerException;
 import edu.T10.Model.InvasionResult;
+import edu.T10.Model.Player;
 
 import javax.json.*;
 import java.io.*;
@@ -62,12 +63,11 @@ public class Server {
         switch (json.getString("Action")) {
             case "Init":
                 JsonArray jsonArray = json.getJsonArray("names");
-                String[] names = new String[jsonArray.size()];
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    names[i] = jsonArray.getString(i);
-                }
+           
+                Player[] players = constructPlayers(jsonArray);
 
-                this.game = new Game(names);
+                this.game = new Game(players);
+
                 this.game.startGame();
 
                 sendInitialSeverData(session);
@@ -131,6 +131,21 @@ public class Server {
             default:
                 break;
         }
+    }
+
+    private Player[] constructPlayers(JsonArray jsonArray) {
+        Player[] players = new Player[jsonArray.size()];
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            String line = jsonArray.getString(i);
+            String[] elements = line.split("");
+            String name = elements[0];
+            int colorID = Integer.parseInt(elements[1]);
+
+            Player player = new Player(name, colorID);
+            players[i] = player;
+        }
+        return players;
     }
 
     private void sendBack2Server(Session session, String action){
