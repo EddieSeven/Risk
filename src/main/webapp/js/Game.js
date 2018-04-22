@@ -67,13 +67,11 @@ function parseBoard(str){
  * -------------------------------
  */
 function registerNumber() {
-    var number = document.getElementById("numOfPlayer").value;
-    addListener();
-    startGame();
+    // var number = document.getElementById("numOfPlayer").value;
+    // addListener();
     // test();
-    // openTab(number);
-    console.log(number);
-    cleanBoxes('controlBoxes');
+    openTab(6);
+    // console.log(number);
 }
 
 function openTab(numOfBoxes) {
@@ -81,13 +79,15 @@ function openTab(numOfBoxes) {
 
     var div = document.createElement('div');
     div.className = 'row';
-    div.innerHTML += '<p>input your names</p>';
-    div.innerHTML += "<button onclick='startGame()'> Start </button><br/>";
-    for (i  = 0; i < numOfBoxes; i++){
-        var newInputBox = "<input type='text' id='nameBox' name='names' class='box'/>";
+    div.innerHTML += '<p>Select Color by Inputting Player Names</p>';
+    for (i  = 0; i < 6; i++){
+        var newInputBox = "<input type='text' id='nameBox" + i + "' name='names' class='box'/>";
         div.innerHTML += newInputBox;
     }
 
+
+
+    div.innerHTML += "<br/><button onclick='startGame()'> Start </button><br/>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 
@@ -103,7 +103,9 @@ function test(){
     addTDRow(tableName, "Available Armies", "11");
     addTDRow(tableName, "Cards", "11");
 
+
     var tableName = "controlTable";
+
     addTHRow(tableName, "Player 1 : Fortify", "yellow");
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 
@@ -111,6 +113,9 @@ function test(){
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     // addTDRowWithButton(tableName, "To Location", createListener("listener2"));
     addTDRowWithButton(tableName, "Units", createInputBox());
+
+    var tableName = "controlButtons";
+    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 }
 
 /* -------------------------------
@@ -119,13 +124,25 @@ function test(){
  */
 function startGame(){
     var obj = new Object();
+    var counter = 0;
     addKeyValuePair(obj, 'Action', 'Init');
     var nodes = document.getElementsByName('names');
     var stArray = new Array(nodes.length);
+    var playerColors = new Array();
+    var colorArray = new Array("GREEN", "YELLOW", "RED", "BLUE", "PINK", "GREY");
+    var nameArray = new Array();
+
     for (i = 0; i < nodes.length; i++){
+        if (nodes[i].value !== ""){
+            nameArray.push(nodes[i].value);
+            playerColors.push(colorArray[i]);
+        }
         stArray[i] = nodes[i].value;
+
     }
-    addKeyValuePair(obj, 'names', ["3","4","5"]);
+
+    addKeyValuePairWithColor(obj, 'names', nameArray, playerColors);
+    console.log(obj);
     webSocket.send(JSON.stringify(obj));
 }
 
@@ -259,4 +276,13 @@ function showresultStage(obj){
 
 function addKeyValuePair(obj, key, value) {
     obj[key] = value;
+}
+
+function addKeyValuePairWithColor(obj, key, value, color) {
+    var temp = "";
+    for (var i = 0; i < value.length;i++){
+        temp += value[i] + " " + color[i] + ",";
+    }
+    temp = temp.substr(0,temp.length-1);
+    obj[key] = temp;
 }

@@ -43,6 +43,10 @@ h5 {
     font-style: italic;
 }
 
+.control-buttons{
+    text-align: center;
+}
+
 .controlPanel h1{
     font-size: 85px;
     margin: 0px;
@@ -80,6 +84,36 @@ h5 {
 
 .boxnames{
     margin: 10px 5px;
+}
+
+#nameBox1{
+    background-color: yellow;
+    height: 50px;
+}
+
+#nameBox2{
+    background-color: red;
+    height: 50px;
+}
+
+#nameBox3{
+    background-color: blue;
+    height: 50px;
+}
+
+#nameBox4{
+    background-color: hotpink;
+    height: 50px;
+}
+
+#nameBox5{
+    background-color: gray;
+    height: 50px;
+}
+
+#nameBox0{
+    background-color: green;
+    height: 50px;
 }
 
 .nameContent {
