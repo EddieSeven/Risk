@@ -95,9 +95,9 @@ public class Parser {
             return false;
 
         else{
-            int adjTerritories[] = new int[segs.length - 2];
+            Vector<Integer> adjTerritories = new Vector<Integer>();
             for (int i = 0; i < segs.length - 2; i++){
-                adjTerritories[i] = Integer.parseInt(segs[1+i]);
+                adjTerritories.add(Integer.parseInt(segs[1+i]));
             }
 
             territory.setAdjTerritories(adjTerritories);

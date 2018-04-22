@@ -1,8 +1,13 @@
 package edu.T10;
 
 import edu.T10.Model.Board.Territory;
-import edu.T10.Model.Game;
+import edu.T10.Controller.Game;
+import edu.T10.Model.Exceptions.MoveException;
+import edu.T10.Model.Exceptions.NumberOfDiceException;
+import edu.T10.Model.Exceptions.NumberOfUnitsException;
+import edu.T10.Model.Exceptions.PlayerException;
 import edu.T10.Model.InvasionResult;
+import edu.T10.Model.Player;
 
 import javax.json.*;
 import java.io.*;
@@ -58,23 +63,31 @@ public class Server {
         switch (json.getString("Action")) {
             case "Init":
                 JsonArray jsonArray = json.getJsonArray("names");
-                String[] names = new String[jsonArray.size()];
-                for (int i = 0; i < jsonArray.size(); i++) {
-                    names[i] = jsonArray.getString(i);
-                }
-                this.game = new Game(names);
+           
+                Player[] players = constructPlayers(jsonArray);
+
+                this.game = new Game(players);
+
                 this.game.startGame();
+
+                sendInitialSeverData(session);
 
                 sendBack2Server(session, "init");
                 break;
 
             case "Attack":
-                InvasionResult invasionResult = this.game.conductInvasion(
-                        json.getInt("territoryID"),
-                        json.getInt("targetID"),
-                        json.getInt("unitValue"),
-                        json.getInt("attackerDice"),
-                        json.getInt("defenderDice"));
+                InvasionResult invasionResult = null;
+                try {
+                    invasionResult = this.game.conductInvasion(
+                            json.getInt("territoryID"),
+                            json.getInt("targetID"),
+                            json.getInt("unitValue"),
+                            json.getInt("attackerDice"),
+                            json.getInt("defenderDice"));
+                } catch (MoveException | NumberOfUnitsException | NumberOfDiceException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
 
                 sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
@@ -83,16 +96,27 @@ public class Server {
 
                 break;
             case "Reinforce":
-                this.game.conductReinforcement(
-                        json.getInt("territoryID"),
-                        json.getInt("unitValue"));
+                try {
+                    this.game.conductReinforcement(
+                            json.getInt("territoryID"),
+                            json.getInt("unitValue"));
+                } catch (NumberOfUnitsException | PlayerException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
+
                 sendBack2Server(session, "reinforce");
                 break;
             case "Fortify":
-                this.game.conductFortification(
-                        json.getInt("fromTerritoryID"),
-                        json.getInt("toTerritoryID"),
-                        json.getInt("unitValue"));
+                try {
+                    this.game.conductFortification(
+                            json.getInt("fromTerritoryID"),
+                            json.getInt("toTerritoryID"),
+                            json.getInt("unitValue"));
+                } catch (MoveException | NumberOfUnitsException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
                 sendBack2Server(session, "fortify");
                 break;
             case "PlayCards":
@@ -109,6 +133,21 @@ public class Server {
         }
     }
 
+    private Player[] constructPlayers(JsonArray jsonArray) {
+        Player[] players = new Player[jsonArray.size()];
+
+        for (int i = 0; i < jsonArray.size(); i++) {
+            String line = jsonArray.getString(i);
+            String[] elements = line.split("");
+            String name = elements[0];
+            int colorID = Integer.parseInt(elements[1]);
+
+            Player player = new Player(name, colorID);
+            players[i] = player;
+        }
+        return players;
+    }
+
     private void sendBack2Server(Session session, String action){
         int playerID = game.getCurrentPlayerID();
         String playerInfo = game.getCurrentPlayer().toString();
@@ -121,6 +160,32 @@ public class Server {
                 .add("board", concatenateString(allTerritories)).build();
         System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
         sendBack(session, buildJson(jobj.toString()));
+    }
+
+    private void sendInitialSeverData(Session session){
+        String[] adjList = buildAdjLists(game.getAllTerritories());
+
+        JsonObject jsonObject = Json.createObjectBuilder().add("action", "open")
+                .add("adjLists", concatenateAdjList(adjList)).build();
+
+        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jsonObject.toString());
+        sendBack(session, jsonObject);
+    }
+
+    private String[] buildAdjLists(Territory territories[]){
+        String adjList[] = new String[game.getNumberOfTerritories()];
+
+        for (int i = 0; i < territories.length; i++){
+            adjList[i] = territories[i].getId() + territories[i].getAdjTerritoriesString() + ";";
+        }
+
+        return adjList;
+    }
+
+    private void sendBackError(Session session, String errorMessage){
+        JsonObject jsonObject = Json.createObjectBuilder().add("action", "error").add("error", errorMessage).build();
+
+        sendBack(session, jsonObject);
     }
 
     private ArrayList<String> buildTerritoryList(Territory[] territories){
@@ -162,6 +227,16 @@ public class Server {
     private JsonObject buildJson(String string){
         JsonReader jsonReader = Json.createReader(new StringReader(string));
         return jsonReader.readObject();
+    }
+
+    private String concatenateAdjList(String[] adjList){
+        String returnValue = "";
+
+        for (String anAdjList : adjList) {
+            returnValue = returnValue + anAdjList;
+        }
+
+        return returnValue;
     }
 
     private String concatenateString(ArrayList array){

@@ -1,25 +1,27 @@
-package edu.T10.Model;
+package edu.T10.Controller;
 
 import edu.T10.Model.Board.Board;
+import edu.T10.Model.Player;
+
+import java.util.Vector;
 
 public class EndGameController {
-
     private final int endingTerritories = 42;
     private final int endingPlayers = 1;
-    private Board board;
-    private Player[] players;
+    private Game game;
+    private Vector<Player> players;
 
-    public EndGameController(Board board, Player[] players) {
-        this.board = board;
-        this.players = players;
 
+    public EndGameController(Game game, Vector<Player> players) {
+        this.game = game;
+        this.players = new Vector<Player> (players);
         eliminatePlayers();
     }
 
     private void eliminatePlayers(){
-        for (int i = 0; i < players.length; i++) {
-            if (board.getTerritories(i).length == 0)
-                players[i] = null;
+        for (int i = 0; i < players.size(); i++) {
+            if (game.getPlayerTerritories(i).length == 0)
+                players.set(i, null);
         }
     }
 
@@ -33,11 +35,11 @@ public class EndGameController {
     }
 
     public int swapPlayer(int currentPlayer){
-        int numOfPlayers = players.length;
+        int numOfPlayers = players.size();
         int next = currentPlayer;
         while(true) {
             next = (next + 1) % numOfPlayers;
-            if (players[next].equals(null)) continue;
+            if (players.get(next).equals(null)) continue;
             return next;
         }
     }

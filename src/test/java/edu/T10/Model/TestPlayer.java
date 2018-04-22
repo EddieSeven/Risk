@@ -2,6 +2,7 @@ package edu.T10.Model;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+import java.util.Vector;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +22,9 @@ public class TestPlayer {
 	
 	@Test
 	public void testUseCard() {
-		p.addCard2Deck(new Card[] {new Card(CardType.ARTILLERY)});
+		Vector<Card> v = new Vector<Card>();
+		v.add(new Card(CardType.ARTILLERY));
+		p.addCard2Deck(v);
 		assertTrue(p.useCards(1));
 	}
 	

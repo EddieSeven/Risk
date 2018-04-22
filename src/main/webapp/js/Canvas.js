@@ -1,11 +1,8 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
-function highlight(){
-    if (playerTerritories.length < 1) return;
-    for (var i = 0; i < playerTerritories.length; i++){
-        drawPoly(document.getElementById(playerTerritories[i].key).getAttribute('coords'), playerColor);
+function highlight(territories, color){
+    if (territories.length < 1) return;
+    for (var i = 0; i < territories.length; i++){
+        drawPoly(document.getElementById(territories[i]).getAttribute('coords'), color);
     }
 }
 
@@ -24,7 +21,7 @@ function getcentral(mCoords){
 
 function showText() {
     for (var i = 1; i <= 42; i++){
-        drawText(document.getElementById(i).getAttribute('coords'), playerColor);
+        drawText(document.getElementById(i).getAttribute('coords'), board[i].value, playerColor);
     }
 }
 
@@ -59,7 +56,7 @@ function drawPoly(coOrdStr, color)
     hdc.stroke();
 }
 
-function drawText(coOrdStr, text){
+function drawText(coOrdStr, text, color){
     var mCoords = coOrdStr.split(',');
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext("2d");
@@ -68,7 +65,7 @@ function drawText(coOrdStr, text){
     var x;
     var y;
     [x, y] = getcentral(mCoords);
-    ctx.fillText(1 ,x, y);
+    ctx.fillText(text ,x, y);
 }
 
 function drawRect(coOrdStr)
@@ -104,7 +101,7 @@ function myLeave()
 {
     var canvas = byId('myCanvas');
     hdc.clearRect(0, 0, canvas.width, canvas.height);
-    highlight();
+    highlight(playerTerritories, playerColor);
     showText();
 }
 

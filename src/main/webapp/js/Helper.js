@@ -1,6 +1,7 @@
-/**
- * Created by Jim on 4/20/18.
- */
+
+var from = 0;
+var to = 0;
+var stage = false;
 
 function addListener(){
     var classes = document.getElementsByClassName('territory');
@@ -9,34 +10,61 @@ function addListener(){
     }
 }
 
-function bindClick(i) {
+function bindClick(id) {
     return function(){
         var classes = document.getElementsByClassName('territory');
         var div = document.createElement('div');
-        idOnClick = classes[i].getAttribute("id");
-        if (true) {
-            document.getElementById("listener1").innerHTML = classes[i].title;
-            document.getElementById("listener1").appendChild(div);
+        idOnClick = parseInt(classes[id].getAttribute("id"));
+        switch (stage) {
+            case "reinforcement":
+                document.getElementById("listener1").innerHTML = classes[id].title;
+                if (playerTerritories.indexOf(idOnClick) != -1) {
+                    console.log("Your territory");
+                    document.getElementById("armyUnit").disabled = false;
+                } else {
+                    console.log("Not your territory");
+                    document.getElementById("armyUnit").disabled = true;
+                }
+                break;
+            case "invasion":
+                if (isMyTerritory(idOnClick)) {
+                    from = parseInt(idOnClick);
+                    disableInput();
+                    document.getElementById("listener1").innerHTML = classes[id].title;
+                } else {
+                    to = parseInt(idOnClick);
+                    disableInput();
+                    document.getElementById("listener2").innerHTML = classes[id].title;
+                }
+                break;
+            case "fortification":
+                if (isMyTerritory(idOnClick)) {
+                    from = parseInt(idOnClick);
+                    disableInput();
+                    document.getElementById("listener1").innerHTML = classes[id].title;
+                    document.getElementById("listener2").innerHTML = "";
+
+                    var selectList = document.createElement("select");
+                    for (var i = 0; i < adjacent[from].length; i++) {
+                        var curID = adjacent[from][i];
+                        if (playerTerritories.indexOf(curID) != -1 && idOnClick != curID) {
+                            var option = document.createElement("option");
+                            option.value = document.getElementById(curID).title;
+                            option.text = document.getElementById(curID).title;
+                            selectList.appendChild(option);
+                        }
+
+                    }
+                    document.getElementById("listener2").appendChild(selectList);
+                } else {
+                    disableInput();
+                }
+                break;
+
+
         }
-        else {
-            document.getElementById("listener2").innerHTML = classes[i].title;
-            document.getElementById("listener2").appendChild(div);
-        }
-        console.log("you clicked region number " + classes[i].title);
+        console.log("you clicked region " + classes[id].title);
     };
-}
-
-function addKeyValuePair(obj, key, value) {
-    obj[key] = value;
-}
-
-function addKeyValuePairWithColor(obj, key, value, color) {
-    var temp = "";
-    for (var i = 0; i < value.length;i++){
-        temp += value[i] + " " + color[i] + ",";
-    }
-    temp = temp.substr(0,temp.length-1);
-    obj[key] = temp;
 }
 
 function cleanBoxes(ids){
@@ -73,9 +101,10 @@ function addTDRow(table, left, right) {
     document.getElementById(table).appendChild(row);
 }
 
-function addTHRow(table, title) {
+function addTHRow(table, title, color) {
     var row = document.createElement("tr");
-    row.innerHTML += "<th colspan='2'>" + title + "</th>";
+    var th = document.createElement("th");
+    row.innerHTML += "<th colspan='2' bgcolor=" + color + ">" + title + "</th>";
     document.getElementById(table).appendChild(row);
 }
 
@@ -98,7 +127,27 @@ function createInputBox(){
     input.type = "text";
     input.id = "armyUnit";
     input.placeholder = "input your units";
+    input.disabled = true;
     input.style.width = "100%";
-    input.disabled="disabled";
+
     return (input);
+}
+
+function isMyTerritory(tid){
+    for (var i = 0; i < playerTerritories.length; i++) {
+        if (tid == playerTerritories[i])
+            return true;
+    }
+    return false;
+}
+
+function disableInput(){
+    var input = document.getElementById("armyUnit");
+    console.log("from", from);
+    console.log("to", to);
+    if (to !=0 && adjacent[from].indexOf(to) == -1) {
+        input.disabled = true;
+    } else {
+        input.disabled = false;
+    }
 }

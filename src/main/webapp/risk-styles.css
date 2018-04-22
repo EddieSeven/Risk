@@ -74,7 +74,8 @@ h5 {
 
 .buttonsBox{
     text-align: center;
-    float:bottom;
+    position: absolute;
+    bottom: 0px;
 }
 
 .box {
@@ -160,6 +161,7 @@ th, td {
 }
 
 .border td {
+    float: bottom;
     text-align: left;
     height: 20px;
 }
@@ -169,6 +171,9 @@ th, td {
 }
 
 .borderless th {
+    -webkit-text-stroke: 1px black;
+    font-family: 'LATO', Verdana, sans-serif;
+    font-size: 24px;
     height: 35px;
     text-align: center;
 }

@@ -1,6 +1,3 @@
-/**
- * Created by Jim on 4/20/18.
- */
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -33,31 +30,36 @@ webSocket.onopen = function () {
 webSocket.onmessage = function (event) {
     var message = event.data;//Grab message string
     var obj = JSON.parse(message);//Turn message string into JSON
-
     console.log(message)
-    if(obj["action"] == "result") {
-        showresultStage(obj);
-        return;
-    }
-    parseResponse(obj);
-    highlight();
-    var action = obj["action"];
-    switch (action) {
-        case "init":
-            openTab(6);
+
+    switch (obj["action"]) {
+        case "open":
+            readAdjacent(obj);
             break;
-        case "reinforce":
+        case "init":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
             reinforceStage(freeArmies, playerName);
             break;
-        case "endGame":
-            endGame();
+        case "reinforce":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
+            reinforceStage(freeArmies, playerName);
             break;
         case "continue":
+            parseResponse(obj);
+            highlight(playerTerritories, playerColor);
             myLeave();
             reinforceStage(freeArmies, playerName);
             break;
         case "fortify":
             endTurn();
+            break;
+        case "endGame":
+            endGame();
+            break;
+        case "result":
+            showresultStage(obj);
             break;
 
     }
