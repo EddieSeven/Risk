@@ -42,10 +42,10 @@ public class Territory {
 
         for (int adjTerritory : adjTerritories) {
             if (adjTerritory == adjTerritoryID)
-                return true;
+                return false;
         }
 
-        return false;
+        return true;
     }
 
     public String getAdjTerritoriesString() {

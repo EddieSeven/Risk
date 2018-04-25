@@ -78,6 +78,7 @@ public class Server {
 
             case "Attack":
                 InvasionResult invasionResult = null;
+
                 try {
                     invasionResult = this.game.conductInvasion(
                             json.getInt("territoryID"),
