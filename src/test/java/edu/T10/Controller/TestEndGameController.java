@@ -33,8 +33,8 @@ public class TestEndGameController {
 		when(game.getPlayerTerritories(0)).thenReturn(new Territory[] {territory});
 		when(game.getPlayerTerritories(1)).thenReturn(new Territory[] {territory});
 		Vector<Player> players = new Vector<Player>();
-		players.add(new Player("player1"));
-		players.add(new Player("player2"));
+		players.add(new Player("player1", 0));
+		players.add(new Player("player2", 1));
 		egController = new EndGameController(game, players);
 	}
 

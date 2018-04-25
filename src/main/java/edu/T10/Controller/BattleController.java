@@ -33,7 +33,7 @@ public class BattleController {
         while (defenderUnits != 0 && attackerUnits != 0) {
             // attacker losses = results[0]
             // defender losses = results[1]
-            Vector<Integer> results = conductBattleRound(attackerDice, defenderDice, invasionResult);
+            Vector<Integer> results = conductBattleRound(attackerDice, defenderDice);
             invasionResult.incrementAttackerLosses(results.get(0));
             invasionResult.incrementDefenderLosses(results.get(1));
 
@@ -102,7 +102,7 @@ public class BattleController {
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
     }
 
-    private Vector<Integer> conductBattleRound(int attackerDice, int defenderDice, InvasionResult runningResult) {
+    private Vector<Integer> conductBattleRound(int attackerDice, int defenderDice) {
         Vector<Integer> attackerRolls = rollDie(attackerDice);
         Vector<Integer> defenderRolls = rollDie(defenderDice);
         Vector<Integer> results;

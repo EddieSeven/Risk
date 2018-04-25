@@ -12,7 +12,7 @@ public class TestPlayer {
 	
 	@Before
 	public void setUp() {
-		p = new Player("Test");
+		p = new Player("Test", 0);
 	}
 	
 	@Test
@@ -37,10 +37,10 @@ public class TestPlayer {
 
 	@Test
 	public void testAssignColor() {
-		assertEquals(p.toString(), "Test RED 0");
-		p.assignColor(Color.BLACK);
-		assertEquals(p.toString(), "Test BLACK 0");
+		assertEquals(p.toString(), "Test GREEN 0");
 		p.assignColor(1);
 		assertEquals(p.toString(), "Test YELLOW 0");
+		p.assignColor(2);
+		assertEquals(p.toString(), "Test RED 0");
 	}
 }
