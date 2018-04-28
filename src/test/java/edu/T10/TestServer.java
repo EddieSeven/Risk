@@ -59,11 +59,13 @@ public class TestServer {
 	@Test
 	public void testOnMessageInit() {
 		try {
-			s.onMessage(session, "{\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW\"}");
-			assertTrue(systemOutRule.getLog().contains("[ServerSide] Received message : {\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW\"}"));
+			s.onMessage(session, "{\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW,C RED,D BLUE,E PINK,F GREY\"}");
+			assertTrue(systemOutRule.getLog()
+					.contains("[ServerSide] Received message : {\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW,C RED,D BLUE,E PINK,F GREY\"}"));
 
 			s.onMessage(session, "{\"Action\":\"EndTurn\"}");
-			assertTrue(systemOutRule.getLog().contains("[ServerSide] Received message : {\"Action\":\"EndTurn\"}"));
+			assertTrue(systemOutRule.getLog()
+					.contains("[ServerSide] Received message : {\"Action\":\"EndTurn\"}"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
