@@ -36,11 +36,10 @@ public class EndGameController {
 
     public int swapPlayer(int currentPlayer){
         int numOfPlayers = players.size();
-        int next = currentPlayer;
-        while(true) {
+        int next = (currentPlayer + 1)%numOfPlayers;
+        while(players.get(next).equals(null)) {
             next = (next + 1) % numOfPlayers;
-            if (players.get(next).equals(null)) continue;
-            return next;
         }
+        return next;
     }
 }

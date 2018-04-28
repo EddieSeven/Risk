@@ -13,6 +13,15 @@ public class Territory {
     private Vector<Integer> adjTerritories = new Vector<Integer>();
 
     public Territory(){}
+    
+    public Territory(int owner, String name, int armyStrength, int id, int continentID, int adj) {
+    	this.owner = owner;
+    	this.name = name;
+    	this.armyStrength = armyStrength;
+    	this.id = id;
+    	this.continentID = continentID;
+    	this.adjTerritories.add(adj);
+    }
 
     public void assignOwner(int playerID){
         this.owner = playerID;
