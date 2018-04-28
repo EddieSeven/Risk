@@ -79,7 +79,6 @@ public class Game {
     public void playCards(int numOfCards) {
         if (players.get(currentPlayer).useCards(numOfCards))
             players.get(currentPlayer).addNewArmies(numOfCards/3);
-        return;
     }
 
 
