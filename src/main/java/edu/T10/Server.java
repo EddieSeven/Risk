@@ -82,14 +82,13 @@ public class Server {
                             json.getInt("territoryID"),
                             json.getInt("targetID"),
                             json.getInt("unitValue"),
-                            json.getInt("attackerDice"),
-                            json.getInt("defenderDice"));
+                            json.getInt("attackerDie"),
+                            json.getInt("defenderDie"));
                 } catch (MoveException | NumberOfUnitsException | NumberOfDiceException e) {
                     System.out.println("Error: " + e.getMessage());
                     sendBackError(session, e.getMessage());
                 }
 
-                sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
                 System.out.print(invasionInfo);
                 // [DEBUG] //todo delete
@@ -104,7 +103,7 @@ public class Server {
                         "\nOwner of Invaded Territory: " + defender.getOwner() +
                         "\nAttacker ID: " + attacker.getOwner() + "\n\n");
                 sendBack(session, buildJson(invasionInfo));
-
+                sendBack2Server(session, "attack");
                 break;
             case "Reinforce":
                 try {
@@ -112,7 +111,7 @@ public class Server {
                             json.getInt("territoryID"),
                             json.getInt("unitValue"));
                 } catch (NumberOfUnitsException | PlayerException e) {
-                    System.out.println("Error: " + e.getMessage());
+                    System.out.println("ERROR: " + e.getMessage());
                     sendBackError(session, e.getMessage());
                 }
 

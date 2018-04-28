@@ -45,7 +45,7 @@ webSocket.onmessage = function (event) {
             break;
         case "reinforce":
             if (!error)
-                displayMessage(playerName + " successfully reinforced");
+                displayMessage(playerName + " has successfully reinforced.",0);
             parseResponse(obj);
             resetCanvas();
             reinforceStage();
@@ -53,7 +53,7 @@ webSocket.onmessage = function (event) {
             break;
         case "attack":
             if (!error)
-                displayMessage(playerName + " successfully attacked");
+                displayMessage(playerName + " has successfully attacked.",0);
             parseResponse(obj);
             resetCanvas();
             invasionStage();
@@ -67,7 +67,7 @@ webSocket.onmessage = function (event) {
             break;
         case "fortify":
             if (!error)
-                displayMessage(playerName + " successfully fortified");
+                displayMessage(playerName + " has successfully fortified",0);
             parseResponse(obj);
             resetCanvas();
             if(error) fortifyStage(1);
@@ -78,13 +78,17 @@ webSocket.onmessage = function (event) {
             endGame();
             break;
         case "result":
-            if (obj["result"] == "attacker") displayMessage("RESULT: You Won");
-            else displayMessage("RESULT: You Lost");
-            displayMessage("You lost " + obj["attacker"] + " armies");
-            displayMessage("The defender lost " + obj["defender"] + " armies");
+            var msg = "";
+            if (obj["result"] == "attacker") msg += "RESULT: " + playerName + " won\n";
+            else msg += "RESULT: " + playerName + "lost\n";
+            msg += playerName + " lost " + obj["attacker"] + " armies\n"
+                + "The defender lost " + obj["defender"] + " armies\n";
+            if (obj["result"] == "attacker")
+                msg += playerName + " has occupied " + document.getElementById(to).title + "!";
+            displayMessage(msg,1);
             break;
         case "error":
-            displayMessage(obj["error"]);
+            displayMessage(obj["error"],1);
             error = true;
             break;
     }
