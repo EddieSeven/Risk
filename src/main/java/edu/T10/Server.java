@@ -2,16 +2,14 @@ package edu.T10;
 
 import edu.T10.Model.Board.Territory;
 import edu.T10.Controller.Game;
-import edu.T10.Model.Exceptions.MoveException;
-import edu.T10.Model.Exceptions.NumberOfDiceException;
-import edu.T10.Model.Exceptions.NumberOfUnitsException;
-import edu.T10.Model.Exceptions.PlayerException;
+import edu.T10.Model.Exceptions.*;
 import edu.T10.Model.InvasionResult;
 import edu.T10.Model.Player;
 
 import javax.json.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Vector;
 import javax.json.stream.JsonParsingException;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -133,7 +131,12 @@ public class Server {
                 sendBack2Server(session, "fortify");
                 break;
             case "PlayCards":
-                this.game.playCards(json.getInt("numOfCards"));
+                try {
+                    this.game.playCards();
+                } catch (DeckCompositionException e) {
+                    System.out.println("Error: " + e.getMessage());
+                    sendBackError(session, e.getMessage());
+                }
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();
@@ -158,6 +161,16 @@ public class Server {
         return players;
     }
 
+    private String createCardTypesList(Vector<Integer> cardTypes){
+        StringBuilder returnValue = new StringBuilder();
+
+        for (Integer cardType : cardTypes) {
+            returnValue.append(cardType).append(" ");
+        }
+
+        return returnValue.toString();
+    }
+
     private void sendBack2Server(Session session, String action){
         int playerID = game.getCurrentPlayerID();
         String playerInfo = game.getCurrentPlayer().toString();
@@ -167,7 +180,9 @@ public class Server {
                 .add("action", action)
                 .add("player", playerInfo)
                 .add("territory", concatenateString(playerTerritories))
-                .add("board", concatenateString(allTerritories)).build();
+                .add("board", concatenateString(allTerritories))
+                .add("cards", createCardTypesList(game.getCardTypes()))
+                .build();
         sendBack(session, buildJson(jobj.toString()));
     }
 
