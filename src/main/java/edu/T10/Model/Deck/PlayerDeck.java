@@ -62,9 +62,10 @@ public class PlayerDeck implements Deck {
     }
 
     private int collect(CollectionType collectionType){
+        int reward = this.collectionReward;
         updateTier();
         removeCardsOfCollectionType(collectionType);
-        return collectionReward;
+        return reward;
     }
 
     private void removeCardsOfCollectionType(CollectionType collectionType){
@@ -183,6 +184,7 @@ public class PlayerDeck implements Deck {
         switch (collectionRewardTier){
             case 1:
                 collectionRewardTier = 2;
+                collectionReward = 6;
                 break;
             case 2:
                 collectionRewardTier = 3;
