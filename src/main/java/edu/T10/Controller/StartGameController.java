@@ -8,18 +8,8 @@ import java.util.Vector;
 
 public class StartGameController {
     public StartGameController(Board board, Vector<Player> players){
-        // Player choose color, randomly assigned for this time
-        this.colorAssignment(players);
         // Player choose territory, randomly assigned for this time
         this.territoryAssignment(board, players.size());
-    }
-
-    private void colorAssignment(Vector<Player> players){
-        int len = players.size();
-        Vector<Integer> assignments = intArrayShuffled(len);
-        for (int i = 0; i < len; i++){
-            players.get(i).assignColor(assignments.get(i));
-        }
     }
 
     private void territoryAssignment(Board board, int numOfPlayers) {

@@ -168,13 +168,13 @@ public class PlayerDeck implements Deck {
             return CollectionType.CAV3;
         } else if (numOfArtillery == 3){
             return CollectionType.ART3;
-        } else if (numOfInfantry < 1 && numOfCavalry < 1 && numOfArtillery < 1){
+        } else if (numOfInfantry >= 1 && numOfCavalry >= 1 && numOfArtillery >= 1){
             return CollectionType.FULL;
-        } else if (numOfWildCards < 1 && numOfCavalry < 1 && numOfArtillery < 1){
+        } else if (numOfWildCards >= 1 && numOfCavalry >= 1 && numOfArtillery >= 1){
             return CollectionType.WCA;
-        } else if (numOfWildCards < 1 && numOfCavalry < 1 && numOfInfantry < 1){
+        } else if (numOfWildCards >= 1 && numOfCavalry >= 1 && numOfInfantry >= 1){
             return CollectionType.WIC;
-        } else if (numOfWildCards < 1 && numOfInfantry < 1 && numOfArtillery < 1){
+        } else if (numOfWildCards >= 1 && numOfInfantry >= 1 && numOfArtillery >= 1){
             return CollectionType.WIA;
         } else
             return CollectionType.NONE;
