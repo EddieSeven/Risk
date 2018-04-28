@@ -43,7 +43,7 @@ public class BattleController {
             if (defenderUnits <= 0) {
                 checkLosses(invasionResult, originalAttackerStrength, true);
                 checkLosses(invasionResult, originalDefenderStrength, false);
-                attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
+                attackerWins(fromTerritoryID, toTerritoryID, originalAttackerStrength, invasionResult, attackingPlayerID);
             } else if (attackerUnits <= 0) {
                 checkLosses(invasionResult, originalAttackerStrength, true);
                 checkLosses(invasionResult, originalDefenderStrength, false);
@@ -70,10 +70,10 @@ public class BattleController {
 
 
         if (attackerUnits < attackerDice)
-            throw new NumberOfDiceException("Invalid move: You have played " + attackerDice + "dice/die, and can play at most " + attackerUnits + ".");
+            throw new NumberOfDiceException("Invalid move: You have played " + attackerDice + " dice/die, and can play at most " + attackerUnits + ".");
 
         if (defenderUnits < defenderDice)
-            throw new NumberOfDiceException("Invalid move: You have played " + defenderDice + "dice/die, and can play at most " + defenderUnits + ".");
+            throw new NumberOfDiceException("Invalid move: You have played " + defenderDice + " dice/die, and can play at most " + defenderUnits + ".");
 
     }
 
@@ -95,10 +95,12 @@ public class BattleController {
 
     private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
         int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
-        System.out.println("remainingAttackerStrength" + remainingAttackerStrength);
+        System.out.println("\n[DEBUG] Attacker units: " + attackerUnits +
+                        "\nAttacker Losses: " + invasionResult.getAttackerLosses() +
+                        "\nRemaining: " + remainingAttackerStrength); //todo delete
         invasionResult.setAttackerVictor();
         game.getBoard().updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
-        game.getBoard().updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
+        game.getBoard().setTerritoryStrength(toTerritoryID, remainingAttackerStrength);
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
     }
 
@@ -116,15 +118,20 @@ public class BattleController {
     }
 
     private Vector<Integer> compareDie(int lowestDieNumber, Vector<Integer> attackerRolls, Vector<Integer> defenderRolls) {
+        // attacker losses = results[0]
+        // defender losses = results[1]
+
         Vector<Integer> results = new Vector<Integer>();
 		results.add(0);
 		results.add(0);
 
+
+
         for (int i = 0; i < lowestDieNumber; i++) {
             if (attackerRolls.get(i) > defenderRolls.get(i))
-                results.set(0, results.get(0)+1);
-            else // in the event of a tie the defend wins
                 results.set(1, results.get(1)+1);
+            else // in the event of a tie the defend wins
+                results.set(0, results.get(0)+1);
         }
 
         return results;
