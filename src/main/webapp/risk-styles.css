@@ -103,37 +103,36 @@ textarea{
     height: 150px;
     border: none;
     background: white;
+    resize: none
 }
 
-
-#nameBox1{
-    background-color: yellow;
-    height: 50px;
-}
-
-#nameBox2{
-    background-color: red;
-    height: 50px;
-}
-
-#nameBox3{
-    background-color: blue;
-    height: 50px;
-}
-
-#nameBox4{
-    background-color: hotpink;
-    height: 50px;
-}
-
-#nameBox5{
-    background-color: gray;
-    height: 50px;
+.box{
+    font-size: 24px;
+    height: 30px;
 }
 
 #nameBox0{
     background-color: green;
-    height: 50px;
+}
+
+#nameBox1{
+    background-color: yellow;
+}
+
+#nameBox2{
+    background-color: red;
+}
+
+#nameBox3{
+    background-color: blue;
+}
+
+#nameBox4{
+    background-color: hotpink;
+}
+
+#nameBox5{
+    background-color: gray;
 }
 
 .nameContent {
