@@ -137,6 +137,8 @@ public class Server {
                     System.out.println("Error: " + e.getMessage());
                     sendBackError(session, e.getMessage());
                 }
+
+                sendBack2Server(session, "reinforce");
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();
