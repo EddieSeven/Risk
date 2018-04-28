@@ -78,7 +78,7 @@ public class Server {
 
             case "Attack":
                 InvasionResult invasionResult = null;
-
+                int oldDef = game.getTerritory(json.getInt("targetID")).getStrength();
                 try {
                     invasionResult = this.game.conductInvasion(
                             json.getInt("territoryID"),
@@ -94,6 +94,17 @@ public class Server {
                 sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
                 System.out.print(invasionInfo);
+                // [DEBUG] //todo delete
+                Territory attacker = game.getTerritory(json.getInt("territoryID"));
+                Territory defender = game.getTerritory(json.getInt("targetID"));
+
+                System.out.println("\n\n[DEBUG]" +
+                        "\nAttacking Army Old Strength: " + json.getInt("unitValue") +
+                        "\nInvading Territory New Strength: " + attacker.getStrength() +
+                        "\nInvaded Territory Old Strength: " + oldDef +
+                        "\nInvaded Territory New Strength: " + defender.getStrength() +
+                        "\nOwner of Invaded Territory: " + defender.getOwner() +
+                        "\nAttacker ID: " + attacker.getOwner() + "\n\n");
                 sendBack(session, buildJson(invasionInfo));
 
                 break;
@@ -157,7 +168,6 @@ public class Server {
                 .add("player", playerInfo)
                 .add("territory", concatenateString(playerTerritories))
                 .add("board", concatenateString(allTerritories)).build();
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
         sendBack(session, buildJson(jobj.toString()));
     }
 
@@ -167,7 +177,6 @@ public class Server {
         JsonObject jsonObject = Json.createObjectBuilder().add("action", "open")
                 .add("adjLists", concatenateAdjList(adjList)).build();
 
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jsonObject.toString());
         sendBack(session, jsonObject);
     }
 
@@ -186,7 +195,7 @@ public class Server {
 
         sendBack(session, jsonObject);
     }
-
+    
     private ArrayList<String> buildTerritoryList(Territory[] territories){
         ArrayList<String> listOfStrings = new ArrayList<>();
 
@@ -197,13 +206,11 @@ public class Server {
         return listOfStrings;
     }
 
-
-
     // Send response message
     private void sendBack(Session session, JsonObject json){
         RemoteEndpoint.Basic remote = session.getBasicRemote();//Get Session remote end
         try{
-            System.out.println(json.toString());
+            System.out.println("[ServerSide] " + session.getId() + " sends back\n" + json.toString());
             remote.sendText(json.toString());
         }catch(IOException e){
             e.printStackTrace();

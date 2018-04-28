@@ -3,6 +3,12 @@ var from = 0;
 var to = 0;
 var stage = false;
 
+function displayMessage(msg){
+    var textarea = document.getElementById("messageBox");
+    textarea.value += msg + "\n";
+    textarea.scrollTop = textarea.scrollHeight;
+}
+
 function addListener(){
     var classes = document.getElementsByClassName('territory');
     for (var i = 0; i < classes.length; i++) {
@@ -40,23 +46,31 @@ function bindClick(id) {
             case "fortification":
                 if (isMyTerritory(idOnClick)) {
                     from = parseInt(idOnClick);
+                    to = 0;
                     disableInput();
                     document.getElementById("listener1").innerHTML = classes[id].title;
                     document.getElementById("listener2").innerHTML = "";
 
                     var selectList = document.createElement("select");
+                    selectList.className = "custom-select";
+                    selectList.id = "fortify_select";
                     for (var i = 0; i < adjacent[from].length; i++) {
                         var curID = adjacent[from][i];
                         if (playerTerritories.indexOf(curID) != -1 && idOnClick != curID) {
                             var option = document.createElement("option");
-                            option.value = document.getElementById(curID).title;
+                            option.value = document.getElementById(curID).id;
                             option.text = document.getElementById(curID).title;
                             selectList.appendChild(option);
                         }
-
                     }
+                    selectList.addEventListener("click", function() {
+                        to = parseInt(document.getElementById("fortify_select").value);
+                        disableInput();
+                    });
                     document.getElementById("listener2").appendChild(selectList);
                 } else {
+                    document.getElementById("listener1").innerHTML = "Choose your territory";
+                    document.getElementById("listener2").innerHTML = "";
                     disableInput();
                 }
                 break;
@@ -143,9 +157,7 @@ function isMyTerritory(tid){
 
 function disableInput(){
     var input = document.getElementById("armyUnit");
-    console.log("from", from);
-    console.log("to", to);
-    if (to !=0 && adjacent[from].indexOf(to) == -1) {
+    if (to ==0 || adjacent[from].indexOf(to) == -1) {
         input.disabled = true;
     } else {
         input.disabled = false;

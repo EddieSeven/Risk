@@ -97,7 +97,7 @@ function myHover(element)
     }
 }
 
-function myLeave()
+function resetCanvas()
 {
     var canvas = byId('myCanvas');
     hdc.clearRect(0, 0, canvas.width, canvas.height);

@@ -15,11 +15,10 @@ public class Game {
     private Board board;
     private int numOfPlayers;
     private Vector<Player> players;
-    private Deck deck; // the deck the players take from, later on
+    private Deck deck;
     private boolean gameOver;
     private boolean currentWin;
     private int currentPlayer;
-    private int round;
 
     public Game(Player[] players){
         this.board = new Board();
@@ -32,7 +31,6 @@ public class Game {
 
         this.gameOver = false;
         this.currentWin = false;
-        this.round = 0;
     }
 
     public void startGame() {
@@ -81,7 +79,6 @@ public class Game {
     public void playCards(int numOfCards) {
         if (players.get(currentPlayer).useCards(numOfCards))
             players.get(currentPlayer).addNewArmies(numOfCards/3);
-        return;
     }
 
 

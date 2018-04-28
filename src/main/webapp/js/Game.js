@@ -58,8 +58,6 @@ function parseBoard(str){
             value: parseInt(segs[1])
         });
     }
-    console.log("board");
-    console.log(board);
 }
 
 /* -------------------------------
@@ -91,40 +89,12 @@ function openTab(numOfBoxes) {
     document.getElementById('controlBoxes').appendChild(div);
 }
 
-function test(){
-    showText();
-    cleanBoxes('controlBoxes');
-
-    showbox = true;
-
-    var tableName = "playerTable";
-    addTDRow(tableName, "Player", "CD");
-    addTDRow(tableName, "Color", "Yellow");
-    addTDRow(tableName, "Available Armies", "11");
-    addTDRow(tableName, "Cards", "11");
-
-
-    var tableName = "controlTable";
-
-    addTHRow(tableName, "Player 1 : Fortify", "yellow");
-    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
-
-    // addTDRow(tableName, "From", "<div class='row' id='listener'></div>");
-    addTDRowWithButton(tableName, "From Location", createListener("listener1"));
-    // addTDRowWithButton(tableName, "To Location", createListener("listener2"));
-    addTDRowWithButton(tableName, "Units", createInputBox());
-
-    var tableName = "controlButtons";
-    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
-}
-
 /* -------------------------------
  * Starting Stage
  * -------------------------------
  */
 function startGame(){
     var obj = new Object();
-    var counter = 0;
     addKeyValuePair(obj, 'Action', 'Init');
     var nodes = document.getElementsByName('names');
     var stArray = new Array(nodes.length);
@@ -147,6 +117,7 @@ function startGame(){
 
     addListener();
     cleanBoxes('controlBoxes');
+    document.getElementById("messageBox").style.display="inline-block";
 }
 
 /* -------------------------------
@@ -165,6 +136,8 @@ function reinforce(){
 
 function reinforceStage(){
 
+    displayMessage(playerName + "'s turn to conduct reinforcement...");
+
     showText();
     cleanBoxes('controlTable');
 
@@ -173,7 +146,8 @@ function reinforceStage(){
     var tableName = "controlTable";
     addTHRow(tableName, playerName + " : Reinforce", playerColor);
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", invasionStage));
-
+    addTDRow(tableName, "Free Armies", freeArmies);
+    addTDRow(tableName, "Free Cards", availablecards);
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "Units", createInputBox());
 }
@@ -191,14 +165,17 @@ function invade() {
     addKeyValuePair(obj, 'targetID', parseInt(to));
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     addKeyValuePair(obj, 'attackerDice', Math.min(parseInt(units), 3));
-    addKeyValuePair(obj, 'defenderDice', Math.min(parseInt(board[idOnClick].value), 3));
+    addKeyValuePair(obj, 'defenderDice', Math.min(parseInt(board[idOnClick].value), 2));
     webSocket.send(JSON.stringify(obj));
 }
 
 function invasionStage() {
+    stage = "invasion";
+    displayMessage(playerName + "'s turn to conduct invasion...");
+
     cleanBoxes('controlTable');
 
-    stage = "invasion";
+
 
     var tableName = "controlTable";
     addTHRow(tableName, playerName + " : Invade", playerColor);
@@ -223,15 +200,23 @@ function fortify(){
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     webSocket.send(JSON.stringify(obj));
 }
-
-function fortifyStage(){
-    cleanBoxes('controlTable');
-
+function fortifyStage(nul){
+    console.log(nul, "  ", nul instanceof MouseEvent);
     stage = "fortification";
+
+    cleanBoxes('controlTable');
 
     var tableName = "controlTable";
     addTHRow(tableName, playerName + " : Fortify", playerColor);
-    addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
+    if (nul === undefined) {
+        addTDRowWithButton(tableName, "End", createButton("END TURN", endTurn))
+        displayMessage(playerName + " has run out of fortification chances...");
+    }
+    else{
+        displayMessage(playerName + "'s turn to conduct fortification...");
+        addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
+    }
+
 
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "To Location", createListener("listener2"));
@@ -258,24 +243,7 @@ function endGame(){
 }
 
 
-function showresultStage(obj){
-    cleanBoxes('controlBoxes');
-    var resultStr;
-    if (obj["result"] == "attacker") resultStr = "You Won";
-    else resultStr = "You Lost";
-    var div = document.createElement('div');
-    div.className = 'row';
-    div.innerHTML += "<p style='color:" + playerColor + ";'> Player:  " + playerName + "</p>";
-    div.innerHTML += "<p> Attack Results</p>";
-    div.innerHTML += "<div class='row>";
-    div.innerHTML += "<button onclick='firstAttackStage()'> Conduct Another Attack </button>";
-    div.innerHTML += "<button onclick='firstFortifyStage()'> Next -- Fortify </button>";
-    div.innerHTML += "</div>";
-    div.innerHTML += "<div class='row'><h5>"  + resultStr + "</h5></div>";
-    div.innerHTML += "<div class='row'><h5> You Lost "  + obj["attacker"] + " units </h5></div>";
-    div.innerHTML += "<div class='row' id='listener'></div>";
-    document.getElementById('controlBoxes').appendChild(div);
-}
+
 
 function addKeyValuePair(obj, key, value) {
     obj[key] = value;

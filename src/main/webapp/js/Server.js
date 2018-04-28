@@ -25,6 +25,8 @@ webSocket.onopen = function () {
     // Check onOpen Here
 };
 
+var error = false;
+
 //Default on message function
 //Where message recieved from server and handled
 webSocket.onmessage = function (event) {
@@ -39,29 +41,52 @@ webSocket.onmessage = function (event) {
         case "init":
             parseResponse(obj);
             highlight(playerTerritories, playerColor);
-            reinforceStage(freeArmies, playerName);
+            reinforceStage();
             break;
         case "reinforce":
+            if (!error)
+                displayMessage(playerName + " successfully reinforced");
             parseResponse(obj);
-            highlight(playerTerritories, playerColor);
-            reinforceStage(freeArmies, playerName);
+            resetCanvas();
+            reinforceStage();
+            error = false;
+            break;
+        case "attack":
+            if (!error)
+                displayMessage(playerName + " successfully attacked");
+            parseResponse(obj);
+            resetCanvas();
+            invasionStage();
+            error = false;
             break;
         case "continue":
             parseResponse(obj);
-            highlight(playerTerritories, playerColor);
-            myLeave();
-            reinforceStage(freeArmies, playerName);
+            resetCanvas();
+            reinforceStage();
+            error = false;
             break;
         case "fortify":
-            endTurn();
+            if (!error)
+                displayMessage(playerName + " successfully fortified");
+            parseResponse(obj);
+            resetCanvas();
+            if(error) fortifyStage(1);
+            else fortifyStage();
+            error = false;
             break;
         case "endGame":
             endGame();
             break;
         case "result":
-            showresultStage(obj);
+            if (obj["result"] == "attacker") displayMessage("RESULT: You Won");
+            else displayMessage("RESULT: You Lost");
+            displayMessage("You lost " + obj["attacker"] + " armies");
+            displayMessage("The defender lost " + obj["defender"] + " armies");
             break;
-
+        case "error":
+            displayMessage(obj["error"]);
+            error = true;
+            break;
     }
 
 };

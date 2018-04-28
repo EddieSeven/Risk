@@ -8,7 +8,7 @@ body{
 
 .container{
     width: 1400px;
-    height: auto;
+    height: 725px;
     background-color: darkred;
     text-align: center;
     vertical-align: center;
@@ -20,9 +20,13 @@ body{
 .controlPanel {
     float: left;
     width: 300px;
-    height: 100%;
+    height: 700px;
     margin: 10px auto;
     padding: 10px;
+}
+
+#controlBoxes {
+    height: auto;
 }
 
 h1, h2, p{
@@ -86,34 +90,49 @@ h5 {
     margin: 10px 5px;
 }
 
-#nameBox1{
-    background-color: yellow;
-    height: 50px;
+.custom-select {
+    width: 100px;
 }
 
-#nameBox2{
-    background-color: red;
-    height: 50px;
+textarea{
+    position: absolute;
+    bottom: 100px;
+    left: 27px;
+    display: none;
+    width: 300px;
+    height: 150px;
+    border: none;
+    background: white;
+    resize: none
 }
 
-#nameBox3{
-    background-color: blue;
-    height: 50px;
-}
-
-#nameBox4{
-    background-color: hotpink;
-    height: 50px;
-}
-
-#nameBox5{
-    background-color: gray;
-    height: 50px;
+.box{
+    font-size: 24px;
+    height: 30px;
 }
 
 #nameBox0{
     background-color: green;
-    height: 50px;
+}
+
+#nameBox1{
+    background-color: yellow;
+}
+
+#nameBox2{
+    background-color: red;
+}
+
+#nameBox3{
+    background-color: blue;
+}
+
+#nameBox4{
+    background-color: hotpink;
+}
+
+#nameBox5{
+    background-color: gray;
 }
 
 .nameContent {
@@ -227,3 +246,4 @@ input[type=submit] {
 input[type=submit]:hover {
     background-color: #45a049;
 }
+

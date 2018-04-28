@@ -26,28 +26,31 @@ public class BattleController {
 
         checkConditions(fromTerritoryID, toTerritoryID, attackerUnits, defenderUnits, attackerDice, defenderDice);
 
-        if (defenderUnits == 0) {
-            attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
-        }
-
         while (defenderUnits != 0 && attackerUnits != 0) {
             // attacker losses = results[0]
             // defender losses = results[1]
+
             Vector<Integer> results = conductBattleRound(attackerDice, defenderDice);
             invasionResult.incrementAttackerLosses(results.get(0));
             invasionResult.incrementDefenderLosses(results.get(1));
 
-            attackerUnits = updateUnits(attackerUnits, results);
-            defenderUnits = updateUnits(defenderUnits, results);
+            attackerUnits = updateUnits(attackerUnits, results, true);
+            defenderUnits = updateUnits(defenderUnits, results, false);
 
-            if (defenderUnits <= 0) {
+            if (defenderUnits == 0 && attackerUnits == 0){
                 checkLosses(invasionResult, originalAttackerStrength, true);
                 checkLosses(invasionResult, originalDefenderStrength, false);
-                attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
+                draw(fromTerritoryID, toTerritoryID, invasionResult);
+            }
+            else if (defenderUnits <= 0) {
+                checkLosses(invasionResult, originalAttackerStrength, true);
+                checkLosses(invasionResult, originalDefenderStrength, false);
+                attackerWins(fromTerritoryID, toTerritoryID, originalAttackerStrength, invasionResult, attackingPlayerID);
             } else if (attackerUnits <= 0) {
                 checkLosses(invasionResult, originalAttackerStrength, true);
                 checkLosses(invasionResult, originalDefenderStrength, false);
                 defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
+
             }
         }
 
@@ -70,10 +73,10 @@ public class BattleController {
 
 
         if (attackerUnits < attackerDice)
-            throw new NumberOfDiceException("Invalid move: You have played " + attackerDice + "dice/die, and can play at most " + attackerUnits + ".");
+            throw new NumberOfDiceException("Invalid move: You have played " + attackerDice + " dice/die, and can play at most " + attackerUnits + ".");
 
         if (defenderUnits < defenderDice)
-            throw new NumberOfDiceException("Invalid move: You have played " + defenderDice + "dice/die, and can play at most " + defenderUnits + ".");
+            throw new NumberOfDiceException("Invalid move: You have played " + defenderDice + " dice/die, and can play at most " + defenderUnits + ".");
 
     }
 
@@ -95,11 +98,16 @@ public class BattleController {
 
     private void attackerWins(int fromTerritoryID, int toTerritoryID, int attackerUnits, InvasionResult invasionResult, int attackingPlayerID) {
         int remainingAttackerStrength = attackerUnits - invasionResult.getAttackerLosses();
-        System.out.println("remainingAttackerStrength" + remainingAttackerStrength);
         invasionResult.setAttackerVictor();
         game.getBoard().updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
-        game.getBoard().updateTerritoryStrength(toTerritoryID, remainingAttackerStrength);
+        game.getBoard().setTerritoryStrength(toTerritoryID, remainingAttackerStrength);
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
+    }
+
+    private void draw(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult){
+        invasionResult.setDefenderVictor();
+        game.getBoard().setTerritoryStrength(toTerritoryID, 1);
+        game.getBoard().updateTerritoryStrength(fromTerritoryID, -invasionResult.getAttackerLosses());
     }
 
     private Vector<Integer> conductBattleRound(int attackerDice, int defenderDice) {
@@ -116,15 +124,18 @@ public class BattleController {
     }
 
     private Vector<Integer> compareDie(int lowestDieNumber, Vector<Integer> attackerRolls, Vector<Integer> defenderRolls) {
+        // attacker losses = results[0]
+        // defender losses = results[1]
+
         Vector<Integer> results = new Vector<Integer>();
 		results.add(0);
 		results.add(0);
 
         for (int i = 0; i < lowestDieNumber; i++) {
             if (attackerRolls.get(i) > defenderRolls.get(i))
-                results.set(0, results.get(0)+1);
-            else // in the event of a tie the defend wins
                 results.set(1, results.get(1)+1);
+            else // in the event of a tie the defend wins
+                results.set(0, results.get(0)+1);
         }
 
         return results;
@@ -153,8 +164,12 @@ public class BattleController {
         }
     }
 
-    private int updateUnits(int units, Vector<Integer> results) {
-        units -= results.get(0);
+    private int updateUnits(int units, Vector<Integer> results, boolean isAttacker) {
+        if (isAttacker)
+            units -= results.get(0);
+        else
+            units -= results.get(1);
+
         if (units < 0)
             units = 0;
 
