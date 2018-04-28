@@ -82,12 +82,6 @@ public class Game {
         this.currentWin = true;
     }
 
-    public boolean canCollectPlayerCards(){
-        Player player = players.get(currentPlayer);
-
-        return player.canCollect();
-    }
-
     public void playCards() throws DeckCompositionException {
         Player player = players.get(currentPlayer);
 

@@ -190,6 +190,8 @@ function addCards(){
     var cardNames = ["Infantry.jpg", "Cavalry.jpg", "Artillery.jpg", "wild.jpg"];
     var cardPile = document.createElement("div");
     cardPile.innerHTML = "";
+    var cardNames = ["Infantry.jpg", "Cavalry.jpg", "Artillery.jpg", "wild.jpg"];
+    var cardPile = document.createElement("div");
     for (var i=0; i<cards.length; i++){
         var num = cards[i];
         for (var j=0; j<num; j++){
@@ -205,6 +207,5 @@ function addCards(){
     if (!flag) {
         cardPile.innerHTML += "No Cards Available";
     }
-
     return cardPile;
 }
