@@ -39,18 +39,20 @@ webSocket.onmessage = function (event) {
         case "init":
             parseResponse(obj);
             highlight(playerTerritories, playerColor);
-            reinforceStage(freeArmies, playerName);
+            reinforceStage();
             break;
         case "reinforce":
+            if (parseInt(obj["player"].split(" ")[2]) != freeArmies)
+                displayMessage(playerName + " successfully reinforced");
             parseResponse(obj);
             highlight(playerTerritories, playerColor);
-            reinforceStage(freeArmies, playerName);
+            reinforceStage();
             break;
         case "continue":
             parseResponse(obj);
             highlight(playerTerritories, playerColor);
             myLeave();
-            reinforceStage(freeArmies, playerName);
+            reinforceStage();
             break;
         case "fortify":
             endTurn();
@@ -59,9 +61,14 @@ webSocket.onmessage = function (event) {
             endGame();
             break;
         case "result":
-            showresultStage(obj);
+            if (obj["result"] == "attacker") displayMessage("RESULT: You Won");
+            else displayMessage("RESULT: You Lost");
+            displayMessage("You lost " + obj["attacker"] + " armies");
+            displayMessage("The defender lost " + obj["defender"] + " armies");
             break;
-
+        case "error":
+            displayMessage(obj["error"]);
+            break;
     }
 
 };

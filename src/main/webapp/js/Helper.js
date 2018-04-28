@@ -3,6 +3,12 @@ var from = 0;
 var to = 0;
 var stage = false;
 
+function displayMessage(msg){
+    var textarea = document.getElementById("messageBox");
+    textarea.value += msg + "\n";
+    textarea.scrollTop = textarea.scrollHeight;
+}
+
 function addListener(){
     var classes = document.getElementsByClassName('territory');
     for (var i = 0; i < classes.length; i++) {
@@ -45,6 +51,7 @@ function bindClick(id) {
                     document.getElementById("listener2").innerHTML = "";
 
                     var selectList = document.createElement("select");
+                    selectList.className = "custom-select";
                     for (var i = 0; i < adjacent[from].length; i++) {
                         var curID = adjacent[from][i];
                         if (playerTerritories.indexOf(curID) != -1 && idOnClick != curID) {
