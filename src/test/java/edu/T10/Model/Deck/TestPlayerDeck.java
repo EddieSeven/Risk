@@ -17,7 +17,7 @@ public class TestPlayerDeck {
 	
 	@Test
 	public void testCanCollectCards() {
-		assertTrue(playerDeck.canCollectCards());
+		assertTrue(!playerDeck.canCollectCards());
 	}
 	
 }
