@@ -78,7 +78,7 @@ public class Server {
 
             case "Attack":
                 InvasionResult invasionResult = null;
-
+                int oldDef = game.getTerritory(json.getInt("targetID")).getStrength();
                 try {
                     invasionResult = this.game.conductInvasion(
                             json.getInt("territoryID"),
@@ -94,6 +94,17 @@ public class Server {
                 sendBack2Server(session, "attack");
                 String invasionInfo = invasionResult.toString();
                 System.out.print(invasionInfo);
+                // [DEBUG] //todo delete
+                Territory attacker = game.getTerritory(json.getInt("territoryID"));
+                Territory defender = game.getTerritory(json.getInt("targetID"));
+
+                System.out.println("\n\n[DEBUG]" +
+                        "\nAttacking Army Old Strength: " + json.getInt("unitValue") +
+                        "\nInvading Territory New Strength: " + attacker.getStrength() +
+                        "\nInvaded Territory Old Strength: " + oldDef +
+                        "\nInvaded Territory New Strength: " + defender.getStrength() +
+                        "\nOwner of Invaded Territory: " + defender.getOwner() +
+                        "\nAttacker ID: " + attacker.getOwner() + "\n\n");
                 sendBack(session, buildJson(invasionInfo));
 
                 break;
