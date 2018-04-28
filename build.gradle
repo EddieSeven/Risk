@@ -2,6 +2,7 @@ plugins {
     id 'war'
     id 'java'
     id 'org.akhikhl.gretty' version '1.4.2'
+    id 'pmd'
 }
 
 repositories {
