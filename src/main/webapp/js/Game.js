@@ -58,8 +58,6 @@ function parseBoard(str){
             value: parseInt(segs[1])
         });
     }
-    console.log("board");
-    console.log(board);
 }
 
 /* -------------------------------
@@ -89,32 +87,6 @@ function openTab(numOfBoxes) {
 
     div.innerHTML += "<br/><button onclick='startGame()'> Start </button><br/>";
     document.getElementById('controlBoxes').appendChild(div);
-}
-
-function test(){
-    showText();
-    cleanBoxes('controlBoxes');
-
-    showbox = true;
-
-    var tableName = "playerTable";
-    addTDRow(tableName, "Player", "CD");
-    addTDRow(tableName, "Color", "Yellow");
-    addTDRow(tableName, "Available Armies", "11");
-    addTDRow(tableName, "Cards", "11");
-
-
-    var tableName = "controlTable";
-
-    addTHRow(tableName, "Player 1 : Fortify", "yellow");
-    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
-
-    addTDRowWithButton(tableName, "From Location", createListener("listener1"));
-    // addTDRowWithButton(tableName, "To Location", createListener("listener2"));
-    addTDRowWithButton(tableName, "Units", createInputBox());
-
-    var tableName = "controlButtons";
-    addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", reinforceStage));
 }
 
 /* -------------------------------
@@ -228,16 +200,23 @@ function fortify(){
     addKeyValuePair(obj, 'unitValue', parseInt(units));
     webSocket.send(JSON.stringify(obj));
 }
-
-function fortifyStage(){
+function fortifyStage(nul){
+    console.log(nul, "  ", nul instanceof MouseEvent);
     stage = "fortification";
-    displayMessage(playerName + "'s turn to conduct fortification...");
 
     cleanBoxes('controlTable');
 
     var tableName = "controlTable";
     addTHRow(tableName, playerName + " : Fortify", playerColor);
-    addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
+    if (nul === undefined) {
+        addTDRowWithButton(tableName, "End", createButton("END TURN", endTurn))
+        displayMessage(playerName + " has run out of fortification chances...");
+    }
+    else{
+        displayMessage(playerName + "'s turn to conduct fortification...");
+        addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
+    }
+
 
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "To Location", createListener("listener2"));

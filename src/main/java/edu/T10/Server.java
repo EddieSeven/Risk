@@ -183,7 +183,6 @@ public class Server {
                 .add("board", concatenateString(allTerritories))
                 .add("cards", createCardTypesList(game.getCardTypes()))
                 .build();
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
         sendBack(session, buildJson(jobj.toString()));
     }
 
@@ -193,7 +192,6 @@ public class Server {
         JsonObject jsonObject = Json.createObjectBuilder().add("action", "open")
                 .add("adjLists", concatenateAdjList(adjList)).build();
 
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jsonObject.toString());
         sendBack(session, jsonObject);
     }
 
@@ -213,6 +211,17 @@ public class Server {
         sendBack(session, jsonObject);
     }
 
+    // Send response message
+    private void sendBack(Session session, JsonObject json){
+        RemoteEndpoint.Basic remote = session.getBasicRemote();//Get Session remote end
+        try{
+            System.out.println("[ServerSide] " + session.getId() + " sends back\n" + json.toString());
+            remote.sendText(json.toString());
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     private ArrayList<String> buildTerritoryList(Territory[] territories){
         ArrayList<String> listOfStrings = new ArrayList<>();
 
@@ -221,32 +230,6 @@ public class Server {
         }
 
         return listOfStrings;
-    }
-
-    private void sendBack2Server(Session session){
-        int playerID = game.getCurrentPlayerID();
-        String playerInfo = game.getCurrentPlayer().toString();
-        ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
-        ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
-        JsonObject jobj = Json.createObjectBuilder()
-                .add("player", playerInfo)
-                .add("territory", concatenateString(playerTerritories))
-                .add("board", concatenateString(allTerritories)).build();
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
-        sendBack(session, jobj);
-    }
-
-
-
-    // Send response message
-    private void sendBack(Session session, JsonObject json){
-        RemoteEndpoint.Basic remote = session.getBasicRemote();//Get Session remote end
-        try{
-            System.out.println(json.toString());
-            remote.sendText(json.toString());
-        }catch(IOException e){
-            e.printStackTrace();
-        }
     }
 
     private JsonObject buildJson(String string){
