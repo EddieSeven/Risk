@@ -26,10 +26,6 @@ public class BattleController {
 
         checkConditions(fromTerritoryID, toTerritoryID, attackerUnits, defenderUnits, attackerDice, defenderDice);
 
-        if (defenderUnits == 0) {
-            attackerWins(fromTerritoryID, toTerritoryID, attackerUnits, invasionResult, attackingPlayerID);
-        }
-
         while (defenderUnits != 0 && attackerUnits != 0) {
             // attacker losses = results[0]
             // defender losses = results[1]
@@ -38,8 +34,8 @@ public class BattleController {
             invasionResult.incrementAttackerLosses(results.get(0));
             invasionResult.incrementDefenderLosses(results.get(1));
 
-            attackerUnits = updateUnits(attackerUnits, results);
-            defenderUnits = updateUnits(defenderUnits, results);
+            attackerUnits = updateUnits(attackerUnits, results, true);
+            defenderUnits = updateUnits(defenderUnits, results, false);
 
             if (defenderUnits == 0 && attackerUnits == 0){
                 checkLosses(invasionResult, originalAttackerStrength, true);
@@ -54,6 +50,7 @@ public class BattleController {
                 checkLosses(invasionResult, originalAttackerStrength, true);
                 checkLosses(invasionResult, originalDefenderStrength, false);
                 defenderWins(fromTerritoryID, toTerritoryID, invasionResult);
+
             }
         }
 
@@ -134,8 +131,6 @@ public class BattleController {
 		results.add(0);
 		results.add(0);
 
-
-
         for (int i = 0; i < lowestDieNumber; i++) {
             if (attackerRolls.get(i) > defenderRolls.get(i))
                 results.set(1, results.get(1)+1);
@@ -169,8 +164,12 @@ public class BattleController {
         }
     }
 
-    private int updateUnits(int units, Vector<Integer> results) {
-        units -= results.get(0);
+    private int updateUnits(int units, Vector<Integer> results, boolean isAttacker) {
+        if (isAttacker)
+            units -= results.get(0);
+        else
+            units -= results.get(1);
+
         if (units < 0)
             units = 0;
 
