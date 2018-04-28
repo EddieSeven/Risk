@@ -6,7 +6,6 @@ import java.util.Vector;
 
 public class GameDeck implements Deck {
     private Vector<Card> deck;
-    private int deckSize;
 
     public GameDeck(){
         deck = new Vector<>();
@@ -20,17 +19,15 @@ public class GameDeck implements Deck {
     @Override
     public void addCard(Card card) {
         deck.add(card);
-        deckSize++;
     }
 
     public int getDeckSize(){
-        return this.deckSize;
+        return this.deck.size();
     }
 
     public Card draw(){ //todo check no cards left
-        Card card = deck.get(deckSize);
-        deck.remove(deckSize);
-        deckSize--;
+        Card card = deck.get(deck.size()-1);
+        deck.remove(deck.size()-1);
 
         return card;
     }
