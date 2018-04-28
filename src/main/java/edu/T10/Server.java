@@ -133,7 +133,7 @@ public class Server {
                 sendBack2Server(session, "fortify");
                 break;
             case "PlayCards":
-                this.game.playCards(json.getInt("numOfCards"));
+                // this.game.playCards(json.getInt("numOfCards")); todo will fix
                 break;
             case "EndTurn":
                 boolean endGame = this.game.finishTurn();

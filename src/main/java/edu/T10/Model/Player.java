@@ -1,16 +1,19 @@
 package edu.T10.Model;
+import edu.T10.Model.Deck.Card;
+import edu.T10.Model.Deck.PlayerDeck;
+
 import java.util.Vector;
 
 public class Player {
     private String name;
     private Color color;
     private int freeArmies;
-    private Deck deck;
+    private PlayerDeck deck;
 
     public Player(String name, int colorID){
         this.name = name;
         this.freeArmies = 0;
-        this.deck = new Deck();
+        this.deck = new PlayerDeck();
         assignColor(colorID);
     }
 
@@ -26,16 +29,17 @@ public class Player {
         this.color = color;
     }
 
-    public void addCard2Deck(Vector<Card> pile){
-        this.deck.addCards(pile);
+    public void addCard(Card card){
+        deck.addCard(card);
     }
 
-    public boolean useCards(int numOfCards){
-        if (this.deck.drawCards(numOfCards).size() != numOfCards)
-            return false;
-        return true;
+    public int collectCardReward(){
+        return deck.collectCardReward();
     }
 
+    public boolean canCollect(){
+        return deck.canCollectCards();
+    }
     public void addNewArmies(int numOfArmies){
         this.freeArmies += numOfArmies;
     }

@@ -9,7 +9,7 @@ import junit.framework.JUnit4TestAdapter;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     TestCard.class,
-    TestDeck.class,
+    TestPlayerDeck.class,
     TestDice.class,
     TestGame.class,
     TestInvasionResult.class,

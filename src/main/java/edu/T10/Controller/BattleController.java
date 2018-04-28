@@ -102,6 +102,7 @@ public class BattleController {
         game.getBoard().updateTerritoryStrength(fromTerritoryID, -attackerUnits); // all attacking units are sent to new province
         game.getBoard().setTerritoryStrength(toTerritoryID, remainingAttackerStrength);
         game.getBoard().updateOwner(toTerritoryID, attackingPlayerID);
+        game.setCurrentPlayerGetsCard();
     }
 
     private void draw(int fromTerritoryID, int toTerritoryID, InvasionResult invasionResult){

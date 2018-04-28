@@ -5,6 +5,9 @@ import edu.T10.Model.Board.Board;
 import edu.T10.Model.Board.Territory;
 
 import java.util.Vector;
+
+import edu.T10.Model.Deck.Card;
+import edu.T10.Model.Deck.GameDeck;
 import edu.T10.Model.Exceptions.MoveException;
 import edu.T10.Model.Exceptions.NumberOfDiceException;
 import edu.T10.Model.Exceptions.NumberOfUnitsException;
@@ -15,7 +18,7 @@ public class Game {
     private Board board;
     private int numOfPlayers;
     private Vector<Player> players;
-    private Deck deck;
+    private GameDeck deck;
     private boolean gameOver;
     private boolean currentWin;
     private int currentPlayer;
@@ -64,8 +67,9 @@ public class Game {
         if(gameOver) return true;
         else {
             // Draw Card
-            if (currentWin) {
-                players.get(currentPlayer).addCard2Deck(deck.drawCards(1));
+            if (currentWin && deck.getDeckSize() > 0) {
+                Card drawnCard = deck.draw();
+                players.get(currentPlayer).addCard(drawnCard);
             }
             currentWin = false;
 
@@ -76,9 +80,20 @@ public class Game {
         }
     }
 
-    public void playCards(int numOfCards) {
-        if (players.get(currentPlayer).useCards(numOfCards))
-            players.get(currentPlayer).addNewArmies(numOfCards/3);
+    public void setCurrentPlayerGetsCard(){
+        this.currentWin = true;
+    }
+
+    public boolean canCollectPlayerCards(){
+        Player player = players.get(currentPlayer);
+
+        return player.canCollect();
+    }
+
+    public void playCards() {
+        Player player = players.get(currentPlayer);
+
+        player.collectCardReward();
     }
 
 
