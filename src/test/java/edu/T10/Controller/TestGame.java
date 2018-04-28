@@ -3,6 +3,7 @@ package edu.T10.Controller;
 import static org.junit.Assert.assertTrue;
 
 import edu.T10.Controller.Game;
+import edu.T10.Model.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,4 +23,5 @@ public class TestGame {
 		// As private variables are not accessable outside
 		// Will use the tests that are in main to test Game for now
 	}
+
 }
