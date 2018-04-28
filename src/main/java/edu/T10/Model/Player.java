@@ -17,6 +17,10 @@ public class Player {
         assignColor(colorID);
     }
 
+    public Vector<Integer> getCardTypes(){
+        return deck.getCardTypes();
+    }
+
     public int getFreeArmies() {
         return freeArmies;
     }

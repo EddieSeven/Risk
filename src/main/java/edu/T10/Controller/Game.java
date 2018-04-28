@@ -8,10 +8,7 @@ import java.util.Vector;
 
 import edu.T10.Model.Deck.Card;
 import edu.T10.Model.Deck.GameDeck;
-import edu.T10.Model.Exceptions.MoveException;
-import edu.T10.Model.Exceptions.NumberOfDiceException;
-import edu.T10.Model.Exceptions.NumberOfUnitsException;
-import edu.T10.Model.Exceptions.PlayerException;
+import edu.T10.Model.Exceptions.*;
 
 public class Game {
     private final BattleController battleController = new BattleController(this);
@@ -27,6 +24,7 @@ public class Game {
         this.board = new Board();
         this.numOfPlayers = players.length;
         this.players = new Vector<Player>();
+        this.deck = new GameDeck();
 
         for (int i = 0; i < this.numOfPlayers; i++){
             this.players.add(players[i]);
@@ -90,10 +88,20 @@ public class Game {
         return player.canCollect();
     }
 
-    public void playCards() {
+    public void playCards() throws DeckCompositionException {
         Player player = players.get(currentPlayer);
 
-        player.collectCardReward();
+        if (!player.canCollect())
+            throw new DeckCompositionException("Invalid move: You do not have a set of cards available to play.");
+
+        int reward = player.collectCardReward();
+        player.addNewArmies(reward);
+    }
+
+    public Vector<Integer> getCardTypes(){
+        Player player = players.get(currentPlayer);
+
+        return player.getCardTypes();
     }
 
 

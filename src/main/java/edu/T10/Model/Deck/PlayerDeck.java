@@ -20,6 +20,16 @@ public class PlayerDeck implements Deck {
         return !canCollect().equals(CollectionType.NONE);
     }
 
+    public Vector<Integer> getCardTypes(){
+        Vector<Integer> cardTypes = new Vector<>();
+        cardTypes.add(numOfInfantry);
+        cardTypes.add(numOfCavalry);
+        cardTypes.add(numOfArtillery);
+        cardTypes.add(numOfWildCards);
+
+        return cardTypes;
+    }
+
     @Override
     public void addCard(Card card) {
         CardType cardType = card.getType();
