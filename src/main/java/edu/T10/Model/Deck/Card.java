@@ -1,4 +1,4 @@
-package edu.T10.Model;
+package edu.T10.Model.Deck;
 
 public class Card {
     private CardType type;
@@ -15,7 +15,6 @@ public class Card {
     public CardType getType() {
     	return type;
     }
-    
 }
 
 enum CardType {

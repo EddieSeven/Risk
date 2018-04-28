@@ -5,17 +5,17 @@ import edu.T10.Model.Board.Board;
 import edu.T10.Model.Board.Territory;
 
 import java.util.Vector;
-import edu.T10.Model.Exceptions.MoveException;
-import edu.T10.Model.Exceptions.NumberOfDiceException;
-import edu.T10.Model.Exceptions.NumberOfUnitsException;
-import edu.T10.Model.Exceptions.PlayerException;
+
+import edu.T10.Model.Deck.Card;
+import edu.T10.Model.Deck.GameDeck;
+import edu.T10.Model.Exceptions.*;
 
 public class Game {
     private final BattleController battleController = new BattleController(this);
     private Board board;
     private int numOfPlayers;
     private Vector<Player> players;
-    private Deck deck;
+    private GameDeck deck;
     private boolean gameOver;
     private boolean currentWin;
     private int currentPlayer;
@@ -24,6 +24,7 @@ public class Game {
         this.board = new Board();
         this.numOfPlayers = players.length;
         this.players = new Vector<Player>();
+        this.deck = new GameDeck();
 
         for (int i = 0; i < this.numOfPlayers; i++){
             this.players.add(players[i]);
@@ -64,8 +65,9 @@ public class Game {
         if(gameOver) return true;
         else {
             // Draw Card
-            if (currentWin) {
-                players.get(currentPlayer).addCard2Deck(deck.drawCards(1));
+            if (currentWin && deck.getDeckSize() > 0) {
+                Card drawnCard = deck.draw();
+                players.get(currentPlayer).addCard(drawnCard);
             }
             currentWin = false;
 
@@ -76,9 +78,30 @@ public class Game {
         }
     }
 
-    public void playCards(int numOfCards) {
-        if (players.get(currentPlayer).useCards(numOfCards))
-            players.get(currentPlayer).addNewArmies(numOfCards/3);
+    public void setCurrentPlayerGetsCard(){
+        this.currentWin = true;
+    }
+
+    public boolean canCollectPlayerCards(){
+        Player player = players.get(currentPlayer);
+
+        return player.canCollect();
+    }
+
+    public void playCards() throws DeckCompositionException {
+        Player player = players.get(currentPlayer);
+
+        if (!player.canCollect())
+            throw new DeckCompositionException("Invalid move: You do not have a set of cards available to play.");
+
+        int reward = player.collectCardReward();
+        player.addNewArmies(reward);
+    }
+
+    public Vector<Integer> getCardTypes(){
+        Player player = players.get(currentPlayer);
+
+        return player.getCardTypes();
     }
 
 
