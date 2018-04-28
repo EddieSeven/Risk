@@ -23,6 +23,8 @@ public class TestInvasionResult {
 	public void testGetVictor() {
 		result.setAttackerVictor();
 		assertEquals(result.getVictor(), Victor.ATTACKER);
+		result.setDefenderVictor();
+		assertEquals(result.getVictor(), Victor.DEFENDER);
 	}
 	
 	@Test
@@ -49,5 +51,10 @@ public class TestInvasionResult {
 	public void testSetDefenderLoss() {
 		result.setDefenderLosses(6);
 		assertEquals(result.getDefenderLosses(), 6);
+	}
+	
+	@Test
+	public void testToString() {
+		assertEquals(result.toString(), "{\"action\":\"result\",\"result\":\"defender\",\"attacker\":0,\"defender\":0}");
 	}
 }

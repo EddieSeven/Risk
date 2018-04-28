@@ -212,6 +212,16 @@ public class Server {
 
         sendBack(session, jsonObject);
     }
+    
+    private ArrayList<String> buildTerritoryList(Territory[] territories){
+        ArrayList<String> listOfStrings = new ArrayList<>();
+
+        for (Territory territory : territories) {
+            listOfStrings.add(territory.toString() + ";");
+        }
+
+        return listOfStrings;
+    }
 
     // Send response message
     private void sendBack(Session session, JsonObject json){
@@ -222,16 +232,6 @@ public class Server {
         }catch(IOException e){
             e.printStackTrace();
         }
-    }
-
-    private ArrayList<String> buildTerritoryList(Territory[] territories){
-        ArrayList<String> listOfStrings = new ArrayList<>();
-
-        for (Territory territory : territories) {
-            listOfStrings.add(territory.toString() + ";");
-        }
-
-        return listOfStrings;
     }
 
     private JsonObject buildJson(String string){

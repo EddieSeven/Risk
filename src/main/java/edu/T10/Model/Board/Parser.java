@@ -19,21 +19,25 @@ public class Parser {
             while (true) {
                 String line = br.readLine();
                 if (line.equals(";;")) break;
-                Continent continent = new Continent();
-                String[] segs = line.split(" ");
-                continent.id = Integer.parseInt(segs[0]);
-                continent.name = segs[1];
-                continent.members = new int[segs.length - 3];
-                for (int i = 0; i < segs.length - 3; i++) {
-                    continent.members[i] = Integer.parseInt(segs[2 + i]);
-                }
-                vec.add(continent);
+                vec.add(getContinent(line));
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
 
         return vec.toArray(new Continent[vec.size()]);
+    }
+    
+    private Continent getContinent(String line) {
+    	Continent continent = new Continent();
+        String[] segs = line.split(" ");
+        continent.id = Integer.parseInt(segs[0]);
+        continent.name = segs[1];
+        continent.members = new int[segs.length - 3];
+        for (int i = 0; i < segs.length - 3; i++) {
+            continent.members[i] = Integer.parseInt(segs[2 + i]);
+        }
+        return continent;
     }
 
     public Territory[] readTerritoriesBuffer(BufferedReader br) {
