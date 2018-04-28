@@ -197,19 +197,6 @@ public class Server {
         return listOfStrings;
     }
 
-    private void sendBack2Server(Session session){
-        int playerID = game.getCurrentPlayerID();
-        String playerInfo = game.getCurrentPlayer().toString();
-        ArrayList playerTerritories = buildTerritoryList(game.getPlayerTerritories(playerID));
-        ArrayList allTerritories = buildTerritoryList(game.getAllTerritories());
-        JsonObject jobj = Json.createObjectBuilder()
-                .add("player", playerInfo)
-                .add("territory", concatenateString(playerTerritories))
-                .add("board", concatenateString(allTerritories)).build();
-        System.out.println("[ServerSide] " + session.getId() + " sends back\n" + jobj.toString());
-        sendBack(session, jobj);
-    }
-
 
 
     // Send response message
