@@ -80,7 +80,7 @@ webSocket.onmessage = function (event) {
         case "result":
             var msg = "";
             if (obj["result"] == "attacker") msg += "RESULT: " + playerName + " won\n";
-            else msg += "RESULT: " + playerName + "lost\n";
+            else msg += "RESULT: " + playerName + " lost\n";
             msg += playerName + " lost " + obj["attacker"] + " armies\n"
                 + "The defender lost " + obj["defender"] + " armies\n";
             if (obj["result"] == "attacker")

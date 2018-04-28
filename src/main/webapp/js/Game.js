@@ -12,6 +12,14 @@ var playerTerritories = [];
 
 var idOnClick;
 
+function sumOfArray(array){
+    var sum = 0;
+    for (var i = 0; i < array.length; i++) {
+        sum += array[i]
+    }
+    return sum;
+}
+
 /* -------------------------------
  * Parsing and Querying
  * -------------------------------
@@ -60,8 +68,8 @@ function parseBoard(str){
 }
 
 function parseCards(str){
-    var cardsArray = str.split(" ");
-    cards = [];
+    var cardsArray = str.split("\\s+");
+    cards = [0, 0, 0, 0];
     for (var i = 0; i < cardsArray.length; i++){
         cards[i] = parseInt(cardsArray[i]);
     }
@@ -187,7 +195,9 @@ function reinforceStage(){
     addTHRow(tableName, playerName + " : Reinforce", playerColor);
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", invasionStage));
     addTDRow(tableName, "Free Armies", freeArmies);
-    addTDRowWithButtons(tableName, createButton("Play Cards", playCard), addCards());
+    if (sumOfArray(cards) <= 2)
+        addTDRowWithButton(tableName, "Play Cards", addCards());
+    else addTDRowWithButtons(tableName, createButton("Play Cards", playCard), addCards());
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "Units", createInputBox());
 }

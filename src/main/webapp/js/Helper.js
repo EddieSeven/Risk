@@ -186,17 +186,26 @@ function disableInput(){
 }
 
 function addCards(){
+    var flag = false;
+    var cardNames = ["Infantry.jpg", "Cavalry.jpg", "Artillery.jpg", "wild.jpg"];
+    var cardPile = document.createElement("div");
+    cardPile.innerHTML = "";
     var cardNames = ["Infantry.jpg", "Cavalry.jpg", "Artillery.jpg", "wild.jpg"];
     var cardPile = document.createElement("div");
     for (var i=0; i<cards.length; i++){
         var num = cards[i];
         for (var j=0; j<num; j++){
             var elem = document.createElement("img");
+            elem.className = "zoom";
             elem.setAttribute("src", "./images/" + cardNames[i]);
             elem.setAttribute("height", "35px");
             elem.setAttribute("width", "25px");
             cardPile.appendChild(elem);
+            flag = true;
         }
+    }
+    if (!flag) {
+        cardPile.innerHTML += "No Cards Available";
     }
     return cardPile;
 }

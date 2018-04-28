@@ -95,6 +95,7 @@ h5 {
 }
 
 textarea{
+    font-size: 14px;
     position: absolute;
     bottom: 100px;
     left: 27px;
@@ -247,3 +248,14 @@ input[type=submit]:hover {
     background-color: #45a049;
 }
 
+.zoom {
+    transition: transform .2s;
+    margin: 0 auto;
+}
+
+.zoom:hover {
+    -ms-transform: scale(5); /* IE 9 */
+    -webkit-transform: scale(5); /* Safari 3-8 */
+    transform: scale(5);
+    opacity: 0.8;
+}
