@@ -3,9 +3,13 @@ var from = 0;
 var to = 0;
 var stage = false;
 
-function displayMessage(msg){
+function displayMessage(msg, level){
     var textarea = document.getElementById("messageBox");
+    if (level != 0)
+        textarea.value += "********************************\n";
     textarea.value += msg + "\n";
+    if (level != 0)
+        textarea.value += "********************************\n";
     textarea.scrollTop = textarea.scrollHeight;
 }
 
@@ -147,6 +151,23 @@ function createInputBox(){
     return (input);
 }
 
+function createDropDownBox(id, numOfDie, dest){
+    var selectList = document.createElement("select");
+    selectList.style.width = "75px";
+    selectList.id = id;
+    for (var i = 1; i <= numOfDie; i++) {
+        var option = document.createElement("option");
+        option.value = i;
+        option.text = i;
+        selectList.appendChild(option);
+    }
+    selectList.addEventListener("change", function() {
+        dest.value = parseInt(document.getElementById(id).value);
+        console.log(dest);
+    });
+    return selectList;
+}
+
 function isMyTerritory(tid){
     for (var i = 0; i < playerTerritories.length; i++) {
         if (tid == playerTerritories[i])
@@ -162,4 +183,20 @@ function disableInput(){
     } else {
         input.disabled = false;
     }
+}
+
+function addCards(){
+    var cardNames = ["Infantry.jpg", "Cavalry.jpg", "Artillery.jpg", "wild.jpg"];
+    var cardPile = document.createElement("div");
+    for (var i=0; i<cards.length; i++){
+        var num = cards[i];
+        for (var j=0; j<num; j++){
+            var elem = document.createElement("img");
+            elem.setAttribute("src", "./images/" + cardNames[i]);
+            elem.setAttribute("height", "35px");
+            elem.setAttribute("width", "25px");
+            cardPile.appendChild(elem);
+        }
+    }
+    return cardPile;
 }
