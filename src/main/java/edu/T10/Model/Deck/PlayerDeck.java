@@ -57,7 +57,6 @@ public class PlayerDeck implements Deck {
     public int collectCardReward(){
         CollectionType collectionType = canCollect();
         int reward = collect(collectionType);
-
         return reward;
     }
 
@@ -69,6 +68,7 @@ public class PlayerDeck implements Deck {
     }
 
     private void removeCardsOfCollectionType(CollectionType collectionType){
+    	//System.out.println(collectionType);
         switch (collectionType){
             case INF3:
                 removeCardOfType(CardType.INFANTRY);
@@ -76,7 +76,7 @@ public class PlayerDeck implements Deck {
                 removeCardOfType(CardType.INFANTRY);
 
                 numOfInfantry -= 3;
-                assert(numOfInfantry < 0);
+                assert(numOfInfantry <= 0);
                 break;
             case CAV3:
                 removeCardOfType(CardType.CAVALRY);
@@ -84,7 +84,7 @@ public class PlayerDeck implements Deck {
                 removeCardOfType(CardType.CAVALRY);
 
                 numOfCavalry -= 3;
-                assert(numOfCavalry < 0);
+                assert(numOfCavalry <= 0);
                 break;
             case ART3:
                 removeCardOfType(CardType.ARTILLERY);
@@ -92,7 +92,7 @@ public class PlayerDeck implements Deck {
                 removeCardOfType(CardType.ARTILLERY);
 
                 numOfArtillery -= 3;
-                assert(numOfArtillery < 0);
+                assert(numOfArtillery <= 0);
                 break;
             case FULL:
                 removeCardOfType(CardType.ARTILLERY);
@@ -102,9 +102,9 @@ public class PlayerDeck implements Deck {
                 numOfInfantry -= 1;
                 numOfCavalry -= 1;
                 numOfArtillery -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WCA:
@@ -115,9 +115,9 @@ public class PlayerDeck implements Deck {
                 numOfWildCards -= 1;
                 numOfCavalry -= 1;
                 numOfArtillery -= 1;
-                assert(numOfWildCards < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfWildCards <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WIA:
@@ -128,9 +128,9 @@ public class PlayerDeck implements Deck {
                 numOfInfantry -= 1;
                 numOfWildCards -= 1;
                 numOfArtillery -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfWildCards < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfWildCards <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WIC:
@@ -141,11 +141,13 @@ public class PlayerDeck implements Deck {
                 numOfInfantry -= 1;
                 numOfCavalry -= 1;
                 numOfWildCards -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfWildCards < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfWildCards <= 0);
 
                 break;
+		default:
+			break;
 
         }
 

@@ -1,7 +1,6 @@
 package edu.T10.Controller;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Vector;

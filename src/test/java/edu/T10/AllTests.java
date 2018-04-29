@@ -2,6 +2,9 @@ package edu.T10;
 import edu.T10.Controller.TestGame;
 import edu.T10.Model.*;
 import edu.T10.Model.Board.*;
+import edu.T10.Model.Deck.TestCard;
+import edu.T10.Model.Deck.TestPlayerDeck;
+
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import junit.framework.JUnit4TestAdapter;

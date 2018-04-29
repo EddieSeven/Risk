@@ -7,6 +7,8 @@ import java.util.Vector;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.T10.Model.Deck.*;
+
 public class TestPlayer {
 	Player p;
 	
@@ -14,18 +16,12 @@ public class TestPlayer {
 	public void setUp() {
 		p = new Player("Test", 0);
 	}
-	
-//	@Test
-//	public void testNoCardUseCard() {
-//		assertTrue(!p.useCards(1));
-//	}
-//
+
 	@Test
-	public void testUseCard() {
-//		Vector<Card> v = new Vector<Card>();
-//		v.add(new Card(CardType.ARTILLERY));
-//		p.addCard2Deck(v);
-//		assertTrue(p.useCards(1));
+	public void testCard() {
+		p.addCard(new Card());
+		assertTrue(!p.canCollect());
+		assertEquals(p.collectCardReward(), 4);
 	}
 	
 	@Test
@@ -40,7 +36,7 @@ public class TestPlayer {
 		assertEquals(p.toString(), "Test GREEN 0");
 		p.assignColor(1);
 		assertEquals(p.toString(), "Test YELLOW 0");
-		p.assignColor(2);
+		p.assignColor(Color.RED);
 		assertEquals(p.toString(), "Test RED 0");
 	}
 }
