@@ -4,19 +4,18 @@ package edu.T10.Model.Deck;
 import java.util.Collections;
 import java.util.Vector;
 
-public class GameDeck implements Deck {
+public class GameDeck {
     private Vector<Card> deck;
 
     public GameDeck(){
         deck = new Vector<>();
-        addCardsOfType(CardType.INFANTRY, 14);
-        addCardsOfType(CardType.CAVALRY, 14);
-        addCardsOfType(CardType.ARTILLERY, 14);
-        addCardsOfType(CardType.WILDCARD, 2);
+        addCardsOfType(Card.CardType.INFANTRY, 14);
+        addCardsOfType(Card.CardType.CAVALRY, 14);
+        addCardsOfType(Card.CardType.ARTILLERY, 14);
+        addCardsOfType(Card.CardType.WILDCARD, 2);
         shuffle();
     }
 
-    @Override
     public void addCard(Card card) {
         deck.add(card);
     }
@@ -32,7 +31,7 @@ public class GameDeck implements Deck {
         return card;
     }
 
-    private void addCardsOfType(CardType cardType, int number){
+    private void addCardsOfType(Card.CardType cardType, int number){
         for (int i = 0; i < number; i++){
             deck.add(new Card(cardType));
         }

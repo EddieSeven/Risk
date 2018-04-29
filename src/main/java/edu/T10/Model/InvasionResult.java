@@ -68,5 +68,5 @@ public class InvasionResult {
 }
 
 enum Victor {
-    ATTACKER, DEFENDER, DEFAULT;
+    ATTACKER, DEFENDER, DEFAULT
 }

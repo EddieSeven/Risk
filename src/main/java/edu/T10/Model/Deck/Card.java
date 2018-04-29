@@ -1,7 +1,5 @@
 package edu.T10.Model.Deck;
 
-import edu.T10.Model.Deck.Deck.CardType;
-
 public class Card {
     private CardType type;
     
@@ -17,4 +15,9 @@ public class Card {
     public CardType getType() {
     	return type;
     }
+
+    public enum CardType {
+        INFANTRY, CAVALRY, ARTILLERY, WILDCARD, DEFAULT
+    }
+
 }

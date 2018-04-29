@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 
 import edu.T10.Controller.Game;
 import edu.T10.Model.Deck.Card;
-import edu.T10.Model.Deck.Deck.CardType;
 import edu.T10.Model.Exceptions.DeckCompositionException;
 import edu.T10.Model.Exceptions.NumberOfUnitsException;
 import edu.T10.Model.Exceptions.PlayerException;
@@ -28,9 +27,9 @@ public class TestGame {
 	@Test
 	public void testPlayCard() throws DeckCompositionException {
 		game.setCurrentPlayerGetsCard();
-		game.getCurrentPlayer().addCard(new Card(CardType.ARTILLERY));
-		game.getCurrentPlayer().addCard(new Card(CardType.ARTILLERY));
-		game.getCurrentPlayer().addCard(new Card(CardType.ARTILLERY));
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
 		game.playCards();
 		assertEquals(game.getCurrentPlayer().getFreeArmies(), 4);
 	}
