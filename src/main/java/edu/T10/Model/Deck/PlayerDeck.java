@@ -32,7 +32,7 @@ public class PlayerDeck {
 
 
     public void addCard(Card card) {
-        CardType cardType = card.getType();
+        Card.CardType cardType = card.getType();
         deck.add(card);
         deckSize++;
 
@@ -68,90 +68,93 @@ public class PlayerDeck {
     }
 
     private void removeCardsOfCollectionType(CollectionType collectionType){
+    	//System.out.println(collectionType);
         switch (collectionType){
             case INF3:
-                removeCardOfType(CardType.INFANTRY);
-                removeCardOfType(CardType.INFANTRY);
-                removeCardOfType(CardType.INFANTRY);
+                removeCardOfType(Card.CardType.INFANTRY);
+                removeCardOfType(Card.CardType.INFANTRY);
+                removeCardOfType(Card.CardType.INFANTRY);
 
                 numOfInfantry -= 3;
-                assert(numOfInfantry < 0);
+                assert(numOfInfantry <= 0);
                 break;
             case CAV3:
-                removeCardOfType(CardType.CAVALRY);
-                removeCardOfType(CardType.CAVALRY);
-                removeCardOfType(CardType.CAVALRY);
+                removeCardOfType(Card.CardType.CAVALRY);
+                removeCardOfType(Card.CardType.CAVALRY);
+                removeCardOfType(Card.CardType.CAVALRY);
 
                 numOfCavalry -= 3;
-                assert(numOfCavalry < 0);
+                assert(numOfCavalry <= 0);
                 break;
             case ART3:
-                removeCardOfType(CardType.ARTILLERY);
-                removeCardOfType(CardType.ARTILLERY);
-                removeCardOfType(CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.ARTILLERY);
 
                 numOfArtillery -= 3;
-                assert(numOfArtillery < 0);
+                assert(numOfArtillery <= 0);
                 break;
             case FULL:
-                removeCardOfType(CardType.ARTILLERY);
-                removeCardOfType(CardType.CAVALRY);
-                removeCardOfType(CardType.INFANTRY);
+                removeCardOfType(Card.CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.CAVALRY);
+                removeCardOfType(Card.CardType.INFANTRY);
 
                 numOfInfantry -= 1;
                 numOfCavalry -= 1;
                 numOfArtillery -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WCA:
-                removeCardOfType(CardType.ARTILLERY);
-                removeCardOfType(CardType.CAVALRY);
-                removeCardOfType(CardType.WILDCARD);
+                removeCardOfType(Card.CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.CAVALRY);
+                removeCardOfType(Card.CardType.WILDCARD);
 
                 numOfWildCards -= 1;
                 numOfCavalry -= 1;
                 numOfArtillery -= 1;
-                assert(numOfWildCards < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfWildCards <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WIA:
-                removeCardOfType(CardType.ARTILLERY);
-                removeCardOfType(CardType.WILDCARD);
-                removeCardOfType(CardType.INFANTRY);
+                removeCardOfType(Card.CardType.ARTILLERY);
+                removeCardOfType(Card.CardType.WILDCARD);
+                removeCardOfType(Card.CardType.INFANTRY);
 
                 numOfInfantry -= 1;
                 numOfWildCards -= 1;
                 numOfArtillery -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfWildCards < 0);
-                assert(numOfArtillery < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfWildCards <= 0);
+                assert(numOfArtillery <= 0);
 
                 break;
             case WIC:
-                removeCardOfType(CardType.WILDCARD);
-                removeCardOfType(CardType.CAVALRY);
-                removeCardOfType(CardType.INFANTRY);
+                removeCardOfType(Card.CardType.WILDCARD);
+                removeCardOfType(Card.CardType.CAVALRY);
+                removeCardOfType(Card.CardType.INFANTRY);
 
                 numOfInfantry -= 1;
                 numOfCavalry -= 1;
                 numOfWildCards -= 1;
-                assert(numOfInfantry < 0);
-                assert(numOfCavalry < 0);
-                assert(numOfWildCards < 0);
+                assert(numOfInfantry <= 0);
+                assert(numOfCavalry <= 0);
+                assert(numOfWildCards <= 0);
 
                 break;
+		default:
+			break;
 
         }
 
         deckSize -= 3;
     }
 
-    private void removeCardOfType(CardType cardType){
+    private void removeCardOfType(Card.CardType cardType){
         for (int i = 0; i < deckSize; i++){
             if (deck.get(i).getType().equals(cardType)) {
                 deck.remove(i);

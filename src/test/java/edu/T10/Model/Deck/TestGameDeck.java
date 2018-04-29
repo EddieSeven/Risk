@@ -18,13 +18,13 @@ public class TestGameDeck {
 	@Test
 	public void testAddDeck() {
 		assertEquals(gameDeck.getDeckSize(), 44);
-		gameDeck.addCard(new Card(CardType.INFANTRY));
+		gameDeck.addCard(new Card(Card.CardType.INFANTRY));
 		assertEquals(gameDeck.getDeckSize(), 45);
 	}
 	
 	@Test
 	public void testDraw() {
-		Card lastCard = new Card(CardType.INFANTRY);
+		Card lastCard = new Card(Card.CardType.INFANTRY);
 		gameDeck.addCard(lastCard);
 		assertEquals(gameDeck.draw(), lastCard);
 	}

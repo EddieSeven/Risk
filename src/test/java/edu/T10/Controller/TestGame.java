@@ -1,32 +1,42 @@
 package edu.T10.Controller;
 
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 
 import edu.T10.Controller.Game;
-import edu.T10.Model.Board.Territory;
-import edu.T10.Model.Exceptions.MoveException;
-import edu.T10.Model.Exceptions.NumberOfDiceException;
+import edu.T10.Model.Deck.Card;
+import edu.T10.Model.Exceptions.DeckCompositionException;
 import edu.T10.Model.Exceptions.NumberOfUnitsException;
-import edu.T10.Model.InvasionResult;
+import edu.T10.Model.Exceptions.PlayerException;
 import edu.T10.Model.Player;
+import edu.T10.Model.Board.Territory;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import org.junit.Rule;
-import org.junit.contrib.java.lang.system.SystemOutRule;
-
 public class TestGame {
 
-	@Rule
-	public final SystemOutRule systemOutRule = new SystemOutRule().enableLog();
+	private Game game;
 
 	@Before
-	public void setUp() {	}
+	public void setUp() {
+		game = new Game(new Player[] {new Player("Player1", 0), 
+				new Player("Player2", 1), new Player("Player3", 2), new Player("Player4", 3)});
+	}
 
 	@Test
-	public void testGame() {
-		// As private variables are not accessable outside
-		// Will use the tests that are in main to test Game for now
+	public void testPlayCard() throws DeckCompositionException {
+		game.setCurrentPlayerGetsCard();
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
+		game.getCurrentPlayer().addCard(new Card(Card.CardType.ARTILLERY));
+		game.playCards();
+		assertEquals(game.getCurrentPlayer().getFreeArmies(), 4);
+	}
+	
+	@Test
+	public void testGetTerritory() {
+		assertEquals(game.getTerritory(0), game.getBoard().getTerritory(0));
 	}
 
 }

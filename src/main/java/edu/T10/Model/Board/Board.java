@@ -14,6 +14,12 @@ public class Board {
         String filepath = getClass().getClassLoader().getResource(Parser.filename).getFile();
         initTerritories(filepath);
     }
+    
+    public Board(Continent c, Territory t) {
+    	continents = new Continent[] {c};
+    	territories = new Territory[] {t};
+    	nTerritories = 1;
+    }
 
     private boolean initTerritories(String filepath){
         try {

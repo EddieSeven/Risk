@@ -9,10 +9,10 @@ public class GameDeck {
 
     public GameDeck(){
         deck = new Vector<>();
-        addCardsOfType(CardType.INFANTRY, 14);
-        addCardsOfType(CardType.CAVALRY, 14);
-        addCardsOfType(CardType.ARTILLERY, 14);
-        addCardsOfType(CardType.WILDCARD, 2);
+        addCardsOfType(Card.CardType.INFANTRY, 14);
+        addCardsOfType(Card.CardType.CAVALRY, 14);
+        addCardsOfType(Card.CardType.ARTILLERY, 14);
+        addCardsOfType(Card.CardType.WILDCARD, 2);
         shuffle();
     }
 
@@ -31,7 +31,7 @@ public class GameDeck {
         return card;
     }
 
-    private void addCardsOfType(CardType cardType, int number){
+    private void addCardsOfType(Card.CardType cardType, int number){
         for (int i = 0; i < number; i++){
             deck.add(new Card(cardType));
         }

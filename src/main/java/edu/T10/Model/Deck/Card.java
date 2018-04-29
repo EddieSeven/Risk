@@ -15,8 +15,9 @@ public class Card {
     public CardType getType() {
     	return type;
     }
-}
 
-enum CardType {
-    INFANTRY, CAVALRY, ARTILLERY, WILDCARD, DEFAULT
+    public enum CardType {
+        INFANTRY, CAVALRY, ARTILLERY, WILDCARD, DEFAULT
+    }
+
 }
