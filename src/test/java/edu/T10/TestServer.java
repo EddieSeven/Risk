@@ -6,7 +6,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.*;
 import javax.websocket.*;
-import javax.websocket.server.ServerEndpoint;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,9 +13,6 @@ import org.junit.Test;
 import org.junit.contrib.java.lang.system.SystemOutRule;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import edu.T10.Model.Board.Territory;
@@ -56,11 +52,17 @@ public class TestServer {
 	}
 
 	@Test
-	public void testOnMessageInit() throws IOException {
+	public void testOnMessageInit() throws Exception {
 		s.onMessage(session, "{\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW,C RED,D BLUE,E PINK,F GREY\"}");
 		assertTrue(systemOutRule.getLog().contains(
 				"[ServerSide] Received message : {\"Action\":\"Init\",\"names\":\"A GREEN,B YELLOW,C RED,D BLUE,E PINK,F GREY\"}"));
 
+		s.onMessage(session, "{\"Action\":\"Reinforce\",\"territoryID\":24,\"unitValue\":7}");
+		assertTrue(systemOutRule.getLog().contains("{\"Action\":\"Reinforce\",\"territoryID\":24,\"unitValue\":7}"));
+		
+		s.onMessage(session, "{\"Action\":\"Fortify\",\"fromTerritoryID\":24,\"toTerritoryID\":22,\"unitValue\":1}");
+		assertTrue(systemOutRule.getLog().contains("{\"Action\":\"Fortify\",\"fromTerritoryID\":24,\"toTerritoryID\":22,\"unitValue\":1}"));
+		
 		s.onMessage(session, "{\"Action\":\"EndTurn\"}");
 		assertTrue(systemOutRule.getLog().contains("[ServerSide] Received message : {\"Action\":\"EndTurn\"}"));
 	}
