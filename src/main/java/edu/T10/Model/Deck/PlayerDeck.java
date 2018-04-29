@@ -56,9 +56,8 @@ public class PlayerDeck {
 
     public int collectCardReward(){
         CollectionType collectionType = canCollect();
-        int reward = collect(collectionType);
 
-        return reward;
+        return collect(collectionType);
     }
 
     private int collect(CollectionType collectionType){

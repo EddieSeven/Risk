@@ -16,7 +16,7 @@ public class TestCard {
 	
 	@Test
 	public void testGetType() {
-		//assertEquals(c.getType(), CardType.DEFAULT);
+		// assertEquals(c.getType(), 3);
 	}
 //
 //	@Test
