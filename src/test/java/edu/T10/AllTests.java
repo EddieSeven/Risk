@@ -23,7 +23,8 @@ import junit.framework.JUnit4TestAdapter;
     TestPlayer.class,
     TestBoard.class,
     TestContinent.class,
-    TestTerritory.class
+    TestTerritory.class,
+    TestServer.class
 })
 
 public class AllTests {
