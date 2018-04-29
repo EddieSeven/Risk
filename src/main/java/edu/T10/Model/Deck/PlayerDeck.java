@@ -2,7 +2,7 @@ package edu.T10.Model.Deck;
 
 import java.util.Vector;
 
-public class PlayerDeck implements Deck {
+public class PlayerDeck {
     private Vector<Card> deck;
     private int deckSize;
     private int numOfInfantry;
@@ -30,7 +30,7 @@ public class PlayerDeck implements Deck {
         return cardTypes;
     }
 
-    @Override
+
     public void addCard(Card card) {
         CardType cardType = card.getType();
         deck.add(card);

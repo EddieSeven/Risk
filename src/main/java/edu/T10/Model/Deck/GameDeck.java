@@ -4,7 +4,7 @@ package edu.T10.Model.Deck;
 import java.util.Collections;
 import java.util.Vector;
 
-public class GameDeck implements Deck {
+public class GameDeck {
     private Vector<Card> deck;
 
     public GameDeck(){
@@ -16,7 +16,6 @@ public class GameDeck implements Deck {
         shuffle();
     }
 
-    @Override
     public void addCard(Card card) {
         deck.add(card);
     }

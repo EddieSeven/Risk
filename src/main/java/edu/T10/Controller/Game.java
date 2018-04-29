@@ -133,10 +133,10 @@ public class Game {
 
         if (from.isNotAdjacent(toTerritoryID))
             throw new MoveException("Invalid move: Cannot move from " + from.getName() + " to " + to.getName() + ".");
-        else if (from.getStrength() < unitValue)
+        else if (from.getStrength() <= unitValue)
             throw new NumberOfUnitsException("Invalid move: " + from.getName() + " has only " + from.getStrength() + " and " +
                     "you want to move " + unitValue + ". Make sure you leave at least one unit in the territory you " +
-                    "are attacking from and that you don't enter in more units than you have.");
+                    "are reinforceing from and that you don't enter in more units than you have.");
 
         updateTerritory(toTerritoryID, unitValue);
         updateTerritory(fromTerritoryID, -unitValue);

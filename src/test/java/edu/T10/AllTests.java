@@ -2,6 +2,8 @@ package edu.T10;
 import edu.T10.Controller.TestGame;
 import edu.T10.Model.*;
 import edu.T10.Model.Board.*;
+import edu.T10.Model.Deck.TestGameDeck;
+import edu.T10.Model.Deck.TestPlayerDeck;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import junit.framework.JUnit4TestAdapter;
@@ -9,9 +11,10 @@ import junit.framework.JUnit4TestAdapter;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
     TestCard.class,
-    TestPlayerDeck.class,
     TestDice.class,
     TestGame.class,
+    TestGameDeck.class,
+    TestPlayerDeck.class,
     TestInvasionResult.class,
     TestPlayer.class,
     TestBoard.class,
