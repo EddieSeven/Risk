@@ -124,9 +124,9 @@ function claimTerritories(){
     for (var i in players){
         var player = players[i];
         console.log(player);
-        displayMessage(player.name + "'s turn to pick territory...",0);
+        displayMessage(player.name + ", choose your territories!",0);
         var tableName = "controlTable";
-        addTHRow(tableName, player.name + " : Pick Territory", player.color);
+        addTHRow(tableName, player.name + " : Chose Territory", player.color);
     }
 
 }
@@ -184,7 +184,7 @@ function playCard(){
 
 function reinforceStage(){
 
-    displayMessage(playerName + "'s turn to conduct reinforcement...",0);
+    displayMessage(playerName + " is reinforcing their territories...",0);
 
     showText();
     cleanBoxes('controlTable');
@@ -194,10 +194,10 @@ function reinforceStage(){
     var tableName = "controlTable";
     addTHRow(tableName, playerName + " : Reinforce", playerColor);
     addTDRowWithButtons(tableName, createButton("REINFORCE", reinforce), createButton("NEXT STAGE", invasionStage));
-    addTDRow(tableName, "Free Armies", freeArmies);
+    addTDRow(tableName, "Armies Remaining", freeArmies);
     // if (sumOfArray(cards) <= 2)
     //     addTDRowWithButton(tableName, "Play Cards", addCards());
-    addTDRowWithButtons(tableName, createButton("Play Cards", playCard), addCards());
+    addTDRowWithButtons(tableName, createButton("PLAY CARDS", playCard), addCards());
     addTDRowWithButton(tableName, "From Location", createListener("listener1"));
     addTDRowWithButton(tableName, "Units", createInputBox());
 }
@@ -222,7 +222,7 @@ function invade() {
 
 function invasionStage() {
     stage = "invasion";
-    displayMessage(playerName + "'s turn to conduct invasion...",0);
+    displayMessage(playerName + " is invading...!",0);
 
     cleanBoxes('controlTable');
 
@@ -260,10 +260,10 @@ function fortifyStage(nul){
     addTHRow(tableName, playerName + " : Fortify", playerColor);
     if (nul === undefined) {
         addTDRowWithButton(tableName, "End", createButton("END TURN", endTurn))
-        displayMessage(playerName + " has run out of fortification chances...",0);
+        displayMessage(playerName + " has completed fortification...",0);
     }
     else{
-        displayMessage(playerName + "'s turn to conduct fortification...",0);
+        displayMessage(playerName + " is fortifying...",0);
         addTDRowWithButtons(tableName, createButton("FORTIFY", fortify), createButton("END TURN", endTurn));
     }
 
@@ -288,7 +288,7 @@ function endGame(){
     cleanBoxes('controlBoxes');
     var div = document.createElement('div');
     div.className = 'row';
-    div.innerHTML += "<p> Game Ends</p>";
+    div.innerHTML += "<p> Game Over</p>";
     document.getElementById('controlBoxes').appendChild(div);
 }
 

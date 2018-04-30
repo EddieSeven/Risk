@@ -45,7 +45,7 @@ webSocket.onmessage = function (event) {
             break;
         case "reinforce":
             if (!error)
-                displayMessage(playerName + " has successfully reinforced.",0);
+                displayMessage(playerName + " has successfully reinforced a territory.",0);
             parseResponse(obj);
             resetCanvas();
             reinforceStage();
@@ -67,7 +67,7 @@ webSocket.onmessage = function (event) {
             break;
         case "fortify":
             if (!error)
-                displayMessage(playerName + " has successfully fortified",0);
+                displayMessage(playerName + " has successfully fortified a territory.",0);
             parseResponse(obj);
             resetCanvas();
             if(error) fortifyStage(1);

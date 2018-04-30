@@ -47,7 +47,7 @@ h5 {
 }
 
 p{
-    font-size: 28px;
+    font-size: 18px;
 }
 
 .control-buttons{
@@ -99,14 +99,16 @@ p{
 
 textarea{
     font-size: 14px;
-    position: absolute;
+    font-family: "Droid Sans", Inconsolata, "American Typewriter", none;
+    color: #dddddd;
+    position: inherit;
     bottom: 100px;
     left: 27px;
     display: none;
     width: 300px;
-    height: 150px;
+    height: 82px;
     border: none;
-    background: white;
+    background: darkred;
     resize: none
 }
 
@@ -180,7 +182,7 @@ th, td {
     color: white;
     width: 50%;
     padding: 8px;
-    font-family: verdana;
+    font-family: "Droid Sans", Inconsolata, "American Typewriter", none;
     font-size: 16px;
 
 }
@@ -236,13 +238,13 @@ button:hover {
     height: 72px;
     width: 115px;
     -webkit-transition: border 0.04s;
-    transition: border 0.04s;
+    transition: border-color 0.04s;
 }
 
 input[type=text], select {
-    width: 50%;
+    width: 92%;
     padding: 6px 10px;
-    display: inline-block;
+    display: block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
